@@ -77,6 +77,7 @@ class TradeBot extends Command
                         if ($bot->trade_type === "future") {
                             $this->futuresTrade($userExchange, $exchangeService, $trade_values, $market, $settings, $bot, $wallerService, $user, $gasFee, $wallet);
                         }
+
                     } else {
                         $bot->update([
                             'started' => false,

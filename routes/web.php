@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CoinpaymentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,12 +18,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-Route::get('check', function () {
-
-    $exchange = new \App\Services\Exchange\Binance("bjxi7DjSUz4UX5fjme0bLJzKjdOExpTaojuinIEn6d8LrTheY19xXcgUZM2j38SX", "Btuphpiklh9ejSXuuIlYbSBoppslwFxkXkAiBRjWVxjG5SF8YotPaVyLmYE8Gkpn");
-
-    $balance = $exchange->getBalance();
-
-    dd($balance);
-});
+Route::post('coinpayment/ipn', CoinpaymentController::class);
