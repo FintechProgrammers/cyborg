@@ -77,7 +77,6 @@ class TradeBot extends Command
                         if ($bot->trade_type === "future") {
                             $this->futuresTrade($userExchange, $exchangeService, $trade_values, $market, $settings, $bot, $wallerService, $user, $gasFee, $wallet);
                         }
-
                     } else {
                         $bot->update([
                             'started' => false,
@@ -289,8 +288,16 @@ class TradeBot extends Command
                         $trade_price = (float) $exchange->fetchTicker();
 
                         $quantity = (float) $settings->first_buy / (float) $trade_price;
-                        $quantity = number_format($quantity, 5);
                         $quantity = (float) $quantity * (float) $leverage;
+
+                        // if kucoin
+                        if ($bot->exchange->slug == "kucoin") {
+                            $lot = $exchange->fetchMarkets();
+
+                            $quantity = $quantity / $lot;
+                        }
+
+                        $quantity = number_format($quantity, 5);
 
                         $options = [
                             "leverage" => $leverage,
@@ -455,62 +462,14 @@ class TradeBot extends Command
                     // Take profit long
                     if ($bot->strategy_mode === "long") {
                         if ($side == "long") {
-                            // Get the current time in seconds with microsecond precision
-                            $t = microtime(true);
-
-                            // Convert the time to milliseconds
-                            $t = $t * 1000;
-
-                            // Convert to an integer
-                            $t = (int)$t;
-
-                            // Sleep for 3 seconds
-                            sleep(3);
-
-                            // create market sell order
-                            $options = [
-                                "leverage" => $leverage,
-                                "newClientOrderId" => "x-zcYWaQcS",
-                                "reduceOnly" => true,
-                            ];
-
-                            $order = $exchange->createMarketSellOrder($quantity, $options);
-
-                            $order_id = $order['order_id'];
-                            // Sleep for 3 seconds
-                            sleep(3);
-
-                            $profitDetails = $exchange->takeLong($t, $order_id, $leverage);
+                            $profitDetails = $exchange->takeLong($quantity, $leverage);
                         } else if ($side == "short") {
                             $profitDetails = $exchange->takeShort($quantity, $leverage);
                         }
                     } else if ($bot->strategy_mode === "short") {
                         // Take profit short
                         if ($side == "long") {
-                            // Get the current time in seconds with microsecond precision
-                            $t = microtime(true);
-
-                            // Convert the time to milliseconds
-                            $t = $t * 1000;
-
-                            // Convert to an integer
-                            $t = (int)$t;
-                            // Sleep for 3 seconds
-                            sleep(3);
-
-                            // create market sell order
-                            $options = [
-                                "leverage" => $leverage,
-                                "newClientOrderId" => "x-zcYWaQcS",
-                                "reduceOnly" => true,
-                            ];
-
-                            $order = $exchange->createMarketSellOrder($quantity, $options);
-                            $order_id = $order['order_id'];
-                            // Sleep for 3 seconds
-                            sleep(3);
-
-                            $profitDetails = $exchange->takeLong($t, $order_id, $leverage);
+                            $profitDetails = $exchange->takeLong($quantity, $leverage);
                         } else if ($side == "short") {
                             $profitDetails = $exchange->takeShort($quantity, $leverage);
                         }
@@ -630,6 +589,17 @@ class TradeBot extends Command
                                 "newClientOrderId" => "x-zcYWaQcS",
                             ];
 
+                            // if kucoin
+                            if ($bot->exchange->slug == "kucoin") {
+                                $lot = $exchange->fetchMarkets();
+
+                                $qty = $tradec / $trade_price;
+
+                                $qty = $qty / $lot;
+
+                                $qty = $qty * $leverage;
+                            }
+
                             if ($bot->strategy_mode === "long") {
                                 $order = $exchange->createMarketBuyOrder($qty, $options);
                             } else if ($bot->strategy_mode === "short") {
@@ -642,9 +612,9 @@ class TradeBot extends Command
                                 $trade_price = $order['trade_price'];
                                 $orderId = $order['order_id'];
 
-                                sleep(3);
-
                                 $fetchOrder = $exchange->fetchOrder($orderId);
+
+                                sleep(3);
 
                                 $qtyusdt = $fetchOrder['qtyusdt'];
 

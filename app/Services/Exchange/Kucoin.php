@@ -4,7 +4,7 @@ namespace App\Services\Exchange;
 
 use ccxt;
 
-class Binance
+class Kucoin
 {
 
     protected $exchange;
@@ -15,14 +15,29 @@ class Binance
     {
         $this->trade_type = $data['trade_type'];
 
-        $this->exchange = new  ccxt\binance([
-            // 'enableRateLimit' => True,
-            'apiKey'  => $data['apikey'],
-            'secret'  => $data['secret'],
-            'options' =>  [
-                'defaultType' => $data['trade_type']
-            ],
-        ]);
+        if ($data['trade_type'] == "spot") {
+            $this->exchange = new  ccxt\kucoin([
+                // 'enableRateLimit' => True,
+                'apiKey'    => $data['apikey'],
+                'secret'    => $data['secret'],
+                'password'  => $data['password'],
+                'options' =>  [
+                    'defaultType'             => $data['trade_type']
+                ],
+            ]);
+        } else {
+            $this->exchange = new  ccxt\kucoinfutures([
+                // 'enableRateLimit' => True,
+                'apiKey'    => $data['apikey'],
+                'secret'    => $data['secret'],
+                'password'  => $data['password'],
+                'options' =>  [
+                    'defaultType' => $data['trade_type'],
+                    "adjustForTimeDifference" => true,
+                    "marginMode"              => "cross",
+                ],
+            ]);
+        }
 
         if (isset($data['market'])) {
             if ($data['trade_type'] == "spot") {
@@ -71,10 +86,10 @@ class Binance
     {
         $positions = $this->exchange->fetch_positions([$this->market]);
 
-        $avg_price = $positions[0]["entryPrice"];
+        $avg_price = $positions[0]["info"]["avgEntryPrice"];
         $position_amount = $positions[0]["initialMargin"];
         $quantity = $positions[0]["contracts"];
-        $current_profit = $positions[0]['info']["unRealizedProfit"];
+        $current_profit = $positions[0]["unrealizedPnl"];
         // $positions[0]["unrealizedPnl"]
         $floating_loss = $positions[0]["percentage"];
         $side = $positions[0]["side"];
@@ -87,6 +102,21 @@ class Binance
             'average_price'     => $avg_price,
             'side'              => $side,
         ];
+    }
+
+    public function fetchMarkets()
+    {
+        $lots = $this->exchange->fetch_markets([
+            "symbol" => $this->market
+        ]);
+
+        foreach ($lots as $lot) {
+            if ($lot['id'] == $this->market) {
+                $lot = $lot['contractSize'];
+            }
+        }
+
+        return $lot;
     }
 
     public function fetchTicker()
@@ -106,34 +136,32 @@ class Binance
         if ($this->trade_type === "spot") {
             $order = $this->exchange->create_market_buy_order($this->market, $qty);
 
-            $position_amount = $order['info']['cummulativeQuoteQty'];
+            $order_id = $order["info"]['orderId'];
 
-            $trade_price = $order['price'];
+            sleep(3);
 
-            $quantity = $order['info']['executedQty'];
+            $getorder = $this->exchange->fetch_order($order_id);
 
-            $order_id = $order["id"];
+            $quantity = $getorder['amount'];
+
+            $position_amount = $getorder['cost'];
+
+            $trade_price = $getorder['price'];
         } else {
-            $this->exchange->set_leverage(1, $this->market);
-
-            $this->exchange->set_margin_mode("crossed", $this->market);
 
             $order = $this->exchange->create_market_buy_order($this->market, $qty, $options);
 
-            $positions = $this->exchange->fetch_positions([$this->market]);
-
-            $position_amount = (float) $positions[0]["initialMargin"];
-
-            $trade_price = $positions[0]["info"]["entryPrice"];
-
-            $quantity = (float) $positions[0]["contracts"];
-
             $order_id = $order["id"];
 
-            // $position_amount = (float) $order['info']["cumQuote"];
-            // $trade_price = (float) $order['price'];
-            // $quantity = (float) $order['info']['cumQty'];
-            // $order_id = $order["info"]['orderId'];
+            sleep(3);
+
+            $getorder = $this->exchange->fetch_order($order_id, $this->market);
+
+            $position_amount = (float) $getorder["cost"];
+
+            $trade_price = $getorder["price"];
+
+            $quantity = (float) $getorder["filled"];
         }
 
 
@@ -158,37 +186,33 @@ class Binance
 
             $order = $this->exchange->create_market_sell_order($this->market, $qty);
 
-            $position_amount = $order['info']['cummulativeQuoteQty'];
+            $order_id = $order["info"]['orderId'];
 
-            $trade_price = $order['price'];
+            sleep(3);
 
-            $order_id = $order["id"];
+            $getorder = $this->exchange->fetch_order($order_id);
 
-            $quantity = $order['info']['executedQty'];
+            $quantity = $getorder['amount'];
+
+            $position_amount = $getorder['cost'];
+
+            $trade_price = $getorder['price'];
         } else {
-            $this->exchange->set_leverage(1, $this->market);
-
-            $this->exchange->set_margin_mode("crossed", $this->market);
 
             $order = $this->exchange->create_market_sell_order($this->market, $qty, $options);
 
-            $positions = $this->exchange->fetch_positions([$this->market]);
-
-            $position_amount = (float) $positions[0]["initialMargin"];
-
-            $trade_price = $positions[0]["info"]["entryPrice"];
-
-            $quantity = (float) $positions[0]["contracts"];
-
             $order_id = $order["id"];
 
-            // $position_amount = (float) $order['info']["cumQuote"];
-            // $trade_price = (float) $order['price'];
-            // $quantity = (float) $order['info']['cumQty'];
-            // $order_id = $order["info"]['orderId'];
+            sleep(3);
+
+            $getorder = $this->exchange->fetch_order($order_id, $this->market);
+
+            $position_amount = (float) $getorder["cost"];
+
+            $trade_price = $getorder["price"];
+
+            $quantity = (float) $getorder["filled"];
         }
-
-
 
         return [
             'position_amount'   => $position_amount,
@@ -201,8 +225,6 @@ class Binance
     public function lastResponseHeaders()
     {
         $response = $this->exchange->last_response_headers();
-
-        logger($response);
 
         return $response['x-mbx-used-weight-1m'];
     }
@@ -231,55 +253,44 @@ class Binance
 
     public function takeLong($quantity, $leverage = 1)
     {
-         // Get the current time in seconds with microsecond precision
-         $t = microtime(true);
+        $positions = $this->getPositions();
 
-         // Convert the time to milliseconds
-         $t = $t * 1000;
+        $average_price = $positions['average_price'];
+        $profit = $positions['current_profit'];
 
-         // Convert to an integer
-         $t = (int)$t;
+        // create market sell order
+        $options = [
+            "leverage"         => $leverage,
+            "newClientOrderId" => "x-zcYWaQcS",
+            "reduceOnly"       => true,
+        ];
 
-         // Sleep for 3 seconds
-         sleep(3);
 
-         // create market sell order
-         $options = [
-             "leverage" => $leverage,
-             "newClientOrderId" => "x-zcYWaQcS",
-             "reduceOnly" => true,
-         ];
-
-         $order = $this->createMarketSellOrder($quantity, $options);
-
-         $order_id = $order['order_id'];
-         // Sleep for 3 seconds
-         sleep(3);
-
-        $myTrades = $this->myTrades($t);
-
-        $profit = 0;
-
-        foreach ($myTrades as $lastTrade) {
-            if ($lastTrade['info']['orderId'] == $order_id) {
-                $p = $lastTrade["info"]["realizedPnl"];
-                $profit = $profit + $p;
-            }
-        }
-
-        $getorder = $this->fetchOrder($order_id);
-
-        $fee = 0.06 * $leverage;
+        $fee = 0.08 * $leverage;
 
         $fee_call = $profit * $fee / 100;
 
         $profit = $profit - $fee_call;
 
+        $order = $this->createMarketSellOrder($quantity, $options);
+
+        $order_id = $order['order_id'];
+
+        sleep(3);
+
+        $getorder = $this->exchange->fetch_order($order_id);
+
+        $quantity = $getorder['filled'];
+
+        $trade_price = $getorder['price'];
+
+        $qtyusdt = $getorder['cost'] / $leverage;
+
         return [
             'profit'        => $profit,
-            'quantity'      => $getorder['quantity'],
-            'qtyusdt'       => $getorder['qtyusdt'],
-            'order_price'   => $getorder['order_price']
+            'quantity'      => $quantity,
+            'qtyusdt'       => $qtyusdt,
+            'order_price'   => $trade_price
         ];
     }
 
@@ -290,19 +301,12 @@ class Binance
         $average_price = $positions['average_price'];
         $profit = $positions['current_profit'];
 
-        // Get the current time in seconds with microsecond precision
-        $t = microtime(true);
+        $fee = 0.08 * $leverage;
 
-        // Convert the time to milliseconds
-        $t = $t * 1000;
+        $fee_call = (float) $profit * $fee / 100;
+        $profit = $profit - $fee_call;
 
-        // Convert to an integer
-        $t = (int)$t;
-
-        // Sleep for 3 seconds
-        sleep(3);
-
-        // create market sell order
+        // create market buy order
         $options = [
             "leverage"         => $leverage,
             "newClientOrderId" => "x-zcYWaQcS",
@@ -313,32 +317,21 @@ class Binance
 
         $order_id = $order['order_id'];
 
-        // Sleep for 3 seconds
         sleep(3);
 
-        $myTrades = $this->myTrades($t);
+        $getorder = $this->exchange->fetch_order($order_id);
 
-        $profit = 0;
+        $quantity = $getorder['filled'];
 
-        foreach ($myTrades as $lastTrade) {
-            if ($lastTrade['info']['orderId'] == $order_id) {
-                $p = $lastTrade["info"]["realizedPnl"];
-                $profit = $profit + (float) $p;
-            }
-        }
+        $trade_price = $getorder['price'];
 
-        $getorder = $this->fetchOrder($order_id);
-
-        $fee = 0.06 * $leverage;
-
-        $fee_call = (float) $profit * $fee / 100;
-        $profit = $profit - $fee_call;
+        $qtyusdt = $getorder['cost'] / $leverage;
 
         return [
             'profit'        => $profit,
-            'quantity'      => $getorder['quantity'],
-            'qtyusdt'       => $getorder['qtyusdt'] / $leverage,
-            'order_price'   => $getorder['order_price']
+            'quantity'      => $quantity,
+            'qtyusdt'       => $qtyusdt,
+            'order_price'   => $trade_price
         ];
     }
 }

@@ -4,7 +4,7 @@ namespace App\Services\Exchange;
 
 use ccxt;
 
-class Binance
+class Bybit
 {
 
     protected $exchange;
@@ -15,7 +15,7 @@ class Binance
     {
         $this->trade_type = $data['trade_type'];
 
-        $this->exchange = new  ccxt\binance([
+        $this->exchange = new ccxt\bybit([
             // 'enableRateLimit' => True,
             'apiKey'  => $data['apikey'],
             'secret'  => $data['secret'],
@@ -129,11 +129,6 @@ class Binance
             $quantity = (float) $positions[0]["contracts"];
 
             $order_id = $order["id"];
-
-            // $position_amount = (float) $order['info']["cumQuote"];
-            // $trade_price = (float) $order['price'];
-            // $quantity = (float) $order['info']['cumQty'];
-            // $order_id = $order["info"]['orderId'];
         }
 
 
@@ -181,14 +176,7 @@ class Binance
             $quantity = (float) $positions[0]["contracts"];
 
             $order_id = $order["id"];
-
-            // $position_amount = (float) $order['info']["cumQuote"];
-            // $trade_price = (float) $order['price'];
-            // $quantity = (float) $order['info']['cumQty'];
-            // $order_id = $order["info"]['orderId'];
         }
-
-
 
         return [
             'position_amount'   => $position_amount,
