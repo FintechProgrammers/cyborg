@@ -46,10 +46,12 @@ class Bybit
 
         $response =  $this->exchange->fetch_balance();
 
+        logger($response);
+
         if (!empty($response)) {
-            $freeBalance = $response['free']['USDT'];
-            $usedBalance = $response['used']['USDT'];
-            $totalBalance = $response['total']['USDT'];
+            $freeBalance = !empty($response['free']['USDT']) ? $response['free']['USDT'] : 0.00;
+            $usedBalance = !empty($response['used']['USDT']) ? $response['used']['USDT'] : 0.00;
+            $totalBalance = !empty($response['total']['USDT']) ? $response['total']['USDT'] : 0.00;
         }
 
         return [
@@ -219,30 +221,30 @@ class Bybit
 
     public function takeLong($quantity, $leverage = 1)
     {
-         // Get the current time in seconds with microsecond precision
-         $t = microtime(true);
+        // Get the current time in seconds with microsecond precision
+        $t = microtime(true);
 
-         // Convert the time to milliseconds
-         $t = $t * 1000;
+        // Convert the time to milliseconds
+        $t = $t * 1000;
 
-         // Convert to an integer
-         $t = (int)$t;
+        // Convert to an integer
+        $t = (int)$t;
 
-         // Sleep for 3 seconds
-         sleep(3);
+        // Sleep for 3 seconds
+        sleep(3);
 
-         // create market sell order
-         $options = [
-             "leverage" => $leverage,
-             "newClientOrderId" => "x-zcYWaQcS",
-             "reduceOnly" => true,
-         ];
+        // create market sell order
+        $options = [
+            "leverage" => $leverage,
+            "newClientOrderId" => "x-zcYWaQcS",
+            "reduceOnly" => true,
+        ];
 
-         $order = $this->createMarketSellOrder($quantity, $options);
+        $order = $this->createMarketSellOrder($quantity, $options);
 
-         $order_id = $order['order_id'];
-         // Sleep for 3 seconds
-         sleep(3);
+        $order_id = $order['order_id'];
+        // Sleep for 3 seconds
+        sleep(3);
 
         $myTrades = $this->myTrades($t);
 
