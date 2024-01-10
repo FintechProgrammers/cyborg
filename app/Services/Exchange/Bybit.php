@@ -46,8 +46,6 @@ class Bybit
 
         $response =  $this->exchange->fetch_balance();
 
-        logger($response);
-
         if (!empty($response)) {
             $freeBalance = !empty($response['free']['USDT']) ? $response['free']['USDT'] : 0.00;
             $usedBalance = !empty($response['used']['USDT']) ? $response['used']['USDT'] : 0.00;
