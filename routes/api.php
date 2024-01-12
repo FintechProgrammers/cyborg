@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\BannerController;
 use App\Http\Controllers\Api\BotController;
 use App\Http\Controllers\Api\DepositController;
 use App\Http\Controllers\Api\TradeRecordsController;
@@ -56,4 +57,11 @@ Route::middleware('validate.user')->group(function () {
         Route::post('stop', 'stopBot');
         Route::delete('/{bot}', 'destroy');
     });
+
+});
+
+Route::get('banners', [BannerController::class, 'banners']);
+
+Route::controller(\App\Http\Controllers\Api\NewsController::class)->prefix('news')->group(function () {
+    Route::get('', 'index');
 });
