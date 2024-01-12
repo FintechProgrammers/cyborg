@@ -27,6 +27,7 @@ Route::middleware('validate.user')->group(function () {
         Route::controller(WalletController::class)->group(function () {
             Route::get('/', 'index');
             Route::post('/transfer', 'transfer');
+            Route::get('/transactions', 'transactions');
         });
 
         Route::post('deposit', DepositController::class);

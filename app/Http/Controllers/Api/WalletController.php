@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TransferRequest;
+use App\Http\Resources\TransactionResource;
 use App\Http\Resources\WalletResource;
 use App\Models\Transaction;
 use App\Models\Wallet;
@@ -42,7 +43,8 @@ class WalletController extends Controller
         }
 
         $wallet->update([
-            'balance'   => $wallet->balance + $request->amount,
+            'balance'   => $wallet->balance - $request->amount,
+            'fee'       => $wallet->fee + $request->amount,
         ]);
 
         $transaction = Transaction::create([
@@ -59,5 +61,16 @@ class WalletController extends Controller
         $wallet = new WalletResource($wallet->refresh());
 
         return $this->sendResponse($wallet, "Transfer to trading fee was successfull.", 200);
+    }
+
+    function transactions(Request $request)
+    {
+        $user = $request->user;
+
+        $transactions = Transaction::where('user_id', $user->id)->get();
+
+        $transaction = TransactionResource::collection($transactions);
+
+        return $this->sendResponse($transaction,"Transactions", 200);
     }
 }
