@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\BotController;
 use App\Http\Controllers\Api\DepositController;
 use App\Http\Controllers\Api\TradeRecordsController;
+use App\Http\Controllers\Api\WalletController;
 use App\Http\Controllers\Api\WithdrawalController;
 use App\Http\Controllers\ExchangeController;
 use Illuminate\Http\Request;
@@ -22,6 +23,12 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('validate.user')->group(function () {
 
     Route::prefix('wallet')->group(function () {
+
+        Route::controller(WalletController::class)->group(function () {
+            Route::get('/', 'index');
+            Route::post('/transfer', 'transfer');
+        });
+
         Route::post('deposit', DepositController::class);
         Route::post('withdraw', WithdrawalController::class);
     });
