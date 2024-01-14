@@ -43,7 +43,7 @@
         <div class="row mb-4">
             <div class="col">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="remember-check">
+                    <input class="form-check-input" type="checkbox" id="remember-check" name="remember">
                     <label class="form-check-label" for="remember-check">
                         Remember me
                     </label>

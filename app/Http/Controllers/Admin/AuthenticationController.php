@@ -17,7 +17,7 @@ class AuthenticationController extends Controller
     {
         $this->validate($request, [
             'email'   => 'required|email',
-            'password' => 'required|min:6'
+            'password' => 'required|min:4'
         ]);
 
         if (Auth::guard('admin')->attempt($request->only(['email', 'password']), $request->get('remember'))) {
