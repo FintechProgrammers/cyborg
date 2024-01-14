@@ -99,11 +99,11 @@ class ExchangeController extends Controller
                     // Now $errorMessage contains the value of "msg"
                     return $this->sendError($errorMessage, [], 500);
                 } else {
-                    logger($e->getMessage());
+                    logger($e);
                     return $this->sendError("Your request cannot be completed at the momment.", [], 500);
                 }
             } else {
-                logger($e->getMessage());
+                logger($e);
                 return $this->sendError("Your request cannot be completed at the momment.", [], 500);
             }
         }

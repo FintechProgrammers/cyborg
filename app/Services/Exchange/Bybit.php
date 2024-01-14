@@ -3,6 +3,9 @@
 namespace App\Services\Exchange;
 
 use ccxt;
+use Exception;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 
 class Bybit
 {
@@ -10,32 +13,44 @@ class Bybit
     protected $exchange;
     protected $trade_type;
     protected $market;
+    protected $apiKey;
+    protected $secret;
+    protected $apiTradeType;
 
     function __construct(array $data)
     {
         $this->trade_type = $data['trade_type'];
+
+        $this->apiTradeType = $data['trade_type'] === "spot" ? "spot" : "contract";
+
+        $this->secret = $data['secret'];
+        $this->apiKey = $data['apikey'];
 
         $this->exchange = new ccxt\bybit([
             // 'enableRateLimit' => True,
             'apiKey'  => $data['apikey'],
             'secret'  => $data['secret'],
             'options' =>  [
-                'defaultType' => $data['trade_type']
+                'defaultType' => $data['trade_type'],
+                'createMarketBuyOrderRequiresPrice' => false
             ],
         ]);
 
         if (isset($data['market'])) {
-            if ($data['trade_type'] == "spot") {
-                $this->market = $data['market'] . '/USDT';
-            } else {
-                $this->market = $data['market'] . '/USDT';
-            }
+            $this->market = $data['market'] . 'USDT';
         }
     }
 
     function setLeverage($leverage)
     {
         $this->exchange->set_leverage($this->market, $leverage);
+    }
+
+    function getBalanceV3()
+    {
+        $response = self::handle("/{$this->apiTradeType}/v3/private/account", "GET");
+
+        return $response;
     }
 
     public function getBalance()
@@ -93,6 +108,9 @@ class Bybit
     {
         $response = $this->exchange->fetch_ticker($this->market);
 
+        // $param = "symbol={$this->market}";
+
+        // $response2 = self::handle("/{$this->apiTradeType}/v3/public/quote/ticker/24hr?$param", "GET", [], $param);
         return $response['last'];
     }
 
@@ -104,31 +122,49 @@ class Bybit
         $order_id = null;
 
         if ($this->trade_type === "spot") {
+
+            // $body = [
+            //     'symbol'    => $this->market,
+            //     'orderQty'  => $qty,
+            //     'side'      => 'BUY',
+            //     'orderType' => 'MARKET'
+            // ];
+
+            // $response = self::handle("/{$this->apiTradeType}/v3/private/order", "POST", $body);
+
+            // logger($response);
+
+            // dd($response);
+
             $order = $this->exchange->create_market_buy_order($this->market, $qty);
 
-            $position_amount = $order['info']['cummulativeQuoteQty'];
+            $order_id = $order['info']['orderId'];
 
-            $trade_price = $order['price'];
+            sleep(3);
 
-            $quantity = $order['info']['executedQty'];
+            $order = $this->exchange->fetch_order($order_id, $this->market);
 
-            $order_id = $order["id"];
+            $position_amount = $order['info']['cumExecValue'];
+
+            $trade_price = $order['average'];
+
+            $quantity = $order['info']['cumExecQty'];
         } else {
             $this->exchange->set_leverage(1, $this->market);
 
-            $this->exchange->set_margin_mode("crossed", $this->market);
+            $order = $this->exchange->create_order($this->market, 'market', 'buy', $qty);
 
-            $order = $this->exchange->create_market_buy_order($this->market, $qty, $options);
+            $order_id = $order['info']['orderId'];
 
-            $positions = $this->exchange->fetch_positions([$this->market]);
+            sleep(3);
 
-            $position_amount = (float) $positions[0]["initialMargin"];
+            $order = $this->exchange->fetch_order($order_id, $this->market);
 
-            $trade_price = $positions[0]["info"]["entryPrice"];
+            $position_amount = $order['info']['cumExecValue'];
 
-            $quantity = (float) $positions[0]["contracts"];
+            $position_amount = $position_amount / 1;
 
-            $order_id = $order["id"];
+            $trade_price = $order['average'];
         }
 
 
@@ -151,31 +187,39 @@ class Bybit
 
         if ($this->trade_type === "spot") {
 
-            $order = $this->exchange->create_market_sell_order($this->market, $qty);
+            $options = [
+                'createMarketBuyOrderRequiresPrice' => false
+            ];
 
-            $position_amount = $order['info']['cummulativeQuoteQty'];
+            $order = $this->exchange->create_order($this->market, 'market', 'sell', $qty, null, $options);
 
-            $trade_price = $order['price'];
+            $order_id = $order['info']['orderId'];
 
-            $order_id = $order["id"];
+            sleep(3);
 
-            $quantity = $order['info']['executedQty'];
+            $order = $this->exchange->fetch_order($order_id, $this->market);
+
+            $position_amount = $order['info']['cumExecValue'];
+
+            $trade_price = $order['average'];
+
+            $quantity = $order['info']['cumExecQty'];
         } else {
             $this->exchange->set_leverage(1, $this->market);
 
-            $this->exchange->set_margin_mode("crossed", $this->market);
+            $order = $this->exchange->create_order($this->market, 'market', 'sell', $qty);
 
-            $order = $this->exchange->create_market_sell_order($this->market, $qty, $options);
+            $order_id = $order['info']['orderId'];
 
-            $positions = $this->exchange->fetch_positions([$this->market]);
+            sleep(3);
 
-            $position_amount = (float) $positions[0]["initialMargin"];
+            $order = $this->exchange->fetch_order($order_id, $this->market);
 
-            $trade_price = $positions[0]["info"]["entryPrice"];
+            $position_amount = $order['info']['cumExecValue'];
 
-            $quantity = (float) $positions[0]["contracts"];
+            $position_amount = $position_amount / 1;
 
-            $order_id = $order["id"];
+            $trade_price = $order['average'];
         }
 
         return [
@@ -189,8 +233,6 @@ class Bybit
     public function lastResponseHeaders()
     {
         $response = $this->exchange->last_response_headers();
-
-        logger($response);
 
         return $response['x-mbx-used-weight-1m'];
     }
@@ -328,5 +370,68 @@ class Bybit
             'qtyusdt'       => $getorder['qtyusdt'] / $leverage,
             'order_price'   => $getorder['order_price']
         ];
+    }
+
+    function generateSignature($timestamp, $apiKey, $recvWindow, $queryString = null, $jsonBodyString = null)
+    {
+
+        // Construct the string to sign
+        $stringToSign = $timestamp . $apiKey . $recvWindow;
+
+        if ($queryString !== null) {
+            $stringToSign .= $queryString;
+        }
+
+
+        if ($jsonBodyString !== null) {
+            $stringToSign .= $jsonBodyString;
+        }
+
+        // Use HMAC_SHA256 algorithm to sign the string
+        $signature = hash_hmac('sha256', $stringToSign, $this->secret);
+
+        return $signature;
+    }
+
+    public function handle($uri, $method = "POST", $body = [], $queryString =  null)
+    {
+        $timestamp = time() * 1000;
+
+        $recvWindow = 6000;
+        $jsonBodyString =  !empty($body) ? json_encode($body) : null;
+
+        $signature = self::generateSignature($timestamp, $this->apiKey, $recvWindow, $queryString, $jsonBodyString);
+
+        $headers = [
+            'X-BAPI-SIGN' => $signature,
+            'X-BAPI-API-KEY' => $this->apiKey,
+            'X-BAPI-TIMESTAMP' => $timestamp,
+            'X-BAPI-RECV-WINDOW' => $recvWindow,
+            'Content-Type' => 'application/json',
+        ];
+
+        $reqBody = ['headers' => $headers];
+
+        if (!empty($body)) {
+            $reqBody['json'] = $body;
+        }
+
+        // Make the Guzzle HTTP POST request
+        $client = new Client(['base_uri' => 'https://api.bybit.com']);
+
+        try {
+
+            $response = $client->request($method, $uri, $reqBody);
+
+            // Handle the response as needed
+            $statusCode = $response->getStatusCode();
+            $responseBody = $response->getBody()->getContents();
+
+            return json_decode($responseBody, true);
+        } catch (Exception $e) {
+            // Handle request exception
+
+            logger(['bybit error' => $e]);
+        }
     }
 }

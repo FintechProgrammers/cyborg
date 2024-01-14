@@ -239,14 +239,42 @@ class TradeBot extends Command
                 }
             }
         } catch (\Exception $e) {
+
             logger($e->getMessage());
 
+            $responseString = $e->getMessage();
+
             if ($e instanceof \ccxt\InsufficientFunds) {
+                // Find the position of the first curly brace
+                $bracePosition = strpos($responseString, '{');
+
+                if ($bracePosition !== false) {
+                    // Extract the JSON string
+                    $jsonString = substr($responseString, $bracePosition);
+
+                    // Decode the JSON string
+                    $responseArray = json_decode($jsonString, true);
+
+                    if ($responseArray !== null && isset($responseArray['msg'])) {
+                        $errorMessage = $responseArray['msg'];
+                        // Now $errorMessage contains the value of "msg"
+                        $responseString = $errorMessage;
+                    } else if ($responseArray !== null && isset($responseArray['retMsg'])) {
+                        $errorMessage = $responseArray['retMsg'];
+                        // Now $errorMessage contains the value of "msg"
+                        $responseString = $errorMessage;
+                    } else {
+                        logger($e->getMessage());
+                    }
+                } else {
+                    logger($e->getMessage());
+                }
+
                 // Handle InsufficientFunds exception
                 $bot->update([
                     'started' => false,
                     'running' => false,
-                    'logs'     => $e->getMessage(),
+                    'logs'     => $responseString,
                 ]);
             }
         }
