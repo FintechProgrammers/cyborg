@@ -1,11 +1,3 @@
-/*
-Template Name: Minia - Bootstrap 5 Admin & Dashboard Template
-Author: Themesbrand
-Version: 2.1.0
-Website: https://themesbrand.com/
-Contact: themesbrand@gmail.com
-File: Main Js File
-*/
 
 
 (function ($) {
@@ -274,7 +266,7 @@ File: Main Js File
     }
 
     function updateRadio(radioId) {
-        document.getElementById(radioId).checked = true;
+        // document.getElementById(radioId).checked = true;
     }
 
     function layoutSetting() {
@@ -330,7 +322,7 @@ File: Main Js File
         $("input[name='layout']").on('change', function () {
             window.location.href = ($(this).val() == "vertical") ? "index": "layouts-horizontal";
         });
-        
+
         // on layout mode change
         $("input[name='layout-mode']").on('change', function () {
             if($(this).val() == "light") {

@@ -1,7 +1,11 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthenticationController;
+use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\DashBoardController;
+use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Admin\StrategyController;
+use App\Models\Strategy;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,6 +28,33 @@ Route::controller(AuthenticationController::class)->group(function () {
 
 Route::middleware(['auth:admin'])->group(function () {
     Route::controller(DashBoardController::class)->prefix('dashboard')->name('dashboard.')->group(function () {
-        Route::get('/','index')->name('index');
+        Route::get('/', 'index')->name('index');
+    });
+
+    Route::controller(NewsController::class)->prefix('news')->name('news.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/create', 'store')->name('store');
+        Route::get('/edit/{news}', 'show')->name('edit');
+        Route::post('/edit/{news}', 'update')->name('update');
+        Route::delete('/delete/{news}', 'destroy')->name('delete');
+    });
+
+    Route::controller(BannerController::class)->prefix('banner')->name('banner.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/create', 'store')->name('store');
+        Route::get('/edit/{banner}', 'show')->name('edit');
+        Route::post('/edit/{banner}', 'update')->name('update');
+        Route::delete('/delete/{banner}', 'destroy')->name('delete');
+    });
+
+    Route::controller(StrategyController::class)->prefix('bot')->name('bot.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/create', 'store')->name('store');
+        Route::get('/edit/{banner}', 'show')->name('edit');
+        Route::post('/edit/{banner}', 'update')->name('update');
+        Route::delete('/delete/{banner}', 'destroy')->name('delete');
     });
 });

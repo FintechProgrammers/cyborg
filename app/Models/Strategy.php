@@ -6,13 +6,13 @@ use App\Traits\GeneratesUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class News extends Model
+class Strategy extends Model
 {
-    use HasFactory,  GeneratesUuid;
+    use HasFactory, GeneratesUuid;
 
     protected $guarded = [];
 
-    /**
+     /**
      * Define the route model binding key for a given model.
      */
     public function getRouteKeyName()
