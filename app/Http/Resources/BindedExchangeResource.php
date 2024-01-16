@@ -18,7 +18,7 @@ class BindedExchangeResource extends JsonResource
             'id'                => $this->uuid,
             'spot_balance'      => $this->spot_balance,
             'future_balance'    => $this->future_balance,
-            'is_binded'         => (boolean) $this->is_binded,
+            'is_binded'         => (bool) $this->is_binded,
             'exchange'          => new ExchangeResource($this->exchange),
             'created_at'        => $this->created_at
         ];

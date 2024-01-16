@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\UserExchange;
 use App\Services\BlackblazeService;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -151,5 +152,20 @@ if (!function_exists('formatDate')) {
         $formattedCreatedAt = $createdAtInUserTimezone->format('M j, Y, g:i A');
 
         return $formattedCreatedAt;
+    }
+}
+
+
+if (!function_exists('isBinded')) {
+    function isBinded($exchangeId)
+    {
+
+        $userExchange = UserExchange::where('user_id', request()->user->id)->where('is_binded', true)->pluck('exchange_id')->toArray();
+
+        if (in_array($exchangeId, $userExchange)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

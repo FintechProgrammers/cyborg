@@ -70,8 +70,6 @@ class StrategyController extends Controller
             'price_ratio.*'    => 'required|integer'
         ]);
 
-        $market = Market::whereUuid($request->market)->first();
-
         $strategy->update([
             'market'       => $request->market,
             'stop_loss'    => $request->stop_loss,
