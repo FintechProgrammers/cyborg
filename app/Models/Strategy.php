@@ -12,11 +12,16 @@ class Strategy extends Model
 
     protected $guarded = [];
 
-     /**
+    /**
      * Define the route model binding key for a given model.
      */
     public function getRouteKeyName()
     {
         return 'uuid';
+    }
+
+    public function market()
+    {
+        return $this->belongsTo(Market::class, 'market_id');
     }
 }

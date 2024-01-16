@@ -2,6 +2,7 @@
 
 use App\Models\UserExchange;
 use App\Services\BlackblazeService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -167,5 +168,21 @@ if (!function_exists('isBinded')) {
         } else {
             return false;
         }
+    }
+}
+
+
+if (!function_exists('formatTime')) {
+    function formatTime($timestamp)
+    {
+        // Convert the Unix timestamp to a Carbon instance
+        $carbonDate = Carbon::createFromTimestamp($timestamp);
+
+        // Format the Carbon instance as a human-readable date
+        $humanReadableDate = $carbonDate->toDateTimeString();
+
+        $humanReadableDate = $carbonDate->format('jS F, Y');
+
+        return $humanReadableDate;
     }
 }

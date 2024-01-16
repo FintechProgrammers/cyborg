@@ -9,3 +9,4 @@
         @include('admin.bot._form')
     </form>
 @endsection
+@include('admin.bot._scripts')

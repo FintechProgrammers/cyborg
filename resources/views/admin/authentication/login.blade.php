@@ -1,6 +1,6 @@
 @extends('admin.authentication.layouts.app')
 
-@section('title','Login')
+@section('title', 'Login')
 
 @section('content')
     <div class="text-center">
@@ -31,13 +31,13 @@
             <div class="input-group auth-pass-inputgroup">
                 <input type="password" class="form-control" placeholder="Enter password" name="password"
                     aria-label="Password" aria-describedby="password-addon">
-                @error('password')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
                 <button class="btn btn-light ms-0" type="button" id="password-addon">
                     <i class="mdi mdi-eye-outline"></i>
                 </button>
             </div>
+            @error('password')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
 
         </div>
         <div class="row mb-4">

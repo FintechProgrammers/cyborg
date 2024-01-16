@@ -20,7 +20,7 @@ class StrategyController extends Controller
     {
         $data['markets'] = Market::get();
 
-        return view('admin.bot.create',$data);
+        return view('admin.bot.create', $data);
     }
 
     function store(Request $request)
@@ -31,15 +31,16 @@ class StrategyController extends Controller
             'stop_loss'        => 'required|numeric',
             'take_profit'      => 'required|numeric',
             'margin_limit'     => 'required|numeric|min:1',
-            'margin_ratio'     => 'required|array',
-            'margin_ratio.*'   => 'required|integer',
-            'price_ratio'      => 'required|array',
-            'price_ratio.*'    => 'required|integer'
+            // 'margin_ratio'     => 'required|array',
+            // 'margin_ratio.*'   => 'required|integer',
+            // 'price_ratio'      => 'required|array',
+            // 'price_ratio.*'    => 'required|integer'
         ]);
 
         Strategy::create([
-            'market'       => $request->market,
+            'market_id'       => $request->market,
             'stop_loss'    => $request->stop_loss,
+            'margin_limit'  => $request->margin_limit,
             'take_profit'  => $request->take_profit,
             'm_ration'     => implode('|', $request->margin_ratio),
             'price_drop'   => implode('|', $request->price_drop)
@@ -53,7 +54,7 @@ class StrategyController extends Controller
         $data['strategy'] = $strategy;
         $data['markets'] = Market::get();
 
-        return view('admin.banner.edit', $data);
+        return view('admin.bot.edit', $data);
     }
 
 
@@ -64,14 +65,15 @@ class StrategyController extends Controller
             'stop_loss'         => 'required|numeric',
             'take_profit'       => 'required|numeric',
             'margin_limit'      => 'required|numeric',
-            'margin_ratio'      => 'required|array',
-            'margin_ratio.*'    => 'required|integer',
-            'price_ratio'      => 'required|array',
-            'price_ratio.*'    => 'required|integer'
+            // 'margin_ratio'      => 'required|array',
+            // 'margin_ratio.*'    => 'required|integer',
+            // 'price_ratio'      => 'required|array',
+            // 'price_ratio.*'    => 'required|integer'
         ]);
 
         $strategy->update([
-            'market'       => $request->market,
+            'market_id'       => $request->market,
+            'margin_limit'  => $request->margin_limit,
             'stop_loss'    => $request->stop_loss,
             'take_profit'  => $request->take_profit,
             'm_ration'     => implode('|', $request->margin_ratio),
@@ -85,6 +87,6 @@ class StrategyController extends Controller
     {
         $strategy->delete();
 
-        return response()->json(['success' => true, 'message' => 'Ads Banner deleted successfully']);
+        return response()->json(['success' => true, 'message' => 'Bot deleted successfully']);
     }
 }

@@ -5,7 +5,9 @@ use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\DashBoardController;
 use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\StrategyController;
-use App\Models\Strategy;
+use App\Http\Controllers\Admin\TradeController;
+use App\Http\Controllers\Admin\TransactionController;
+use App\Http\Controllers\Admin\UserManagementController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -53,8 +55,23 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/create', 'store')->name('store');
-        Route::get('/edit/{banner}', 'show')->name('edit');
-        Route::post('/edit/{banner}', 'update')->name('update');
-        Route::delete('/delete/{banner}', 'destroy')->name('delete');
+        Route::get('/edit/{strategy}', 'show')->name('edit');
+        Route::post('/edit/{strategy}', 'update')->name('update');
+        Route::delete('/delete/{strategy}', 'destroy')->name('delete');
+    });
+
+    Route::controller(UserManagementController::class)->prefix('users')->name('users.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/{user}', 'show')->name('show');
+    });
+
+    Route::controller(TransactionController::class)->prefix('transactions')->name('transactions.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/{transaction}', 'show')->name('show');
+    });
+
+    Route::controller(TradeController::class)->prefix('trades')->name('trades.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/{trades}', 'show')->name('show');
     });
 });

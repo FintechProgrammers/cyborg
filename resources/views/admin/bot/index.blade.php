@@ -36,11 +36,11 @@
                         <tr>
                             <td>{{ $sno++ }}</td>
                             <td>{{ $item->market->name }}</td>
-                            <td>{{ $item->margin_limit }}</td>
-                            <td>{{ $item->m_ratio }}</td>
-                            <td>{{ $item->price_drop }}</td>
-                            <td>{{ $item->stop_loss }}%</td>
-                            <td>{{ $item->take_profit }}%</td>
+                            <td class="text-center">{{ $item->margin_limit }}</td>
+                            <td class="text-center">{{ $item->m_ration }}</td>
+                            <td class="text-center">{{ $item->price_drop }}</td>
+                            <td class="text-center">{{ $item->stop_loss }}%</td>
+                            <td class="text-center">{{ $item->take_profit }}%</td>
                             <td>
                                 <a href="{{ route('admin.bot.edit', $item->uuid) }}" class="btn btn-primary">
                                     Edit
@@ -54,7 +54,7 @@
                     @empty
                         <tr>
                             <td colspan="8">
-                                <x-no-data-component title="no bot  reated" />
+                                <x-no-data-component title="no bot created" />
                             </td>
                         </tr>
                     @endforelse
