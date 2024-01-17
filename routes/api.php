@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\BannerController;
 use App\Http\Controllers\Api\BotController;
 use App\Http\Controllers\Api\DepositController;
+use App\Http\Controllers\Api\StrategyController;
 use App\Http\Controllers\Api\TradeRecordsController;
 use App\Http\Controllers\Api\WalletController;
 use App\Http\Controllers\Api\WithdrawalController;
@@ -58,6 +59,10 @@ Route::middleware('validate.user')->group(function () {
         Route::delete('/{bot}', 'destroy');
     });
 
+    Route::controller(StrategyController::class)->prefix('strategies')->name('strategies.')->group(function () {
+        Route::get('/', 'index');
+        Route::post('copy', 'copyStrategy');
+    });
 });
 
 Route::get('banners', [BannerController::class, 'banners']);
