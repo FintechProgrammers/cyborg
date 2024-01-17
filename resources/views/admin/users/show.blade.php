@@ -104,7 +104,119 @@
         </div>
         <!-- end col -->
     </div>
+    @include('admin.partials._fund-wallet-modal')
 @endsection
 @push('scripts')
-    <script></script>
+    <script>
+        $('.take-wallet-action').click(function(e) {
+            e.preventDefault();
+
+            var txBody = $('.wallet-action')
+
+            const url = $(this).data('url');
+
+            $.ajax({
+                url: url,
+                method: "GET",
+                beforeSend: function() {
+                    txBody.html(
+                        `<div class="d-flex justify-content-center">
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>`
+                    )
+                },
+                success: function(result) {
+                    setTimeout(() => {
+                        txBody.empty().html(result);
+                    }, 1000);
+                },
+                error: function(jqXHR, testStatus, error) {
+
+                    console.log(jqXHR.responseText, testStatus, error);
+                    // Handle other errors
+                    displayMessage(
+                        "Error occurred",
+                        "error"
+                    );
+
+                },
+                timeout: 8000,
+            });
+        })
+
+        $('body').on('click', '.wallet-action .wallet-button', function(e) {
+            e.preventDefault();
+
+            const form = $('.wallet-action').find('form');
+
+            const url = form.attr('action');
+
+            const amount = form.find('#amount').val();
+            const type = form.find('#type').val();
+
+            const button = $(this)
+
+            const spinner = button.find('.spinner-border');
+            const buttonText = button.find('#text')
+
+            $.ajax({
+                url: url,
+                method: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    type: type,
+                    amount: amount,
+                },
+                beforeSend: function() {
+                    buttonText.hide();
+                    spinner.show();
+                },
+                success: function(result) {
+                    if (result.success) {
+
+                        displayMessage(
+                            result.message,
+                            "success"
+                        );
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+
+                    } else {
+
+                        spinner.hide();
+                        buttonText.show();
+
+                        displayMessage(
+                            result.message,
+                            "error"
+                        );
+
+                    }
+
+                },
+                error: function(jqXHR, testStatus, error) {
+
+                    console.log(jqXHR.responseText, testStatus, error);
+
+                    spinner.hide();
+                    buttonText.show();
+
+                    if (jqXHR.status == 422) {
+                        form.find('.amount-error').html(jqXHR.responseJSON.message);
+                    } else {
+                        // Handle other errors
+                        displayMessage(
+                            "Error occurred",
+                            "error"
+                        );
+                    }
+
+                },
+                timeout: 8000,
+            });
+        })
+    </script>
 @endpush

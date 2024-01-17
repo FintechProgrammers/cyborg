@@ -63,6 +63,10 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::controller(UserManagementController::class)->prefix('users')->name('users.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/{user}', 'show')->name('show');
+        Route::get('/fund/{wallet}/{user}', 'fundForm')->name('fund');
+        Route::get('/debit/{wallet}/{user}', 'debitForm')->name('debit');
+        Route::post('/fund-wallet/{user}', 'fund')->name('fund.store');
+        Route::post('/debit-wallet/{user}', 'debit')->name('debit.store');
     });
 
     Route::controller(TransactionController::class)->prefix('transactions')->name('transactions.')->group(function () {

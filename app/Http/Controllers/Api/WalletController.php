@@ -7,6 +7,7 @@ use App\Http\Requests\TransferRequest;
 use App\Http\Resources\TransactionResource;
 use App\Http\Resources\WalletResource;
 use App\Models\Transaction;
+use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
 
@@ -71,6 +72,8 @@ class WalletController extends Controller
 
         $transaction = TransactionResource::collection($transactions);
 
-        return $this->sendResponse($transaction,"Transactions", 200);
+        return $this->sendResponse($transaction, "Transactions", 200);
     }
+
+
 }
