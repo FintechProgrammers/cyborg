@@ -24,4 +24,14 @@ class Strategy extends Model
     {
         return $this->belongsTo(Market::class, 'market_id');
     }
+
+    const MARKETTYPE = [
+        'spot' => 'spot',
+        'future' => 'future',
+    ];
+
+    const STRATEGYMODE = [
+        'short' => 'short',
+        'long'  => 'long',
+    ];
 }

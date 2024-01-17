@@ -5,13 +5,46 @@
                 <div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Martet</label>
-                        <select name="market" class="form-control" id="">
+                        <select name="market" class="form-control" id="" {{ isset($strategy) ? 'disabled' : '' }}>
                             <option value="">--select--market--</option>
                             @foreach ($markets as $item)
-                                <option value="{{ $item->id }}" {{ isset($strategy) && $item->id == $strategy->market_id ? 'Selected':'' }}>{{ $item->name }}</option>
+                                <option value="{{ $item->id }}"
+                                    {{ isset($strategy) && $item->id == $strategy->market_id ? 'Selected' : '' }}>
+                                    {{ $item->name }}</option>
                             @endforeach
                         </select>
                         @error('market')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="example-text-input" class="form-label">Market Type</label>
+                        <select name="market_type" class="form-control" id="market_type"
+                            {{ isset($strategy) ? 'disabled' : '' }}>
+                            <option value="">--select--market--type--</option>
+                            @foreach (\App\Models\Strategy::MARKETTYPE as $item)
+                                <option value="{{ $item }}"
+                                    {{ isset($strategy) && $item == $strategy->trade_type ? 'Selected' : '' }}>
+                                    {{ $item }}</option>
+                            @endforeach
+                        </select>
+                        @error('market_type')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3" id="strategyMode"
+                        style="display: {{ isset($strategy) && $strategy->strategy_modes == 'future' ? 'block' : 'none' }}">
+                        <label for="example-text-input" class="form-label">Strategy Mode</label>
+                        <select name="strategy_mode" class="form-control" id="strategy_mode"
+                            {{ isset($strategy) ? 'disabled' : '' }}>
+                            <option value="">--select--strategy--mode--</option>
+                            @foreach (\App\Models\Strategy::STRATEGYMODE as $item)
+                                <option value="{{ $item }}"
+                                    {{ isset($strategy) && $item == $strategy->strategy_modes ? 'Selected' : '' }}>
+                                    {{ $item }}</option>
+                            @endforeach
+                        </select>
+                        @error('strategy_mode')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
@@ -34,8 +67,10 @@
                     <h5>Margin Settings</h5>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Margin Limit</label>
-                        <input class="form-control" type="number" min="1" step="any" id="margin_limit"
-                            name="margin_limit" value="{{ isset($strategy) ? $strategy->margin_limit : '' }}">
+                        <input class="form-control" type="number" min="1" step="any"
+                            id="{{ isset($strategy) ? '' : 'margin_limit' }}" name="margin_limit"
+                            value="{{ isset($strategy) ? $strategy->margin_limit : '' }}"
+                            {{ isset($strategy) ? 'readonly' : '' }}>
                         @error('margin_limit')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -52,7 +87,8 @@
                                         @foreach ($m_ratio as $item)
                                             <div class="mb-3">
                                                 <input class="form-control" type="number" name="margin_ratio[]"
-                                                    value="{{ $item }}">
+                                                    value="{{ $item }}"
+                                                    {{ isset($strategy) ? 'readonly' : '' }}>
                                             </div>
                                         @endforeach
                                     @endif
@@ -71,7 +107,8 @@
                                         @foreach ($price_drop as $item)
                                             <div class="mb-3">
                                                 <input class="form-control" type="number" name="price_drop[]"
-                                                    value="{{ $item }}">
+                                                    value="{{ $item }}"
+                                                    {{ isset($strategy) ? 'readonly' : '' }}>
                                             </div>
                                         @endforeach
                                     @endif

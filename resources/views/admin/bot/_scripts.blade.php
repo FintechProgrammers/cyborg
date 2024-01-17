@@ -38,5 +38,19 @@
                 $('#marginBody').hide()
             }
         })
+
+        $('#market_type').change(function(e) {
+            e.preventDefault();
+
+            const market_type = $(this).val();
+
+            const strategyMode = $('#strategyMode')
+
+            if (market_type === "future") {
+                strategyMode.show();
+            } else {
+                strategyMode.hide();
+            }
+        })
     </script>
 @endpush
