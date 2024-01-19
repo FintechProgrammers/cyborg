@@ -149,7 +149,7 @@ class TradeBot extends Command
                     'logs'              => "First buy order succesfully filled."
                 ]);
 
-                $this->recordTrade($bot, $trade_price, $quantity, "buy", 0 , false);
+                $this->recordTrade($bot, $trade_price, $quantity, "buy", 0, false);
 
                 return;
             }
@@ -233,20 +233,48 @@ class TradeBot extends Command
                     ]);
 
                     // record trade history
-                    $this->recordTrade($bot, $trade_price, $quantity, "buy", $trade_values->profit , false);
+                    $this->recordTrade($bot, $trade_price, $quantity, "buy", $trade_values->profit, false);
 
                     return;
                 }
             }
         } catch (\Exception $e) {
+
             logger($e->getMessage());
 
+            $responseString = $e->getMessage();
+
             if ($e instanceof \ccxt\InsufficientFunds) {
+                // Find the position of the first curly brace
+                $bracePosition = strpos($responseString, '{');
+
+                if ($bracePosition !== false) {
+                    // Extract the JSON string
+                    $jsonString = substr($responseString, $bracePosition);
+
+                    // Decode the JSON string
+                    $responseArray = json_decode($jsonString, true);
+
+                    if ($responseArray !== null && isset($responseArray['msg'])) {
+                        $errorMessage = $responseArray['msg'];
+                        // Now $errorMessage contains the value of "msg"
+                        $responseString = $errorMessage;
+                    } else if ($responseArray !== null && isset($responseArray['retMsg'])) {
+                        $errorMessage = $responseArray['retMsg'];
+                        // Now $errorMessage contains the value of "msg"
+                        $responseString = $errorMessage;
+                    } else {
+                        logger($e->getMessage());
+                    }
+                } else {
+                    logger($e->getMessage());
+                }
+
                 // Handle InsufficientFunds exception
                 $bot->update([
                     'started' => false,
                     'running' => false,
-                    'logs'     => $e->getMessage(),
+                    'logs'     => $responseString,
                 ]);
             }
         }
@@ -288,8 +316,16 @@ class TradeBot extends Command
                         $trade_price = (float) $exchange->fetchTicker();
 
                         $quantity = (float) $settings->first_buy / (float) $trade_price;
-                        $quantity = number_format($quantity, 5);
                         $quantity = (float) $quantity * (float) $leverage;
+
+                        // if kucoin
+                        if ($bot->exchange->slug == "kucoin") {
+                            $lot = $exchange->fetchMarkets();
+
+                            $quantity = $quantity / $lot;
+                        }
+
+                        $quantity = number_format($quantity, 5);
 
                         $options = [
                             "leverage" => $leverage,
@@ -334,9 +370,9 @@ class TradeBot extends Command
 
                             // record trade history
                             if ($bot->strategy_mode === "long") {
-                                $this->recordTrade($bot, $trade_price, $quantity, "buy",0,false);
+                                $this->recordTrade($bot, $trade_price, $quantity, "buy", 0, false);
                             } else if ($bot->strategy_mode === "short") {
-                                $this->recordTrade($bot, $trade_price, $quantity, "sell",0,false);
+                                $this->recordTrade($bot, $trade_price, $quantity, "sell", 0, false);
                             }
                         } else {
                             $bot->update([
@@ -368,10 +404,6 @@ class TradeBot extends Command
 
                 $positions = $exchange->getPositions();
 
-                logger($positions);
-
-                return;
-
                 $avg_price = $positions['average_price'];
                 $position_amount = $positions['position_amount'];
                 $quantity = $positions['quantity'];
@@ -379,31 +411,31 @@ class TradeBot extends Command
                 $floating_loss = $positions['floating_loss'];
                 $side = strtolower($positions['side']);
 
-                $rate = $exchange->lastResponseHeaders();
+                // $rate = $exchange->lastResponseHeaders();
 
-                if ($rate >= 1000) {
+                // if ($rate >= 1000) {
 
-                    $tradeValues = [
-                        'quantity'          => $quantity,
-                        'trade_price'       => 0,
-                        'first_price'       => 0,
-                        'position_amount'   => $position_amount,
-                        'margin_calls'      => 0,
-                        'in_position'       => true,
-                        'buy_position'      => false,
-                        'sell_position'     => false,
-                        'profit'            => 0,
-                        'floating_loss'     => 0,
-                    ];
+                //     $tradeValues = [
+                //         'quantity'          => $quantity,
+                //         'trade_price'       => 0,
+                //         'first_price'       => 0,
+                //         'position_amount'   => $position_amount,
+                //         'margin_calls'      => 0,
+                //         'in_position'       => true,
+                //         'buy_position'      => false,
+                //         'sell_position'     => false,
+                //         'profit'            => 0,
+                //         'floating_loss'     => 0,
+                //     ];
 
-                    $bot->update([
-                        'running'           => false,
-                        'trade_values'      => json_encode($tradeValues),
-                        'logs'              => "Rate limit reached"
-                    ]);
+                //     $bot->update([
+                //         'running'           => false,
+                //         'trade_values'      => json_encode($tradeValues),
+                //         'logs'              => "Rate limit reached"
+                //     ]);
 
-                    return;
-                }
+                //     return;
+                // }
 
                 if ($position_amount === 'None' || $position_amount < 1) {
 
@@ -458,66 +490,19 @@ class TradeBot extends Command
                     // Take profit long
                     if ($bot->strategy_mode === "long") {
                         if ($side == "long") {
-                            // Get the current time in seconds with microsecond precision
-                            $t = microtime(true);
-
-                            // Convert the time to milliseconds
-                            $t = $t * 1000;
-
-                            // Convert to an integer
-                            $t = (int)$t;
-
-                            // Sleep for 3 seconds
-                            sleep(3);
-
-                            // create market sell order
-                            $options = [
-                                "leverage" => $leverage,
-                                "newClientOrderId" => "x-zcYWaQcS",
-                                "reduceOnly" => true,
-                            ];
-
-                            $order = $exchange->createMarketSellOrder($quantity, $options);
-
-                            $order_id = $order['order_id'];
-                            // Sleep for 3 seconds
-                            sleep(3);
-
-                            $profitDetails = (float) $exchange->takeLong($t, $order_id, $leverage);
+                            $profitDetails = $exchange->takeLong($quantity, $leverage);
                         } else if ($side == "short") {
                             $profitDetails = $exchange->takeShort($quantity, $leverage);
                         }
                     } else if ($bot->strategy_mode === "short") {
                         // Take profit short
                         if ($side == "long") {
-                            // Get the current time in seconds with microsecond precision
-                            $t = microtime(true);
-
-                            // Convert the time to milliseconds
-                            $t = $t * 1000;
-
-                            // Convert to an integer
-                            $t = (int)$t;
-                            // Sleep for 3 seconds
-                            sleep(3);
-
-                            // create market sell order
-                            $options = [
-                                "leverage" => $leverage,
-                                "newClientOrderId" => "x-zcYWaQcS",
-                                "reduceOnly" => true,
-                            ];
-
-                            $order = $exchange->createMarketSellOrder($quantity, $options);
-                            $order_id = $order['order_id'];
-                            // Sleep for 3 seconds
-                            sleep(3);
-
-                            $profitDetails = (float) $exchange->takeLong($t, $order_id, $leverage);
+                            $profitDetails = $exchange->takeLong($quantity, $leverage);
                         } else if ($side == "short") {
                             $profitDetails = $exchange->takeShort($quantity, $leverage);
                         }
                     }
+
 
                     $profit = $profitDetails['profit'];
                     $trade_price = $profitDetails['order_price'];
@@ -528,7 +513,7 @@ class TradeBot extends Command
                         if ($side == "short") {
                             $type = "buy";
                         } else {
-                            $type = "sale";
+                            $type = "sell";
                         }
 
                         $this->takeProfit($profit, $bot, $trade_price, $quantity, $gasFee, $wallerService, $wallet, $user, $type);
@@ -572,7 +557,7 @@ class TradeBot extends Command
                         // Sleep for 3 seconds
                         sleep(3);
 
-                        $profitDetails = (float) $exchange->takeLong($t, $order_id, $leverage);
+                        $profitDetails = $exchange->takeLong($t, $order_id, $leverage);
                     } else if ($bot->strategy_mode === "short") {
                         $profitDetails = $exchange->takeShort($quantity, $leverage);
                     }
@@ -599,7 +584,7 @@ class TradeBot extends Command
                     if ($bot->strategy_mode == "short") {
                         $type = "buy";
                     } else {
-                        $type = "sale";
+                        $type = "sell";
                     }
 
                     $this->recordTrade($bot, $trade_price, $quantity, $type, $profitDetails['profit'], false);
@@ -615,6 +600,7 @@ class TradeBot extends Command
                 $m_ratio = explode("|", $settings->m_ratio);
 
                 if ($margin_limit > 0 && $margin_limit !=  $margin_call) {
+
                     $cal = (float) $trade_values->first_price * (float)$price_drop[$margin_call] / 100;
                     $cal2 = (float) $trade_values->first_price - $cal;
 
@@ -631,6 +617,17 @@ class TradeBot extends Command
                                 "newClientOrderId" => "x-zcYWaQcS",
                             ];
 
+                            // if kucoin
+                            if ($bot->exchange->slug == "kucoin") {
+                                $lot = $exchange->fetchMarkets();
+
+                                $qty = $tradec / $trade_price;
+
+                                $qty = $qty / $lot;
+
+                                $qty = $qty * $leverage;
+                            }
+
                             if ($bot->strategy_mode === "long") {
                                 $order = $exchange->createMarketBuyOrder($qty, $options);
                             } else if ($bot->strategy_mode === "short") {
@@ -643,9 +640,9 @@ class TradeBot extends Command
                                 $trade_price = $order['trade_price'];
                                 $orderId = $order['order_id'];
 
-                                sleep(3);
-
                                 $fetchOrder = $exchange->fetchOrder($orderId);
+
+                                sleep(3);
 
                                 $qtyusdt = $fetchOrder['qtyusdt'];
 
@@ -672,7 +669,8 @@ class TradeBot extends Command
                                     'in_position'       => true,
                                     'buy_position'      => false,
                                     'sell_position'     => false,
-                                    'profit'            => $profit
+                                    'profit'            => $profit,
+                                    'floating_loss'     => $floating_loss,
                                 ];
 
                                 $bot->update([
@@ -685,7 +683,7 @@ class TradeBot extends Command
                                 if ($bot->strategy_mode === "long") {
                                     $this->recordTrade($bot, $trade_price, $quantity, "buy", $profit, false);
                                 } else if ($bot->strategy_mode === "short") {
-                                    $this->recordTrade($bot, $trade_price, $quantity, "sale", $profit, false);
+                                    $this->recordTrade($bot, $trade_price, $quantity, "sell", $profit, false);
                                 }
                             }
                         } else {
@@ -700,7 +698,7 @@ class TradeBot extends Command
                 }
             }
         } catch (\Exception $e) {
-            logger($e->getMessage());
+            logger($e);
 
             if ($e instanceof \ccxt\InsufficientFunds) {
                 // Handle InsufficientFunds exception

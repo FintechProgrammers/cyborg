@@ -13,10 +13,10 @@ class Coinpay
         $this->client = new Client();
     }
 
-    public function getDepositAddress($currency)
+    public function getDepositAddress()
     {
         $params = [
-            'currency' => $currency,
+            'currency' => strtoupper('usdt.trc20'),
             'ipn_url'  => config('constants.coinpay.ipn_url')
         ];
 

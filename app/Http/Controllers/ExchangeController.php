@@ -69,8 +69,8 @@ class ExchangeController extends Controller
                     'api_key'           => $request->api_key,
                     'api_secret'        => $request->secret,
                     'api_passphrase'    => $request->password,
-                    'spot_balance'      => $spotBalance['total'],
-                    'future_balance'    => $futuresBalance['total'],
+                    'spot_balance'      => !empty($spotBalance['total']) ? $spotBalance['total'] : 0.00,
+                    'future_balance'    => !empty($futuresBalance['total']) ? $futuresBalance['total'] : 0.00,
                     'is_binded'         => (bool) $request->bind
                 ]
             );
@@ -94,12 +94,16 @@ class ExchangeController extends Controller
                     $errorMessage = $responseArray['msg'];
                     // Now $errorMessage contains the value of "msg"
                     return $this->sendError($errorMessage, [], 500);
+                } else if ($responseArray !== null && isset($responseArray['retMsg'])) {
+                    $errorMessage = $responseArray['retMsg'];
+                    // Now $errorMessage contains the value of "msg"
+                    return $this->sendError($errorMessage, [], 500);
                 } else {
-                    logger($e->getMessage());
+                    logger($e);
                     return $this->sendError("Your request cannot be completed at the momment.", [], 500);
                 }
             } else {
-                logger($e->getMessage());
+                logger($e);
                 return $this->sendError("Your request cannot be completed at the momment.", [], 500);
             }
         }

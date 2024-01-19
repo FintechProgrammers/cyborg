@@ -13,7 +13,6 @@ class WithdrawalController extends Controller
     public function __invoke(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'currency'  => 'required|string',
             'amount'    => 'required|numeric',
             'address'   => 'required|string',
         ]);
@@ -41,7 +40,7 @@ class WithdrawalController extends Controller
 
             $data = [
                 'amount'        => $request->amount,
-                'currency'      => $request->currency,
+                'currency'      => "USDT",
                 'currency2'     => 'USDT'
             ];
 

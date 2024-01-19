@@ -12,14 +12,6 @@ class DepositController extends Controller
 {
     public function __invoke(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'asset'  => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->sendError("Validation error", $validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
         try {
 
             $user = $request->user;
@@ -27,25 +19,26 @@ class DepositController extends Controller
             // Check if user already have a deposit addess
             $wallet = Wallet::where('user_id', $user->id)->first();
 
-            if (!$wallet) {
+            if (!$wallet || empty($wallet->address)) {
 
                 $coinpay = new \App\Services\Gateways\Coinpay();
 
-                $response = $coinpay->getDepositAddress($request->asset);
+                $response = $coinpay->getDepositAddress();
 
                 if ($response['error'] !== 'ok') {
                     return $this->sendError("Unable to create deposit address at the moment.", [], Response::HTTP_SERVICE_UNAVAILABLE);
                 }
 
                 $address = $response['result']['address'];
-
-                Wallet::create([
-                    'user'    => $user->id,
-                    'address' => $address,
-                ]);
             } else {
                 $address = $wallet->address;
             }
+
+            Wallet::updateOrCreate([
+                'user_id'    => $user->id,
+            ], [
+                'address' => $address,
+            ]);
 
             return $this->sendResponse(['address' => $address], "Deposit address", Response::HTTP_CREATED);
         } catch (\Exception $e) {

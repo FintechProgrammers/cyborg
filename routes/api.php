@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\Api\BannerController;
 use App\Http\Controllers\Api\BotController;
 use App\Http\Controllers\Api\DepositController;
+use App\Http\Controllers\Api\StrategyController;
+use App\Http\Controllers\Api\SupportController;
 use App\Http\Controllers\Api\TradeRecordsController;
+use App\Http\Controllers\Api\WalletController;
 use App\Http\Controllers\Api\WithdrawalController;
 use App\Http\Controllers\ExchangeController;
 use Illuminate\Http\Request;
@@ -22,6 +26,13 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('validate.user')->group(function () {
 
     Route::prefix('wallet')->group(function () {
+
+        Route::controller(WalletController::class)->group(function () {
+            Route::get('/', 'index');
+            Route::post('/transfer', 'transfer');
+            Route::get('/transactions', 'transactions');
+        });
+
         Route::post('deposit', DepositController::class);
         Route::post('withdraw', WithdrawalController::class);
     });
@@ -48,4 +59,22 @@ Route::middleware('validate.user')->group(function () {
         Route::post('stop', 'stopBot');
         Route::delete('/{bot}', 'destroy');
     });
+
+    Route::controller(StrategyController::class)->prefix('strategies')->group(function () {
+        Route::get('/', 'index');
+        Route::post('copy', 'copyStrategy');
+    });
+
+    Route::controller(SupportController::class)->prefix('tickets')->group(function () {
+        Route::get('/', 'index');
+        Route::post('/create', 'store');
+        Route::get('/{ticket}', 'show');
+        Route::post('/reply/{ticket}', 'reply');
+    });
+});
+
+Route::get('banners', [BannerController::class, 'banners']);
+
+Route::controller(\App\Http\Controllers\Api\NewsController::class)->prefix('news')->group(function () {
+    Route::get('', 'index');
 });

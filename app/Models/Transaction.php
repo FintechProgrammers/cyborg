@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\TransactionService;
 use App\Traits\GeneratesUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -36,5 +37,26 @@ class Transaction extends Model
     public function resolveRouteBinding($value, $field = null)
     {
         return $this->where('uuid', $value)->firstOrFail();
+    }
+
+     /**
+     * Get the type of a single transaction record created.
+     */
+    public function action()
+    {
+        return (new TransactionService)->action($this->action);
+    }
+
+    public function type()
+    {
+        return (new TransactionService)->type($this->type);
+    }
+
+    /**
+     * Get the status of a single transaction record created.
+     */
+    public function status()
+    {
+        return (new TransactionService)->status($this->status);
     }
 }

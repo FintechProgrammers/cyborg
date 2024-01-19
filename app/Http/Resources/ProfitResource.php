@@ -15,8 +15,8 @@ class ProfitResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'today_profit'  =>  $this->today_profit,
-            'total_profit'  =>  $this->total_profit,
+            'today_profit'  =>  empty($this->today_profit) ? $this->today_profit : 0.00 . 'USDT',
+            'total_profit'  =>  empty($this->total_profit) ? $this->total_profit : 0.00 . 'USDT'
         ];
     }
 }
