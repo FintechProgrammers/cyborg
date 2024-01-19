@@ -19,6 +19,7 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Bot Name</th>
                         <th>Market</th>
                         <th>Margin Limit</th>
                         <th>Margin Ratio</th>
@@ -35,6 +36,7 @@
                     @forelse ($stretegy as $item)
                         <tr>
                             <td>{{ $sno++ }}</td>
+                            <td>{{ $item->bot_name }}</td>
                             <td>{{ $item->market->name }}</td>
                             <td class="text-center">{{ $item->margin_limit }}</td>
                             <td class="text-center">{{ $item->m_ration }}</td>

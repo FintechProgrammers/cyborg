@@ -26,8 +26,8 @@ class Strategy extends Model
     }
 
     const MARKETTYPE = [
-        'spot' => 'spot',
-        'future' => 'future',
+        'spot bot' => 'spot',
+        'futures bot' => 'future',
     ];
 
     const STRATEGYMODE = [

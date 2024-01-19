@@ -16,6 +16,7 @@ class StrategyResource extends JsonResource
     {
         return [
             'id'             => $this->uuid,
+            'bot_name'      => $this->bot_name,
             'market'         => new MarketResource($this->market),
             'market_type'    => $this->trade_type,
             'strategy_mode'  => $this->strategy_mode,
@@ -23,5 +24,4 @@ class StrategyResource extends JsonResource
             'take_profit'  => $this->take_profit . '%'
         ];
     }
-
 }

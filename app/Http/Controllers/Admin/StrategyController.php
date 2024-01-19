@@ -41,9 +41,10 @@ class StrategyController extends Controller
         ]);
 
         Strategy::create([
+            'bot_name'          =>  $request->bot_name,
             'market_id'         => $request->market,
             'stop_loss'         => $request->stop_loss,
-            'margin_limit'       => $request->margin_limit,
+            'margin_limit'      => $request->margin_limit,
             'take_profit'  => $request->take_profit,
             'm_ration'     => implode('|', $request->margin_ratio),
             'price_drop'   => implode('|', $request->price_drop),
@@ -79,6 +80,7 @@ class StrategyController extends Controller
         ]);
 
         $strategy->update([
+            'bot_name'  =>  $request->bot_name,
             // 'market_id'       => $request->market,
             // 'margin_limit'  => $request->margin_limit,
             'stop_loss'    => $request->stop_loss,

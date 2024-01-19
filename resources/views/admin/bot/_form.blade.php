@@ -4,8 +4,17 @@
             <div class="col-lg-12">
                 <div>
                     <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Martet</label>
-                        <select name="market" class="form-control" id="" {{ isset($strategy) ? 'disabled' : '' }}>
+                        <label for="example-text-input" class="form-label">Bot Name</label>
+                        <input class="form-control" type="text" name="bot_name"
+                            value="{{ isset($strategy) ? $strategy->bot_name : '' }}">
+                        @error('bot_name')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="example-text-input" class="form-label">Market</label>
+                        <select name="market" class="form-control" id=""
+                            {{ isset($strategy) ? 'disabled' : '' }}>
                             <option value="">--select--market--</option>
                             @foreach ($markets as $item)
                                 <option value="{{ $item->id }}"
@@ -22,39 +31,42 @@
                         <select name="market_type" class="form-control" id="market_type"
                             {{ isset($strategy) ? 'disabled' : '' }}>
                             <option value="">--select--market--type--</option>
-                            @foreach (\App\Models\Strategy::MARKETTYPE as $item)
+                            @foreach (\App\Models\Strategy::MARKETTYPE as $key=>$item)
                                 <option value="{{ $item }}"
                                     {{ isset($strategy) && $item == $strategy->trade_type ? 'Selected' : '' }}>
-                                    {{ $item }}</option>
+                                        <span class="text-uppercase">{{ $key }}</span>
+                                    </option>
                             @endforeach
                         </select>
                         @error('market_type')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="mb-3" id="strategyMode"
+                    <div id="strategyMode"
                         style="display: {{ isset($strategy) && $strategy->strategy_modes == 'future' ? 'block' : 'none' }}">
-                        <label for="example-text-input" class="form-label">Strategy Mode</label>
-                        <select name="strategy_mode" class="form-control" id="strategy_mode"
-                            {{ isset($strategy) ? 'disabled' : '' }}>
-                            <option value="">--select--strategy--mode--</option>
-                            @foreach (\App\Models\Strategy::STRATEGYMODE as $item)
-                                <option value="{{ $item }}"
-                                    {{ isset($strategy) && $item == $strategy->strategy_modes ? 'Selected' : '' }}>
-                                    {{ $item }}</option>
-                            @endforeach
-                        </select>
-                        @error('strategy_mode')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label for="example-text-input" class="form-label">Stop Loss (%)</label>
-                        <input class="form-control" type="number" step="any" name="stop_loss"
-                            value="{{ isset($strategy) ? $strategy->stop_loss : '' }}">
-                        @error('stop_loss')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
+                        <div class="mb-3">
+                            <label for="example-text-input" class="form-label">Strategy Mode</label>
+                            <select name="strategy_mode" class="form-control" id="strategy_mode"
+                                {{ isset($strategy) ? 'disabled' : '' }}>
+                                <option value="">--select--strategy--mode--</option>
+                                @foreach (\App\Models\Strategy::STRATEGYMODE as $item)
+                                    <option value="{{ $item }}"
+                                        {{ isset($strategy) && $item == $strategy->strategy_modes ? 'Selected' : '' }}>
+                                        {{ $item }}</option>
+                                @endforeach
+                            </select>
+                            @error('strategy_mode')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label for="example-text-input" class="form-label">Stop Loss (%)</label>
+                            <input class="form-control" type="number" step="any" name="stop_loss"
+                                value="{{ isset($strategy) ? $strategy->stop_loss : '' }}">
+                            @error('stop_loss')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Take Profit (%)</label>
@@ -121,7 +133,7 @@
                     </div>
                 </div>
                 <div class="mt-4">
-                    <button type="submit" class="btn btn-primary w-lg">Submit</button>
+                    <button type="submit" class="btn btn-primary w-lg">Create Bot</button>
                 </div>
             </div>
         </div>
