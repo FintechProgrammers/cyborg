@@ -16,7 +16,7 @@ class ProfitResource extends JsonResource
     {
         return [
             'today_profit'  =>  empty($this->today_profit) ? $this->today_profit : 0.00,
-            'total_profit'  =>  empty($this->total_profit) ? $this->total_profit : 0.00'
+            'total_profit'  =>  empty($this->total_profit) ? $this->total_profit : 0.00
         ];
     }
 }
