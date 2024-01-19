@@ -56,6 +56,24 @@ class Navigation
                 'icon'  => 'bar-chart-2',
                 'hasPermission' => true
             ],
+            (object) [
+                'name'  => 'Support',
+                'route' => 'admin.supports.index',
+                'icon'  => 'headphones',
+                'hasPermission' => true
+            ],
+            (object) [
+                'name'  => 'Roles and Permissions',
+                'route' => 'admin.roles.index',
+                'icon'  => 'anchor',
+                'hasPermission' => true
+            ],
+            (object) [
+                'name'  => 'Settings',
+                'route' => 'admin.settings.index',
+                'icon'  => 'settings',
+                'hasPermission' => true
+            ],
         ];
     }
 }

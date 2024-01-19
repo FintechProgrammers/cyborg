@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Settings;
 use App\Models\UserExchange;
 use App\Services\BlackblazeService;
 use Carbon\Carbon;
@@ -184,5 +185,13 @@ if (!function_exists('formatTime')) {
         $humanReadableDate = $carbonDate->format('jS F, Y');
 
         return $humanReadableDate;
+    }
+}
+
+
+if (!function_exists('systemSettings')) {
+    function systemSettings()
+    {
+        return Settings::first();
     }
 }

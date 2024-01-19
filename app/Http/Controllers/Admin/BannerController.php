@@ -46,6 +46,23 @@ class BannerController extends Controller
         return view('admin.banner.edit', $data);
     }
 
+    function enableBanner(Banner $banner)
+    {
+        $banner->update([
+            'enabled' => true
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Enabled successfully.']);
+    }
+
+    function disableBanner(Banner $banner)
+    {
+        $banner->update([
+            'enabled' => false
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Disabled successfully.']);
+    }
 
     function update(Request $request, Banner $banner)
     {

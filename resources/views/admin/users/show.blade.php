@@ -43,6 +43,10 @@
                     <a class="nav-link px-3" data-bs-toggle="tab" href="#trade" role="tab" aria-selected="false"
                         tabindex="-1">Trades</a>
                 </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link px-3" data-bs-toggle="tab" href="#rewards" role="tab" aria-selected="false"
+                        tabindex="-1">Rewards</a>
+                </li>
             </ul>
         </div>
     </div>
@@ -63,6 +67,10 @@
 
                 <div class="tab-pane" id="trade" role="tabpanel">
                     @include('admin.users._trades')
+                    <!-- end card -->
+                </div>
+                <div class="tab-pane" id="rewards" role="tabpanel">
+                    @include('admin.users._rewards')
                     <!-- end card -->
                 </div>
                 <!-- end tab pane -->

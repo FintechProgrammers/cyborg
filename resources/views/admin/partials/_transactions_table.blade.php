@@ -1,8 +1,8 @@
 <div class="table-responsive">
-    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100 table-hover">
+    <table id="datatable" class="table table-bordered dt-responsive nowrap w-100 table-hover">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>S/N</th>
                 <th>Reference</th>
                 <th>Amount</th>
                 <th>Type</th>
@@ -49,7 +49,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="7">
+                    <td colspan="8">
                         <x-no-data-component title="no bot created" />
                     </td>
                 </tr>

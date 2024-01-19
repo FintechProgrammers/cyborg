@@ -5,6 +5,7 @@
 /public/news
 /public/hot
 /public/storage
+/public/support
 /storage/*.key
 /vendor
 .env

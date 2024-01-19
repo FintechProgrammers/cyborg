@@ -1,14 +1,14 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Bot')
+@section('title', 'Roles and Permissions')
 
 @section('content')
     <div class="d-sm-flex align-items-center justify-content-end mb-3">
         <div class="page-title-right">
             <div class="card-body">
                 <div class="d-flex flex-wrap gap-2">
-                    <a href="{{ route('admin.bot.create') }}" type="button"
-                        class="btn btn-success waves-effect waves-light">Create Bot</a>
+                    <a href="{{ route('admin.roles.create') }}" type="button"
+                        class="btn btn-success waves-effect waves-light">Create Role</a>
                 </div>
             </div>
         </div>
@@ -18,13 +18,8 @@
             <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100 table-hover">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Market</th>
-                        <th>Margin Limit</th>
-                        <th>Margin Ratio</th>
-                        <th>Price Drop</th>
-                        <th>Stop Loss</th>
-                        <th>Take Profit</th>
+                        <th>S/N</th>
+                        <th>Role Name</th>
                         <th width="20%">Option</th>
                     </tr>
                 </thead>
@@ -32,29 +27,26 @@
                     @php
                         $sno = 1;
                     @endphp
-                    @forelse ($stretegy as $item)
+                    @forelse ($roles as $item)
                         <tr>
                             <td>{{ $sno++ }}</td>
-                            <td>{{ $item->market->name }}</td>
-                            <td class="text-center">{{ $item->margin_limit }}</td>
-                            <td class="text-center">{{ $item->m_ration }}</td>
-                            <td class="text-center">{{ $item->price_drop }}</td>
-                            <td class="text-center">{{ $item->stop_loss }}%</td>
-                            <td class="text-center">{{ $item->take_profit }}%</td>
+                            <td class="text-capitalize">{{ $item->name }}</td>
                             <td>
-                                <a href="{{ route('admin.bot.edit', $item->uuid) }}" class="btn btn-primary">
-                                    Edit
-                                </a>
-                                <a href="#" class="btn btn-danger delete"
-                                    data-url="{{ route('admin.bot.delete', $item->uuid) }}">
-                                    Delete
-                                </a>
+                                @if (!in_array($item['name'],['super admin','default']))
+                                    <a href="{{ route('admin.roles.edit', $item->uuid) }}" class="btn btn-primary">
+                                        Edit
+                                    </a>
+                                    <a href="#" class="btn btn-danger delete"
+                                        data-url="{{ route('admin.roles.delete', $item->uuid) }}">
+                                        Delete
+                                    </a>
+                                @endif
                             </td>
                         </tr>
                     @empty
                         <tr>
                             <td colspan="8">
-                                <x-no-data-component title="no bot available" />
+                                <x-no-data-component title="no roles available" />
                             </td>
                         </tr>
                     @endforelse
@@ -97,7 +89,7 @@
                                 }, 1000);
                             } else {
                                 displayMessage(
-                                    "Error occurred while trying to delete bot",
+                                    "Error occurred while trying to delete Role",
                                     "error"
                                 );
                             }
@@ -110,13 +102,13 @@
                             if (jqXHR.status === 404) {
                                 // Handle 404 error here
                                 displayMessage(
-                                    "News not found.",
+                                    "Role not found.",
                                     "error"
                                 );
                             } else {
                                 // Handle other errors
                                 displayMessage(
-                                    "Error occurred while trying to delete bot",
+                                    "Error occurred while trying to delete role",
                                     "error"
                                 );
                             }

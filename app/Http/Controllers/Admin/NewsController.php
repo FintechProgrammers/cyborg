@@ -36,7 +36,7 @@ class NewsController extends Controller
             'title'     => $request->title,
             'content'   => $request->news_body,
             'image'     =>  $image,
-            'status'    => 'published'
+            'status'    => 'draft'
         ]);
 
         return redirect()->route('admin.news.index')->with('success', 'News created successfully.');
@@ -48,6 +48,24 @@ class NewsController extends Controller
         $data['news'] = $news;
 
         return view('admin.news.edit', $data);
+    }
+
+    function publish(News $news)
+    {
+        $news->update([
+            'status'  => 'published'
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'News published successfully.']);
+    }
+
+    function unpublish(News $news)
+    {
+        $news->update([
+            'status'  => 'draft'
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'News unpublished successfully.']);
     }
 
 

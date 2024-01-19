@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Reward;
 use App\Models\TradeHistory;
 use App\Models\Transaction;
 use App\Models\User;
@@ -26,6 +27,7 @@ class UserManagementController extends Controller
         $data['exchanges'] = UserExchange::where('user_id', $user->id)->get();
         $data['transactions'] = Transaction::where('user_id', $user->id)->get();
         $data['trades'] = TradeHistory::where('user_id', $user->id)->get();
+        $data['rewards'] = Reward::where('user_id', $user->id)->get();
 
         return view('admin.users.show', $data);
     }

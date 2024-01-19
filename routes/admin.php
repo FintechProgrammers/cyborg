@@ -4,7 +4,10 @@ use App\Http\Controllers\Admin\AuthenticationController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\DashBoardController;
 use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Admin\RolesController;
+use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\StrategyController;
+use App\Http\Controllers\Admin\SupportController;
 use App\Http\Controllers\Admin\TradeController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\UserManagementController;
@@ -39,6 +42,8 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::post('/create', 'store')->name('store');
         Route::get('/edit/{news}', 'show')->name('edit');
         Route::post('/edit/{news}', 'update')->name('update');
+        Route::post('/publish/{news}', 'publish')->name('publish');
+        Route::post('/unpublish/{news}', 'unpublish')->name('unpublish');
         Route::delete('/delete/{news}', 'destroy')->name('delete');
     });
 
@@ -48,6 +53,8 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::post('/create', 'store')->name('store');
         Route::get('/edit/{banner}', 'show')->name('edit');
         Route::post('/edit/{banner}', 'update')->name('update');
+        Route::post('/enable/{banner}', 'enableBanner')->name('enable');
+        Route::post('/disable/{banner}', 'disableBanner')->name('disable');
         Route::delete('/delete/{banner}', 'destroy')->name('delete');
     });
 
@@ -77,5 +84,25 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::controller(TradeController::class)->prefix('trades')->name('trades.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/{trades}', 'show')->name('show');
+    });
+
+    Route::controller(RolesController::class)->prefix('roles')->name('roles.')->group(function () {
+        Route::get('', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('', 'store')->name('store');
+        Route::get('/edit/{role},', 'edit')->name('edit');
+        Route::post('/update/{role},', 'update')->name('update');
+        Route::delete('/{role}', 'destroy')->name('delete');
+    });
+
+    Route::controller(SupportController::class)->prefix('supports')->name('supports.')->group(function () {
+        Route::get('', 'index')->name('index');
+        Route::get('show/{ticket}', 'show')->name('show');
+        Route::post('reply/{ticket}', 'reply')->name('reply');
+    });
+
+    Route::controller(SettingsController::class)->prefix('settings')->name('settings.')->group(function () {
+        Route::get('', 'index')->name('index');
+        Route::post('', 'store')->name('store');
     });
 });

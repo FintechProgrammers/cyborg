@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             MarketSeeder::class,
             RoleAndPermissionSeeder::class,
+            SettingsSeed::class
         ]);
     }
 }
