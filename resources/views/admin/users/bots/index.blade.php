@@ -16,8 +16,8 @@
                     </div>
                     <div class="flex-grow-1">
                         <div>
-                            <h5 class="font-size-14 mb-1">{{ $item->market->name }}</h5>
-                            <p class="font-size-13 text-muted mb-0">{{ $item->exchange->name }}</p>
+                            <h5 class="font-size-14 mb-1">{{ $item->bot_name }}</h5>
+                            <p class="font-size-13 text-muted mb-0">{{ $item->market->name }}-{{ $item->exchange->name }}</p>
                         </div>
                     </div>
                 </div>

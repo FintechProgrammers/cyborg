@@ -35,35 +35,42 @@ class BotController extends Controller
 
     function create(BotRequest $request)
     {
-
-        $exchange = Exchange::where('uuid', $request->exchange)->first();
-
-        $market = Market::where('uuid', $request->market)->first();
-
-        $settings  = [
-            'stop_loss'         => $request->stop_loss,
-            'take_profit'       => $request->take_profit,
-            'capital'           => $request->capital,
-            'first_buy'         => $request->first_buy,
-            'margin_limit'      => $request->margin_limit,
-            'm_ratio'           => $request->m_ratio,
-            'price_drop'        => $request->price_drop,
-        ];
-
-        $trade_Values = [
-            'position_amount'   => 0,
-            'in_position'       => false,
-            'buy_position'      => false,
-            'sell_position'     => false,
-            'margin_calls'      => 0,
-            'floating_loss'     => 0,
-            'trade_price'       => 0,
-            'quantity'          => 0,
-            'profit'            => 0
-        ];
-
         try {
+
             $user = $request->user;
+
+            $exchange = Exchange::where('uuid', $request->exchange)->first();
+
+            $market = Market::where('uuid', $request->market)->first();
+
+            // check if bot already exists
+            $botExists = Bot::where('user_id', $user->id)->where('trade_type', $request->trade_type)->where('exchange_id', $exchange->id)->where('market_id', $$market->id)->where('strategy_mode', $request->strategy_mode)->first();
+
+            if ($botExists) {
+                return $this->sendError("Bot already exists.", [], 422);
+            }
+
+            $settings  = [
+                'stop_loss'         => $request->stop_loss,
+                'take_profit'       => $request->take_profit,
+                'capital'           => $request->capital,
+                'first_buy'         => $request->first_buy,
+                'margin_limit'      => $request->margin_limit,
+                'm_ratio'           => $request->m_ratio,
+                'price_drop'        => $request->price_drop,
+            ];
+
+            $trade_Values = [
+                'position_amount'   => 0,
+                'in_position'       => false,
+                'buy_position'      => false,
+                'sell_position'     => false,
+                'margin_calls'      => 0,
+                'floating_loss'     => 0,
+                'trade_price'       => 0,
+                'quantity'          => 0,
+                'profit'            => 0
+            ];
 
             $bot = Bot::Create(
                 [
