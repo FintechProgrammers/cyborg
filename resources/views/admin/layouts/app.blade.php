@@ -66,10 +66,22 @@
                 buttons: ['copy', 'excel', 'pdf', 'colvis']
             });
 
-            table.buttons().container()
-                .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
+            // table.buttons().container()
+            //     .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
 
-            $(".dataTables_length select").addClass('form-select form-select-sm');
+            // $(".dataTables_length select").addClass('form-select form-select-sm');
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('a[data-bs-toggle="tab"]').on('show.bs.tab', function(e) {
+                localStorage.setItem('activeTab', $(e.target).attr('href'));
+            });
+            var activeTab = localStorage.getItem('activeTab');
+            if (activeTab) {
+                $('#pills-tab a[href="' + activeTab + '"]').tab('show');
+            }
         });
     </script>
 

@@ -26,17 +26,18 @@ class BotRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'bot_name'      => 'required',
             'exchange'      => 'required|string|exists:exchanges,uuid',
             'market'        => 'required|string|exists:markets,uuid',
             'trade_type'    => ['required', 'string', Rule::in(['spot', 'future'])],
-            'stop_loss'     => 'required|numeric',
+            'stop_loss'     => 'nullable|numeric|required_if:trade_type,future',
             'take_profit'   => 'required|numeric',
             'capital'       => 'required|numeric',
             'first_buy'     => 'required|numeric',
             'margin_limit'  => 'required|numeric',
             'm_ratio'       => 'required',
             'price_drop'    => 'required',
-            'strategy_mode' => ['nullable', 'required_if:trade_type,futures', Rule::in(['short', 'long'])],
+            'strategy_mode' => ['nullable', 'required_if:trade_type,future', Rule::in(['short', 'long'])],
         ];
     }
 

@@ -67,6 +67,7 @@ class BotController extends Controller
 
             $bot = Bot::Create(
                 [
+                    'bot_name'      => $request->bot_name,
                     'user_id'       => $user->id,
                     'exchange_id'   => $exchange->id,
                     'market_id'     => $market->id,

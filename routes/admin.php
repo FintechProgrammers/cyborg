@@ -74,6 +74,11 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('/debit/{wallet}/{user}', 'debitForm')->name('debit');
         Route::post('/fund-wallet/{user}', 'fund')->name('fund.store');
         Route::post('/debit-wallet/{user}', 'debit')->name('debit.store');
+        Route::get('/create/bot/{user}', 'createBotForm')->name('create.bot');
+        Route::post('/create/bot/{user}', 'createBot')->name('create.bot.store');
+        Route::post('/start/bot/{bot}', 'startBot')->name('bot.start');
+        Route::post('/stop/bot/{bot}', 'stopBot')->name('bot.stop');
+        Route::post('/delete/bot/{bot}', 'deleteBot')->name('bot.delete');
     });
 
     Route::controller(TransactionController::class)->prefix('transactions')->name('transactions.')->group(function () {

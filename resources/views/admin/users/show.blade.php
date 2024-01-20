@@ -47,6 +47,10 @@
                     <a class="nav-link px-3" data-bs-toggle="tab" href="#rewards" role="tab" aria-selected="false"
                         tabindex="-1">Rewards</a>
                 </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link px-3" data-bs-toggle="tab" href="#bots" role="tab" aria-selected="false"
+                        tabindex="-1">Bots</a>
+                </li>
             </ul>
         </div>
     </div>
@@ -73,6 +77,10 @@
                     @include('admin.users._rewards')
                     <!-- end card -->
                 </div>
+                <div class="tab-pane" id="bots" role="tabpanel">
+                    @include('admin.users.bots.index')
+                    <!-- end card -->
+                </div>
                 <!-- end tab pane -->
             </div>
             <!-- end tab content -->
@@ -84,15 +92,14 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title mb-3">Exchanges</h5>
-
                     <div class="list-group list-group-flush">
                         @forelse ($exchanges as $item)
                             <a href="#" class="list-group-item list-group-item-action">
                                 <div class="d-flex align-items-center">
-                                    {{-- <div class="avatar-sm flex-shrink-0 me-3">
-                                        <img src="assets/images/users/avatar-1.jpg" alt=""
+                                    <div class="avatar-sm flex-shrink-0 me-3">
+                                        <img src="{{ $item->exchange->logo }}" alt=""
                                             class="img-thumbnail rounded-circle">
-                                    </div> --}}
+                                    </div>
                                     <div class="flex-grow-1">
                                         <div>
                                             <h5 class="font-size-14 mb-1">{{ $item->exchange->name }}</h5>
@@ -108,11 +115,40 @@
                 </div>
                 <!-- end card body -->
             </div>
+
+            <div class="card">
+
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Active Bots</h5>
+                    <div class="list-group list-group-flush">
+                        @forelse ($activeBots as $item)
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-sm flex-shrink-0 me-3">
+                                        <img src="{{ asset('coin/' . $item->market->coin_image) }}" alt=""
+                                            class="img-thumbnail rounded-circle">
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div>
+                                            <h5 class="font-size-14 mb-1">{{ $item->market->name }}</h5>
+                                            <p class="font-size-13 text-muted mb-0">{{ $item->exchange->name }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        @empty
+                            <h6 class="text-warning">No Bot is Active</h6>
+                        @endforelse
+                    </div>
+                </div>
+                <!-- end card body -->
+            </div>
             <!-- end card -->
         </div>
         <!-- end col -->
     </div>
     @include('admin.partials._fund-wallet-modal')
+    @include('admin.users.bots._modal')
 @endsection
 @push('scripts')
     <script>
@@ -227,4 +263,6 @@
             });
         })
     </script>
+
+    @include('admin.users.bots._scripts')
 @endpush
