@@ -45,10 +45,22 @@ class Navigation
                 'hasPermission' => true
             ],
             (object) [
-                'name'  => 'Transactions',
-                'route' => 'admin.transactions.index',
-                'icon'  => 'align-justify',
-                'hasPermission' => true
+                'name'      => 'Finance',
+                'icon'      => 'align-justify',
+                'routes'    => ['admin.transactions.index', 'admin.banner.index'],
+                'hasPermission' => true,
+                'subMenu'   => (object) [
+                    (object) [
+                        'name'  => 'Transactions',
+                        'route' => 'admin.transactions.index',
+                        'hasPermission' => true
+                    ],
+                    (object) [
+                        'name'  => 'Pending Withdrawals',
+                        'route' => 'admin.transactions.withdrawals.index',
+                        'hasPermission' => true
+                    ]
+                ],
             ],
             (object) [
                 'name'  => 'Trades',

@@ -95,5 +95,65 @@
                 timeout: 8000,
             });
         })
+
+        $('body').on('click', '#approve', function(e) {
+            e.preventDefault();
+
+            const button = $(this)
+
+            const url = button.data('url');
+
+            const spinner = button.find('.spinner-border');
+            const buttonText = button.find('#text')
+
+            $.ajax({
+                url: url,
+                method: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}"
+                },
+                beforeSend: function() {
+                    buttonText.hide();
+                    spinner.show();
+                },
+                success: function(result) {
+                    if (result.success) {
+
+                        displayMessage(
+                            result.message,
+                            "success"
+                        );
+
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+
+                    } else {
+
+                        spinner.hide();
+                        buttonText.show();
+
+                        displayMessage(
+                            result.message,
+                            "error"
+                        );
+                    }
+                },
+                error: function(jqXHR, testStatus, error) {
+
+                    console.log(jqXHR.responseText, testStatus, error);
+
+                    spinner.hide();
+                    buttonText.show();
+                    // Handle other errors
+                    displayMessage(
+                        "Error occurred",
+                        "error"
+                    );
+
+                },
+                timeout: 8000,
+            });
+        })
     </script>
 @endpush

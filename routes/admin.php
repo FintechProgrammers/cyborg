@@ -84,6 +84,8 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::controller(TransactionController::class)->prefix('transactions')->name('transactions.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/{transaction}', 'show')->name('show');
+        Route::get('/withdrawals/pending', 'withdrawals')->name('withdrawals.index');
+        Route::post('/approve/{transaction}', 'approveTranasction')->name('approve');
     });
 
     Route::controller(TradeController::class)->prefix('trades')->name('trades.')->group(function () {
