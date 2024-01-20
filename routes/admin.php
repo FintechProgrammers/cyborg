@@ -36,6 +36,8 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('/', 'index')->name('index');
     });
 
+    Route::get('/logout', [AuthenticationController::class, 'logout'])->name('logout');
+
     Route::controller(NewsController::class)->prefix('news')->name('news.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');

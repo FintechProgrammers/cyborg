@@ -56,10 +56,10 @@
             </div>
 
             <div class="dropdown d-none d-sm-inline-block">
-                <button type="button" class="btn header-item waves-effect" data-bs-toggle="dropdown"
+                {{-- <button type="button" class="btn header-item waves-effect" data-bs-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                     <img class="me-2" src="{{ asset('assets/admin/images/flags/us.jpg') }}" alt="Header Language" height="16">
-                </button>
+                </button> --}}
                 <div class="dropdown-menu dropdown-menu-end">
 
                     <!-- item-->
@@ -104,19 +104,19 @@
                 <button type="button" class="btn header-item bg-light-subtle border-start border-end"
                     id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">
-                    <img class="rounded-circle header-profile-user" src="{{ asset('assets/admin/images/users/avatar-1.jpg') }}"
+                    <img class="rounded-circle header-profile-user" src="{{ asset('assets/admin/images/default.png') }}"
                         alt="Header Avatar">
-                    <span class="d-none d-xl-inline-block ms-1 fw-medium">Admin Panel.</span>
+                    <span class="d-none d-xl-inline-block ms-1 fw-medium">{{ Auth::guard('admin')->user()->name }}</span>
                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
                     <!-- item-->
-                    <a class="dropdown-item" href="apps-contacts-profile.php"><i
+                    {{-- <a class="dropdown-item" href="apps-contacts-profile.php"><i
                             class="mdi mdi mdi-face-man font-size-16 align-middle me-1"></i> Profile</a>
                     <a class="dropdown-item" href="auth-lock-screen.php"><i
-                            class="mdi mdi-lock font-size-16 align-middle me-1"></i> Lock Screen</a>
+                            class="mdi mdi-lock font-size-16 align-middle me-1"></i> Lock Screen</a> --}}
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="logout.php"><i
+                    <a class="dropdown-item" href="{{ route('admin.logout') }}"><i
                             class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout</a>
                 </div>
             </div>

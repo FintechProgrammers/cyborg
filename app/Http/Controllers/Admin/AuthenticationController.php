@@ -42,4 +42,11 @@ class AuthenticationController extends Controller
     function resetPasword(Request $request)
     {
     }
+
+    function logout()
+    {
+        Auth::guard('admin')->logout();
+
+        return back()->with('success', 'Logged out successfully.');
+    }
 }
