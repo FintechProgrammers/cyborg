@@ -47,11 +47,11 @@
                     </td>
                 </tr>
             @empty
-                <tr>
+                {{-- <tr>
                     <td colspan="8">
                         <x-no-data-component title="no trades available" />
                     </td>
-                </tr>
+                </tr> --}}
             @endforelse
         </tbody>
     </table>

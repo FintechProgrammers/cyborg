@@ -44,11 +44,11 @@
                             </td>
                         </tr>
                     @empty
-                        <tr>
+                        {{-- <tr>
                             <td colspan="4">
                                 <x-no-data-component title="no news created" />
                             </td>
-                        </tr>
+                        </tr> --}}
                     @endforelse
                 </tbody>
             </table>
