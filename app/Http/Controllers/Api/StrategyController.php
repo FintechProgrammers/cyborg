@@ -23,10 +23,32 @@ class StrategyController extends Controller
 
     function copyStrategy(CopyRequest $request)
     {
+        $user = $request->user;
 
         $strategy = Strategy::whereUuid($request->strategy)->first();
 
         $exchange = Exchange::where('uuid', $request->exchange)->first();
+
+        // check if bot already exists
+        if ($request->trade_type == "future") {
+            $botExists = Bot::where('user_id', $user->id)
+                ->where('trade_type', $strategy->trade_type)
+                ->where('exchange_id', $exchange->id)
+                ->where('market_id', $strategy->market_id)
+                ->where('strategy_mode', $strategy->strategy_mode)
+                ->first();
+        } else {
+            $botExists = Bot::where('user_id', $user->id)
+                ->where('trade_type', $strategy->trade_type)
+                ->where('exchange_id', $exchange->id)
+                ->where('market_id', $strategy->market_id)
+                // ->where('strategy_mode', $request->strategy_mode)
+                ->first();
+        }
+
+        if ($botExists) {
+            return $this->sendError("Bot already exists.", [], 400);
+        }
 
         if ($request->capital < $strategy->capital) {
             return $this->sendError("Capital should not be less than " . $strategy->capital, [], 422);
@@ -65,8 +87,6 @@ class StrategyController extends Controller
             'quantity'          => 0,
             'profit'            => 0
         ];
-
-        $user = $request->user;
 
         $bot = Bot::Create(
             [

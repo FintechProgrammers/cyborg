@@ -188,13 +188,27 @@ class UserManagementController extends Controller
             $market = Market::where('uuid', $request->market)->first();
 
             // check if bot already exists
-            $botExists = Bot::where('user_id', $user->id)->where('trade_type', $request->trade_type)->where('exchange_id', $exchange->id)->where('market_id', $$market->id)->where('strategy_mode', $request->strategy_mode)->first();
-
-            if ($botExists) {
-                return $this->sendError("Bot already exists.", [], 422);
+            if ($request->trade_type == "future") {
+                $botExists = Bot::where('user_id', $user->id)
+                    ->where('trade_type', $request->trade_type)
+                    ->where('exchange_id', $exchange->id)
+                    ->where('market_id', $market->id)
+                    ->where('strategy_mode', $request->strategy_mode)
+                    ->first();
+            } else {
+                $botExists = Bot::where('user_id', $user->id)
+                    ->where('trade_type', $request->trade_type)
+                    ->where('exchange_id', $exchange->id)
+                    ->where('market_id', $market->id)
+                    // ->where('strategy_mode', $request->strategy_mode)
+                    ->first();
             }
 
-            $settings  = [
+            if ($botExists) {
+                return $this->sendError("Bot already exists.", [], 400);
+            }
+
+            $settings = [
                 'stop_loss'         => $request->stop_loss,
                 'take_profit'       => $request->take_profit,
                 'capital'           => $request->capital,

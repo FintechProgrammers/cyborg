@@ -157,7 +157,7 @@
                 } else {
                     // Handle other errors
                     displayMessage(
-                        "Error occurred",
+                        jqXHR.responseJSON.message,
                         "error"
                     );
                 }
@@ -180,7 +180,9 @@
         $.ajax({
             url: url,
             method: "POST",
-            data: {_token:"{{ csrf_token() }}"},
+            data: {
+                _token: "{{ csrf_token() }}"
+            },
             beforeSend: function() {
                 buttonText.hide();
                 spinner.show();
