@@ -34,6 +34,7 @@ Route::controller(AuthenticationController::class)->group(function () {
 Route::middleware(['auth:admin'])->group(function () {
     Route::controller(DashBoardController::class)->prefix('dashboard')->name('dashboard.')->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::get('get-stattistics','getStatistics')->name('getStatistics');
     });
 
     Route::get('/logout', [AuthenticationController::class, 'logout'])->name('logout');

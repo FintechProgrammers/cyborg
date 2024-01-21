@@ -195,3 +195,18 @@ if (!function_exists('systemSettings')) {
         return Settings::first();
     }
 }
+
+if (!function_exists('formatNumber')) {
+    function formatNumber($number)
+    {
+        if ($number >= 1000000) {
+            $formattedNumber = number_format($number / 1000000, 1) . 'm';
+        } elseif ($number >= 1000) {
+            $formattedNumber = number_format($number / 1000, 1) . 'k';
+        } else {
+            $formattedNumber = number_format($number, 1);
+        }
+
+        return $formattedNumber;
+    }
+}

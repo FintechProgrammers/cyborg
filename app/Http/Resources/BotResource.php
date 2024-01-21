@@ -20,6 +20,7 @@ class BotResource extends JsonResource
 
         return [
             'id'            => $this->uuid,
+            'bot_name'      => $this->bot_name,
             'market'        => new MarketResource($this->market),
             'exchange'      => new ExchangeResource($this->exchange),
             'started'       => (bool)$this->started,

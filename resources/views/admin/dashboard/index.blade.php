@@ -11,9 +11,9 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-6">
-                            <span class="text-white mb-3 lh-1 d-block text-truncate">Total Users</span>
+                            <span class="text-white mb-3 lh-1 d-block text-truncate">Deposits</span>
                             <h4 class="mb-3 text-white">
-                                <span class="counter-value text-white" data-target="865.2">0</span>k
+                                <span class=" text-white">${{ formatNumber($totalDeposit) }}</span>
                             </h4>
                         </div>
 
@@ -21,10 +21,10 @@
                             <div id="mini-chart1" data-colors='["#fff"]' class="apex-charts mb-2"></div>
                         </div>
                     </div>
-                    <div class="text-nowrap">
+                    {{-- <div class="text-nowrap">
                         <span class="badge bg-success-subtle text-success">+20.9k</span>
                         <span class="ms-1  font-size-13 text-white">Since today</span>
-                    </div>
+                    </div> --}}
                 </div><!-- end card body -->
             </div><!-- end card -->
         </div><!-- end col -->
@@ -36,20 +36,18 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-6">
-                            <span class="text-muted mb-3 lh-1 d-block text-truncate">Paid Users</span>
+                            <span class="text-muted mb-3 lh-1 d-block text-truncate">Withdrawals</span>
                             <h4 class="mb-3">
-                                <span class="counter-value" data-target="6258">0</span>
+                                <span class="">${{ formatNumber($totalWithdrawal) }}</span>
                             </h4>
                         </div>
                         <div class="col-6">
                             <div id="mini-chart2" data-colors='["#5156be"]' class="apex-charts mb-2"></div>
                         </div>
                     </div>
-                    <div class="text-nowrap">
+                    {{-- <div class="text-nowrap">
                         <span class="badge bg-danger-subtle text-danger">-29 Unpaid</span>
-
-
-                    </div>
+                    </div> --}}
                 </div><!-- end card body -->
             </div><!-- end card -->
         </div>
@@ -62,18 +60,16 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-12">
-                            <span class="text-white mb-3 lh-1 d-block text-truncate">Total circle income</span>
+                            <span class="text-white mb-3 lh-1 d-block text-truncate">Total Users</span>
                             <h4 class="mb-3">
-                                <span class="counter-value text-white" data-target="865.2">0</span>
+                                <span class=" text-white">{{ formatNumber($totalUsers) }}</span>
                             </h4>
                         </div>
-
-
                     </div>
-                    <div class="text-nowrap">
+                    {{-- <div class="text-nowrap">
                         <span class="badge bg-success-subtle text-success">+20.9k</span>
                         <span class="ms-1 text-white font-size-13">Since today</span>
-                    </div>
+                    </div> --}}
                 </div><!-- end card body -->
             </div><!-- end card -->
         </div><!-- end col -->
@@ -85,17 +81,17 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-6">
-                            <span class="text-muted mb-3 lh-1 d-block text-truncate">Kucoin api bind</span>
+                            <span class="text-muted mb-3 lh-1 d-block text-truncate">Paid Users</span>
                             <h4 class="mb-3">
-                                <span class="counter-value" data-target="6258">0</span>
+                                <span class="">{{ formatNumber($paidUsers) }}</span>
                             </h4>
                         </div>
 
                     </div>
-                    <div class="text-nowrap">
+                    {{-- <div class="text-nowrap">
                         <span class="badge bg-danger-subtle text-danger">-29 Trades</span>
                         <span class="ms-1 text-muted font-size-13">Since last week</span>
-                    </div>
+                    </div> --}}
                 </div><!-- end card body -->
             </div><!-- end card -->
         </div><!-- end col-->
@@ -109,15 +105,14 @@
                         <div class="col-6">
                             <span class="text-white mb-3 lh-1 d-block text-truncate">Users Balance</span>
                             <h4 class="mb-3 text-white">
-                                $<span class="counter-value text-white" data-target="4.32">0</span>M
+                                $<span class=" text-white">{{ formatNumber($usersBalance) }}</span>
                             </h4>
                         </div>
-
                     </div>
-                    <div class="text-nowrap">
+                    {{-- <div class="text-nowrap">
                         <span class="badge bg-danger-subtle text-danger">+ $2.8k</span>
                         <span class="ms-1 text-white font-size-13">Since last week</span>
-                    </div>
+                    </div> --}}
                 </div><!-- end card body -->
             </div><!-- end card -->
         </div><!-- end col -->
@@ -129,139 +124,47 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-6">
-                            <span class="mb-3 lh-1 d-block text-truncate text-white">Total Users Profit</span>
+                            <span class="mb-3 lh-1 d-block text-truncate text-white">Total Fee</span>
                             <h4 class="mb-3">
-                                <span class="counter-value text-white" data-target="12.57">0</span>
+                                <span class=" text-white">${{ formatNumber($feeBalance) }}</span>
                             </h4>
                         </div>
-
                     </div>
-                    <div class="text-nowrap">
+                    {{-- <div class="text-nowrap">
                         <span class="badge bg-success-subtle text-success">+2.95%</span>
                         <span class="ms-1 text-white font-size-13">Since last week</span>
-                    </div>
+                    </div> --}}
                 </div><!-- end card body -->
             </div><!-- end card -->
         </div><!-- end col -->
     </div>
     <div class="row">
-        <div class="col-xl-2 col-md-5">
-            <!-- card -->
-            <div class="card card-h-100">
-                <!-- card body -->
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-12">
-                            <span class="text-muted mb-3 lh-1 d-block text-truncate">Binance api bind</span>
-                            <h4 class="mb-3">
-                                <span class="counter-value" data-target="865.2">0</span>k
-                            </h4>
+        @foreach ($bindedExcahnges as $item)
+            <div class="col-xl-2 col-md-5">
+                <!-- card -->
+                <div class="card card-h-100">
+                    <!-- card body -->
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-12">
+                                <span class="text-muted mb-3 lh-1 d-block text-truncate">{{ $item['name'] }} api bind</span>
+                                <h4 class="mb-3">
+                                    <span class="">{{ formatNumber($item['count']) }}</span>
+                                </h4>
+                            </div>
                         </div>
-
-                    </div>
-
-                </div><!-- end card body -->
-            </div><!-- end card -->
-        </div><!-- end col -->
-        <div class="col-xl-2 col-md-5">
-            <!-- card -->
-            <div class="card card-h-100">
-                <!-- card body -->
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-12">
-                            <span class="text-muted mb-3 lh-1 d-block text-truncate">Total Reward</span>
-                            <h4 class="mb-3">
-                                <span class="counter-value" data-target="865.2">0</span>k
-                            </h4>
-                        </div>
-
-                    </div>
-
-                </div><!-- end card body -->
-            </div><!-- end card -->
-        </div><!-- end col -->
-        <div class="col-xl-2 col-md-5">
-            <!-- card -->
-            <div class="card card-h-100">
-                <!-- card body -->
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-12">
-                            <span class="text-muted mb-3 lh-1 d-block text-truncate">Total support tickets</span>
-                            <h4 class="mb-3">
-                                <span class="counter-value" data-target="865.2">0</span>k
-                            </h4>
-                        </div>
-
-                    </div>
-
-                </div><!-- end card body -->
-            </div><!-- end card -->
-        </div><!-- end col -->
-        <div class="col-xl-2 col-md-5">
-            <!-- card -->
-            <div class="card card-h-100">
-                <!-- card body -->
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-12">
-                            <span class="text-muted mb-3 lh-1 d-block text-truncate">Users in position</span>
-                            <h4 class="mb-3">
-                                <span class="counter-value" data-target="865.2">0</span>k
-                            </h4>
-                        </div>
-
-                    </div>
-
-                </div><!-- end card body -->
-            </div><!-- end card -->
-        </div><!-- end col -->
-        <div class="col-xl-2 col-md-5">
-            <!-- card -->
-            <div class="card card-h-100">
-                <!-- card body -->
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-12">
-                            <span class="text-muted mb-3 lh-1 d-block text-truncate">Bots On</span>
-                            <h4 class="mb-3">
-                                <span class="counter-value" data-target="865.2">0</span>k
-                            </h4>
-                        </div>
-
-                    </div>
-
-                </div><!-- end card body -->
-            </div><!-- end card -->
-        </div><!-- end col -->
-        <div class="col-xl-2 col-md-5">
-            <!-- card -->
-            <div class="card card-h-100">
-                <!-- card body -->
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-12">
-                            <span class="text-muted mb-3 lh-3 d-block text-truncate">Strategy sync</span>
-                            <h4 class="mb-3">
-                                <span class="counter-value" data-target="865.2">0</span>k
-                            </h4>
-                        </div>
-
-                    </div>
-
-                </div><!-- end card body -->
-            </div><!-- end card -->
-        </div><!-- end col -->
-
+                    </div><!-- end card body -->
+                </div><!-- end card -->
+            </div><!-- end col -->
+        @endforeach
     </div>
 
     <div class="row">
 
-        <div class="col-xl-6">
+        <div class="col-xl-8">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title mb-0">Deposit/Withdraw (30 days)</h4>
+                    <h4 class="card-title mb-0">Deposit/Withdraw</h4>
                 </div>
                 <div class="card-body">
 
@@ -271,100 +174,84 @@
                 </div>
             </div>
         </div> <!-- end col -->
-
-
-
         <!-- end col -->
-        <div class="col-xl-5">
-            <div class="row">
-
-                <!-- end col -->
-
-                <div class="col-xl-7">
-                    <!-- card -->
-                    <div class="card bg-primary text-white shadow-primary card-h-100">
-                        <!-- card body -->
-                        <div class="card-body p-0">
-                            <div id="carouselExampleCaptions" class="carousel slide text-center widget-carousel"
-                                data-bs-ride="carousel">
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <div class="text-center p-4">
-                                            <i class="mdi mdi-bitcoin widget-box-1-icon"></i>
-                                            <div class="avatar-md m-auto">
-                                                <span
-                                                    class="avatar-title rounded-circle bg-light-subtle text-white font-size-24">
-                                                    <i class="mdi mdi-currency-btc"></i>
-                                                </span>
-                                            </div>
-                                            <h4 class="mt-3 lh-base fw-normal text-white"><b>Bitcoin</b> News</h4>
-                                            <p class="text-white-50 font-size-13">Bitcoin prices fell sharply amid the
-                                                global sell-off in equities. Negative news
-                                                over the Bitcoin past week has dampened Bitcoin basics
-                                                sentiment for bitcoin. </p>
-                                            <button type="button" class="btn btn-light btn-sm">View details <i
-                                                    class="mdi mdi-arrow-right ms-1"></i></button>
-                                        </div>
+        <div class="col-xl-4">
+            <div class="card bg-primary text-white shadow-primary card-h-100">
+                <!-- card body -->
+                <div class="card-body p-0">
+                    <div id="carouselExampleCaptions" class="carousel slide text-center widget-carousel"
+                        data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="text-center p-4">
+                                    <i class="mdi mdi-bitcoin widget-box-1-icon"></i>
+                                    <div class="avatar-md m-auto">
+                                        <span class="avatar-title rounded-circle bg-light-subtle text-white font-size-24">
+                                            <i class="mdi mdi-currency-btc"></i>
+                                        </span>
                                     </div>
-                                    <!-- end carousel-item -->
-                                    <div class="carousel-item">
-                                        <div class="text-center p-4">
-                                            <i class="mdi mdi-ethereum widget-box-1-icon"></i>
-                                            <div class="avatar-md m-auto">
-                                                <span
-                                                    class="avatar-title rounded-circle bg-light-subtle text-white font-size-24">
-                                                    <i class="mdi mdi-ethereum"></i>
-                                                </span>
-                                            </div>
-                                            <h4 class="mt-3 lh-base fw-normal text-white"><b>ETH</b> News</h4>
-                                            <p class="text-white-50 font-size-13">Bitcoin prices fell sharply amid the
-                                                global sell-off in equities. Negative news
-                                                over the Bitcoin past week has dampened Bitcoin basics
-                                                sentiment for bitcoin. </p>
-                                            <button type="button" class="btn btn-light btn-sm">View details <i
-                                                    class="mdi mdi-arrow-right ms-1"></i></button>
-                                        </div>
-                                    </div>
-                                    <!-- end carousel-item -->
-                                    <div class="carousel-item">
-                                        <div class="text-center p-4">
-                                            <i class="mdi mdi-litecoin widget-box-1-icon"></i>
-                                            <div class="avatar-md m-auto">
-                                                <span
-                                                    class="avatar-title rounded-circle bg-light-subtle text-white font-size-24">
-                                                    <i class="mdi mdi-litecoin"></i>
-                                                </span>
-                                            </div>
-                                            <h4 class="mt-3 lh-base fw-normal text-white"><b>Litecoin</b> News</h4>
-                                            <p class="text-white-50 font-size-13">Bitcoin prices fell sharply amid the
-                                                global sell-off in equities. Negative news
-                                                over the Bitcoin past week has dampened Bitcoin basics
-                                                sentiment for bitcoin. </p>
-                                            <button type="button" class="btn btn-light btn-sm">View details <i
-                                                    class="mdi mdi-arrow-right ms-1"></i></button>
-                                        </div>
-                                    </div>
-                                    <!-- end carousel-item -->
+                                    <h4 class="mt-3 lh-base fw-normal text-white"><b>Bitcoin</b> News</h4>
+                                    <p class="text-white-50 font-size-13">Bitcoin prices fell sharply amid the
+                                        global sell-off in equities. Negative news
+                                        over the Bitcoin past week has dampened Bitcoin basics
+                                        sentiment for bitcoin. </p>
+                                    <button type="button" class="btn btn-light btn-sm">View details <i
+                                            class="mdi mdi-arrow-right ms-1"></i></button>
                                 </div>
-                                <!-- end carousel-inner -->
-
-                                <div class="carousel-indicators carousel-indicators-rounded">
-                                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0"
-                                        class="active" aria-current="true" aria-label="Slide 1"></button>
-                                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
-                                        aria-label="Slide 2"></button>
-                                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
-                                        aria-label="Slide 3"></button>
-                                </div>
-                                <!-- end carousel-indicators -->
                             </div>
-                            <!-- end carousel -->
+                            <!-- end carousel-item -->
+                            <div class="carousel-item">
+                                <div class="text-center p-4">
+                                    <i class="mdi mdi-ethereum widget-box-1-icon"></i>
+                                    <div class="avatar-md m-auto">
+                                        <span class="avatar-title rounded-circle bg-light-subtle text-white font-size-24">
+                                            <i class="mdi mdi-ethereum"></i>
+                                        </span>
+                                    </div>
+                                    <h4 class="mt-3 lh-base fw-normal text-white"><b>ETH</b> News</h4>
+                                    <p class="text-white-50 font-size-13">Bitcoin prices fell sharply amid the
+                                        global sell-off in equities. Negative news
+                                        over the Bitcoin past week has dampened Bitcoin basics
+                                        sentiment for bitcoin. </p>
+                                    <button type="button" class="btn btn-light btn-sm">View details <i
+                                            class="mdi mdi-arrow-right ms-1"></i></button>
+                                </div>
+                            </div>
+                            <!-- end carousel-item -->
+                            <div class="carousel-item">
+                                <div class="text-center p-4">
+                                    <i class="mdi mdi-litecoin widget-box-1-icon"></i>
+                                    <div class="avatar-md m-auto">
+                                        <span class="avatar-title rounded-circle bg-light-subtle text-white font-size-24">
+                                            <i class="mdi mdi-litecoin"></i>
+                                        </span>
+                                    </div>
+                                    <h4 class="mt-3 lh-base fw-normal text-white"><b>Litecoin</b> News</h4>
+                                    <p class="text-white-50 font-size-13">Bitcoin prices fell sharply amid the
+                                        global sell-off in equities. Negative news
+                                        over the Bitcoin past week has dampened Bitcoin basics
+                                        sentiment for bitcoin. </p>
+                                    <button type="button" class="btn btn-light btn-sm">View details <i
+                                            class="mdi mdi-arrow-right ms-1"></i></button>
+                                </div>
+                            </div>
+                            <!-- end carousel-item -->
                         </div>
-                        <!-- end card body -->
+                        <!-- end carousel-inner -->
+
+                        <div class="carousel-indicators carousel-indicators-rounded">
+                            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0"
+                                class="active" aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
+                                aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
+                                aria-label="Slide 3"></button>
+                        </div>
+                        <!-- end carousel-indicators -->
                     </div>
-                    <!-- end card -->
+                    <!-- end carousel -->
                 </div>
-                <!-- end col -->
+                <!-- end card body -->
             </div>
             <!-- end row -->
         </div>
@@ -377,10 +264,11 @@
 
     <!-- Plugins js-->
     <script src="{{ asset('assets/admin/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-world-mill-en.js') }}">
+    <script
+        src="{{ asset('assets/admin/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-world-mill-en.js') }}">
     </script>
     <script src="{{ asset('assets/admin/libs/chart.js/chart.umd.js') }}"></script>
-    <script src="{{ asset('assets/admin/js/pages/chartjs.init.js') }}"></script>
+    {{-- <script src="{{ asset('assets/admin/js/pages/chartjs.init.js') }}"></script> --}}
 
     <script>
         // get colors array from the string
@@ -398,12 +286,36 @@
             })
         }
 
-        $(document).ready(function() {
-            // mini-1
+        function getChartColorsArrayLin(chartId) {
+            if (document.getElementById(chartId) !== null) {
+                var colors = document.getElementById(chartId).getAttribute("data-colors");
+                colors = JSON.parse(colors);
+                return colors.map(function(value) {
+                    var newValue = value.replace(" ", "");
+                    if (newValue.indexOf(",") === -1) {
+                        var color = getComputedStyle(document.documentElement).getPropertyValue(newValue);
+                        if (color) return color;
+                        else return newValue;;
+                    } else {
+                        var val = value.split(',');
+                        if (val.length == 2) {
+                            var rgbaColor = getComputedStyle(document.documentElement).getPropertyValue(val[0]);
+                            rgbaColor = "rgba(" + rgbaColor + "," + val[1] + ")";
+                            return rgbaColor;
+                        } else {
+                            return newValue;
+                        }
+                    }
+                });
+            }
+        }
+
+        function setDepositChart(deposits) {
             var minichart1Colors = getChartColorsArray("#mini-chart1");
+
             var options = {
                 series: [{
-                    data: [2, 10, 18, 22, 36, 15, 47, 75, 65, 19, 14, 2, 47, 42, 15, ]
+                    data: deposits
                 }],
                 chart: {
                     type: 'line',
@@ -439,12 +351,13 @@
 
             var chart = new ApexCharts(document.querySelector("#mini-chart1"), options);
             chart.render();
+        }
 
-            // mini-2
+        function setWithdrawalChart(withdrawal) {
             var minichart2Colors = getChartColorsArray("#mini-chart2");
             var options = {
                 series: [{
-                    data: [15, 42, 47, 2, 14, 19, 65, 75, 47, 15, 42, 47, 2, 14, 12, ]
+                    data: withdrawal
                 }],
                 chart: {
                     type: 'line',
@@ -480,6 +393,110 @@
 
             var chart = new ApexCharts(document.querySelector("#mini-chart2"), options);
             chart.render();
+        }
+
+        function setLineChart(deposits, withdrawal) {
+
+            Chart.defaults.borderColor = "rgba(133, 141, 152, 0.1)";
+            Chart.defaults.color = "#858d98";
+            // line chart
+            var islinechart = document.getElementById('lineChart');
+            lineChartColor = getChartColorsArrayLin('lineChart');
+            if (lineChartColor) {
+                islinechart.setAttribute("width", islinechart.parentElement.offsetWidth);
+
+                var lineChart = new Chart(islinechart, {
+                    type: 'line',
+                    options: {
+                        maintainAspectRatio: false,
+                    },
+                    data: {
+                        labels: ["January", "February", "March", "April", "May", "June", "July", "August",
+                            "September", "October"
+                        ],
+                        datasets: [{
+                                label: "Deposits",
+                                fill: true,
+                                lineTension: 0.5,
+                                backgroundColor: lineChartColor[0],
+                                borderColor: lineChartColor[1],
+                                borderCapStyle: 'butt',
+                                borderDash: [],
+                                borderDashOffset: 0.0,
+                                borderJoinStyle: 'miter',
+                                pointBorderColor: lineChartColor[1],
+                                pointBackgroundColor: "#fff",
+                                pointBorderWidth: 1,
+                                pointHoverRadius: 5,
+                                pointHoverBackgroundColor: lineChartColor[1],
+                                pointHoverBorderColor: "#fff",
+                                pointHoverBorderWidth: 2,
+                                pointRadius: 1,
+                                pointHitRadius: 10,
+                                data: [deposits.January, deposits.February, deposits.March, deposits.March,
+                                    deposits.April, deposits.May, deposits.June, deposits.July, deposits
+                                    .August, deposits.September, deposits.October, deposits.November,
+                                    deposits.December
+                                ]
+                            },
+                            {
+                                label: "Withrawals",
+                                fill: true,
+                                lineTension: 0.5,
+                                backgroundColor: lineChartColor[2],
+                                borderColor: lineChartColor[3],
+                                borderCapStyle: 'butt',
+                                borderDash: [],
+                                borderDashOffset: 0.0,
+                                borderJoinStyle: 'miter',
+                                pointBorderColor: lineChartColor[3],
+                                pointBackgroundColor: "#fff",
+                                pointBorderWidth: 1,
+                                pointHoverRadius: 5,
+                                pointHoverBackgroundColor: lineChartColor[3],
+                                pointHoverBorderColor: "#eef0f2",
+                                pointHoverBorderWidth: 2,
+                                pointRadius: 1,
+                                pointHitRadius: 10,
+                                data: [
+                                    withdrawal.January, withdrawal.February, withdrawal.March, withdrawal.March,
+                                    withdrawal.April, withdrawal.May, withdrawal.June, withdrawal.July, withdrawal
+                                    .August, withdrawal.September, withdrawal.October, withdrawal.November,
+                                    withdrawal.December
+                                ]
+                            }
+                        ]
+                    },
+
+                });
+            }
+        }
+
+        $(document).ready(function() {
+
+            $.ajax({
+                url: "{{ route('admin.dashboard.getStatistics') }}",
+                method: "GET",
+                success: function(result) {
+                    console.log(result.data)
+                    setDepositChart(result.data.deposits);
+
+                    setWithdrawalChart(result.data.withdrawals)
+
+                    setLineChart(result.data.depositsInMonths, result.data.withdrawalInMonth)
+                },
+                error: function(jqXHR, testStatus, error) {
+
+                    console.log(jqXHR.responseText, testStatus, error);
+                    displayMessage(
+                        "Error occurred",
+                        "error"
+                    );
+
+                },
+                timeout: 8000,
+            });
+
         })
     </script>
 @endpush

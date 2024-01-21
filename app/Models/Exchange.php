@@ -13,6 +13,11 @@ class Exchange extends Model
 
     function exchange()
     {
-        return $this->belongsTo(Exchange::class,'exchange_id');
+        return $this->belongsTo(Exchange::class, 'exchange_id');
+    }
+
+    public function userExchanges()
+    {
+        return $this->hasMany(UserExchange::class, 'exchange_id');
     }
 }
