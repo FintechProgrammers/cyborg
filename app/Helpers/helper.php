@@ -172,6 +172,19 @@ if (!function_exists('isBinded')) {
     }
 }
 
+if (!function_exists('exchangeBalance')) {
+    function exchangeBalance($exchangeId)
+    {
+        $userExchange = UserExchange::where('user_id', request()->user->id)->where('exchange_id', $exchangeId)->first();
+
+        if ($userExchange) {
+            return number_format($userExchange->spot_balance + $userExchange->future_balance, 2);
+        } else {
+            return 0.00;
+        }
+    }
+}
+
 
 if (!function_exists('formatTime')) {
     function formatTime($timestamp)

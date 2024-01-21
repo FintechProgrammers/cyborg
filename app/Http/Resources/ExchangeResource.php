@@ -23,6 +23,7 @@ class ExchangeResource extends JsonResource
             "futures"   => (bool)$this->futures,
             "is_active" => (bool)$this->is_active,
             'is_binded' => isBinded($this->id),
+            'balance'   => exchangeBalance($this->id)
         ];
     }
 }

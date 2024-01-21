@@ -34,11 +34,11 @@
                             </td>
                         </tr>
                     @empty
-                        <tr>
+                        {{-- <tr>
                             <td colspan="6">
                                 <x-no-data-component title="no users available." />
                             </td>
-                        </tr>
+                        </tr> --}}
                     @endforelse
                 </tbody>
             </table>
