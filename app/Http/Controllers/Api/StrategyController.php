@@ -88,8 +88,8 @@ class StrategyController extends Controller
             'profit'            => 0
         ];
 
-        $bot = Bot::Create(
-            [
+        $bot = Bot::Create([
+                'bot_name'      => $strategy->bot_name,
                 'user_id'       => $user->id,
                 'exchange_id'   => $exchange->id,
                 'market_id'     => $strategy->market_id,
@@ -99,8 +99,7 @@ class StrategyController extends Controller
                 'trade_Values'  => json_encode($trade_Values),
                 'copy_id'       => $strategy->id,
                 'is_copied'     => true
-            ]
-        );
+            ]);
 
         return $this->sendResponse([], "Strategy copied successfully.");
     }
