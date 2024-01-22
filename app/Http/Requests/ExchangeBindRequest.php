@@ -35,6 +35,14 @@ class ExchangeBindRequest extends FormRequest
         // If exchange is kucoin, make password required
         $exchange = Exchange::whereUuid($this->input('exchange'))->first();
 
+        if (!$exchange) {
+           return throw new HttpResponseException(response()->json([
+                'success' => false,
+                'message' => 'Invalid exchange',
+                'errors' => [],
+            ], 400));
+        }
+
         if (in_array($exchange->slug, ['kucoin'])) {
             $rules['password'] = 'required';
         }
