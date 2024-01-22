@@ -122,7 +122,9 @@ class ExchangeController extends Controller
 
             $user = $request->user;
 
-            $binded = UserExchange::where('user_id', $user->id)->where('exchange_id', $exchange->id)->update([
+            $binded = UserExchange::where('user_id', $user->id)->where('exchange_id', $exchange->id)->first();
+
+            $binded->update([
                 'api_key'           => null,
                 'api_secret'        => null,
                 'api_passphrase'    => null,
@@ -131,11 +133,13 @@ class ExchangeController extends Controller
                 'is_binded'         => false
             ]);
 
-            $bindeds = new BindedExchangeResource($binded->refresh());
+            $bindeds = new BindedExchangeResource($binded);
 
             return $this->sendResponse($bindeds, "{$exchange->name} unbinded successfully.", 201);
         } catch (\Exception $e) {
-            sendToLog(['ubind error' => $e->getMessage()]);
+            sendToLog(['unbind error' => $e]);
+
+            return $this->sendError("Your request cannot be completed at the momment.", [], 500);
         }
     }
 
