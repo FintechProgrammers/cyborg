@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\WithdrawalController;
 use App\Http\Controllers\ExchangeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,4 +78,13 @@ Route::get('banners', [BannerController::class, 'banners']);
 
 Route::controller(\App\Http\Controllers\Api\NewsController::class)->prefix('news')->group(function () {
     Route::get('', 'index');
+});
+
+
+Route::fallback(function () {
+    return response()->json([
+        'success' => false,
+        'message' => 'Specified page not found.',
+        'data' => []
+    ], Response::HTTP_NOT_FOUND);
 });
