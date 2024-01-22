@@ -38,6 +38,7 @@ class ExchangeController extends Controller
             $setupData = [
                 'apikey'        => $request->api_key,
                 'secret'        => $request->secret,
+                'password'      => $request->password,
                 'trade_type'    =>  "spot"
             ];
 
