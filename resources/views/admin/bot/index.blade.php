@@ -15,17 +15,20 @@
     </div>
     <div class="card">
         <div class="card-body">
+           <div class="table-responsive">
             <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100 table-hover">
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Bot Name</th>
                         <th>Market</th>
+                        <th>Market Type</th>
                         <th>Margin Limit</th>
                         <th>Margin Ratio</th>
                         <th>Price Drop</th>
                         <th>Stop Loss</th>
                         <th>Take Profit</th>
+                        <th>Minimum Capital</th>
                         <th width="20%">Option</th>
                     </tr>
                 </thead>
@@ -38,11 +41,13 @@
                             <td>{{ $sno++ }}</td>
                             <td>{{ $item->bot_name }}</td>
                             <td>{{ $item->market->name }}</td>
+                            <td>{{ $item->trade_type }}</td>
                             <td class="text-center">{{ $item->margin_limit }}</td>
                             <td class="text-center">{{ $item->m_ration }}</td>
                             <td class="text-center">{{ $item->price_drop }}</td>
                             <td class="text-center">{{ $item->stop_loss }}%</td>
                             <td class="text-center">{{ $item->take_profit }}%</td>
+                            <td class="text-center">{{ $item->capital }} USDT</td>
                             <td>
                                 <a href="{{ route('admin.bot.edit', $item->uuid) }}" class="btn btn-primary">
                                     Edit
@@ -62,6 +67,7 @@
                     @endforelse
                 </tbody>
             </table>
+           </div>
         </div>
     </div>
 @endsection

@@ -30,7 +30,7 @@ if (!function_exists('createCaption')) {
         $plainText = preg_replace('/\[.*?\]/', '', $plainText);
 
         // Set the desired maximum length for the caption
-        $maxCaptionLength = 150;
+        $maxCaptionLength = 50;
 
         // Create the caption from the content
         $caption = Str::limit($plainText, $maxCaptionLength);
@@ -213,11 +213,11 @@ if (!function_exists('formatNumber')) {
     function formatNumber($number)
     {
         if ($number >= 1000000) {
-            $formattedNumber = number_format($number / 1000000, 1) . 'm';
+            $formattedNumber = $number / 1000000 . 'M';
         } elseif ($number >= 1000) {
-            $formattedNumber = number_format($number / 1000, 1) . 'k';
+            $formattedNumber = $number / 1000 . 'K';
         } else {
-            $formattedNumber = number_format($number, 1);
+            $formattedNumber = $number;
         }
 
         return $formattedNumber;

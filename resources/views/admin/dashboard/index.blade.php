@@ -13,7 +13,7 @@
                         <div class="col-6">
                             <span class="text-white mb-3 lh-1 d-block text-truncate">Deposits</span>
                             <h4 class="mb-3 text-white">
-                                <span class=" text-white">${{ formatNumber($totalDeposit) }}</span>
+                                <span class=" text-white">${{ formatNumber(number_format($totalDeposit, 1)) }}</span>
                             </h4>
                         </div>
 
@@ -38,7 +38,7 @@
                         <div class="col-6">
                             <span class="text-muted mb-3 lh-1 d-block text-truncate">Withdrawals</span>
                             <h4 class="mb-3">
-                                <span class="">${{ formatNumber($totalWithdrawal) }}</span>
+                                <span class="">${{ formatNumber(number_format($totalWithdrawal,1)) }}</span>
                             </h4>
                         </div>
                         <div class="col-6">
@@ -81,7 +81,7 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-6">
-                            <span class="text-muted mb-3 lh-1 d-block text-truncate">Paid Users</span>
+                            <span class="text-muted mb-3 lh-1 d-block text-truncate">Active Users</span>
                             <h4 class="mb-3">
                                 <span class="">{{ formatNumber($paidUsers) }}</span>
                             </h4>
@@ -105,7 +105,7 @@
                         <div class="col-6">
                             <span class="text-white mb-3 lh-1 d-block text-truncate">Users Balance</span>
                             <h4 class="mb-3 text-white">
-                                $<span class=" text-white">{{ formatNumber($usersBalance) }}</span>
+                                $<span class=" text-white">{{ formatNumber(number_format($usersBalance, 1)) }}</span>
                             </h4>
                         </div>
                     </div>
@@ -126,7 +126,7 @@
                         <div class="col-6">
                             <span class="mb-3 lh-1 d-block text-truncate text-white">Total Fee</span>
                             <h4 class="mb-3">
-                                <span class=" text-white">${{ formatNumber($feeBalance) }}</span>
+                                <span class=" text-white">${{ formatNumber(number_format($feeBalance, 1)) }}</span>
                             </h4>
                         </div>
                     </div>
@@ -195,8 +195,7 @@
                                         global sell-off in equities. Negative news
                                         over the Bitcoin past week has dampened Bitcoin basics
                                         sentiment for bitcoin. </p>
-                                    <button type="button" class="btn btn-light btn-sm">View details <i
-                                            class="mdi mdi-arrow-right ms-1"></i></button>
+
                                 </div>
                             </div>
                             <!-- end carousel-item -->
@@ -213,8 +212,7 @@
                                         global sell-off in equities. Negative news
                                         over the Bitcoin past week has dampened Bitcoin basics
                                         sentiment for bitcoin. </p>
-                                    <button type="button" class="btn btn-light btn-sm">View details <i
-                                            class="mdi mdi-arrow-right ms-1"></i></button>
+
                                 </div>
                             </div>
                             <!-- end carousel-item -->
@@ -231,8 +229,7 @@
                                         global sell-off in equities. Negative news
                                         over the Bitcoin past week has dampened Bitcoin basics
                                         sentiment for bitcoin. </p>
-                                    <button type="button" class="btn btn-light btn-sm">View details <i
-                                            class="mdi mdi-arrow-right ms-1"></i></button>
+
                                 </div>
                             </div>
                             <!-- end carousel-item -->
@@ -459,8 +456,10 @@
                                 pointRadius: 1,
                                 pointHitRadius: 10,
                                 data: [
-                                    withdrawal.January, withdrawal.February, withdrawal.March, withdrawal.March,
-                                    withdrawal.April, withdrawal.May, withdrawal.June, withdrawal.July, withdrawal
+                                    withdrawal.January, withdrawal.February, withdrawal.March, withdrawal
+                                    .March,
+                                    withdrawal.April, withdrawal.May, withdrawal.June, withdrawal.July,
+                                    withdrawal
                                     .August, withdrawal.September, withdrawal.October, withdrawal.November,
                                     withdrawal.December
                                 ]

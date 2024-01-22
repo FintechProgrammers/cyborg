@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ExchangeBindRequest;
+use App\Http\Requests\ExchangeUnbindRequest;
 use App\Http\Resources\BindedExchangeResource;
 use App\Http\Resources\ExchangeResource;
 use App\Http\Resources\MarketResource;
@@ -71,7 +72,7 @@ class ExchangeController extends Controller
                     'api_passphrase'    => $request->password,
                     'spot_balance'      => !empty($spotBalance['total']) ? $spotBalance['total'] : 0.00,
                     'future_balance'    => !empty($futuresBalance['total']) ? $futuresBalance['total'] : 0.00,
-                    'is_binded'         => (bool) $request->bind
+                    'is_binded'         => true
                 ]
             );
 
@@ -106,6 +107,35 @@ class ExchangeController extends Controller
                 logger($e);
                 return $this->sendError("Your request cannot be completed at the momment.", [], 500);
             }
+        }
+    }
+
+    function unbind(ExchangeUnbindRequest $request)
+    {
+        try {
+
+            $exchange = Exchange::whereUuid($request->exchange)->first();
+
+            if (!$exchange) {
+                return $this->sendError("Invalid exchange.", [], 402);
+            }
+
+            $user = $request->user;
+
+            $binded = UserExchange::where('user_id', $user->id)->where('exchange_id', $exchange->id)->update([
+                'api_key'           => null,
+                'api_secret'        => null,
+                'api_passphrase'    => null,
+                'spot_balance'      => 0.00,
+                'future_balance'    => 0.00,
+                'is_binded'         => false
+            ]);
+
+            $bindeds = new BindedExchangeResource($binded->refresh());
+
+            return $this->sendResponse($bindeds, "{$exchange->name} unbinded successfully.", 201);
+        } catch (\Exception $e) {
+            sendToLog(['ubind error' => $e->getMessage()]);
         }
     }
 

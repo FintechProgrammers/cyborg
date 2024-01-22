@@ -42,6 +42,7 @@ Route::middleware('validate.user')->group(function () {
         Route::get('/', 'index');
         Route::get('/binded', 'bindedExchange');
         Route::post('/bind', 'bind');
+        Route::post('/unbind', 'unbind');
         Route::get('/markets', 'markets');
     });
 

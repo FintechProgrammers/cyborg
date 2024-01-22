@@ -61,7 +61,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="example-text-input" class="form-label">Stop Loss (%)</label>
-                            <input class="form-control" type="number" step="any" name="stop_loss"
+                            <input class="form-control" type="number" step="any" min="0" name="stop_loss"
                                 value="{{ isset($strategy) ? $strategy->stop_loss : '' }}">
                             @error('stop_loss')
                                 <div class="text-danger">{{ $message }}</div>
@@ -70,9 +70,17 @@
                     </div>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Take Profit (%)</label>
-                        <input class="form-control" type="number" step="any" name="take_profit"
+                        <input class="form-control" type="number" min="0" step="any" name="take_profit"
                             value="{{ isset($strategy) ? $strategy->take_profit : '' }}">
                         @error('take_profit')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="example-text-input" class="form-label">Minimum Capital (USDT)</label>
+                        <input class="form-control" type="number" min="0" step="any" name="mimimum_capital"
+                            value="{{ isset($strategy) ? $strategy->capital : '' }}">
+                        @error('mimimum_capital')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>

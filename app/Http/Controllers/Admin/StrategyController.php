@@ -29,11 +29,12 @@ class StrategyController extends Controller
 
         $request->validate([
             'market'           => 'required|exists:markets,id',
-            'stop_loss'        => 'required|numeric',
+            'stop_loss'     => 'nullable|numeric|required_if:trade_type,future',
             'take_profit'      => 'required|numeric',
             'margin_limit'     => 'required|numeric|min:1',
             'market_type'      => 'required',
-            'strategy_mode'     => 'nullable|required_if:market_type,future'
+            'strategy_mode'     => 'nullable|required_if:market_type,future',
+            'mimimum_capital'   => 'required|numeric|',
             // 'margin_ratio'     => 'required|array',
             // 'margin_ratio.*'   => 'required|integer',
             // 'price_ratio'      => 'required|array',
@@ -43,13 +44,14 @@ class StrategyController extends Controller
         Strategy::create([
             'bot_name'          =>  $request->bot_name,
             'market_id'         => $request->market,
-            'stop_loss'         => $request->stop_loss,
+            'stop_loss'         => $request->stop_loss ? $request->stop_loss : 0,
             'margin_limit'      => $request->margin_limit,
             'take_profit'  => $request->take_profit,
             'm_ration'     => implode('|', $request->margin_ratio),
             'price_drop'   => implode('|', $request->price_drop),
             'trade_type'    => $request->market_type,
-            'strategy_mode' => $request->strategy_mode
+            'strategy_mode' => $request->strategy_mode? $request->strategy_mode : "short",
+            'capital'   => $request->mimimum_capital,
         ]);
 
         return redirect()->route('admin.bot.index')->with('success', 'Bot created successfully');
@@ -70,6 +72,7 @@ class StrategyController extends Controller
             // 'market'           => 'required|exists:markets,id',
             'stop_loss'         => 'required|numeric',
             'take_profit'       => 'required|numeric',
+            'mimimum_capital'   => 'required|numeric|',
             // 'margin_limit'      => 'required|numeric',
             // 'market_type'      => 'required',
             // 'strategy_mode'     => 'nullable|required_if:market_type,future'
@@ -85,6 +88,7 @@ class StrategyController extends Controller
             // 'margin_limit'  => $request->margin_limit,
             'stop_loss'    => $request->stop_loss,
             'take_profit'  => $request->take_profit,
+            'capital'   => $request->mimimum_capital,
             // 'm_ration'     => implode('|', $request->margin_ratio),
             // 'price_drop'   => implode('|', $request->price_drop),
             // 'trade_type'    => $request->market_type,

@@ -15,43 +15,45 @@
     </div>
     <div class="card">
         <div class="card-body">
-            <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100 table-hover">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Title</th>
-                        <th>Caption</th>
-                        <th width="20%">Option</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @php
-                        $sno = 1;
-                    @endphp
-                    @forelse ($news as $item)
+            <div class="table-responsive">
+                <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100 table-hover">
+                    <thead>
                         <tr>
-                            <td>{{ $sno++ }}</td>
-                            <td>{{ $item->title }}</td>
-                            <td>{{ createCaption($item->content) }}</td>
-                            <td>
-                                <a href="{{ route('admin.news.edit', $item->uuid) }}" class="btn btn-primary">
-                                    Edit
-                                </a>
-                                <a href="#" class="btn btn-danger delete"
-                                    data-url="{{ route('admin.news.delete', $item->uuid) }}">
-                                    Delete
-                                </a>
-                            </td>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Caption</th>
+                            <th width="20%">Option</th>
                         </tr>
-                    @empty
-                        {{-- <tr>
-                            <td colspan="4">
-                                <x-no-data-component title="no news created" />
-                            </td>
-                        </tr> --}}
-                    @endforelse
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @php
+                            $sno = 1;
+                        @endphp
+                        @forelse ($news as $item)
+                            <tr>
+                                <td>{{ $sno++ }}</td>
+                                <td>{{ $item->title }}</td>
+                                <td>{{ createCaption($item->content) }}</td>
+                                <td>
+                                    <a href="{{ route('admin.news.edit', $item->uuid) }}" class="btn btn-primary">
+                                        Edit
+                                    </a>
+                                    <a href="#" class="btn btn-danger delete"
+                                        data-url="{{ route('admin.news.delete', $item->uuid) }}">
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        @empty
+                            {{-- <tr>
+                                <td colspan="4">
+                                    <x-no-data-component title="no news created" />
+                                </td>
+                            </tr> --}}
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 @endsection
