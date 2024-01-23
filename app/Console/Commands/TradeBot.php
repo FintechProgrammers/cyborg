@@ -32,64 +32,57 @@ class TradeBot extends Command
      */
     public function handle()
     {
-        try {
-            $gasFee = 20;
 
-            $wallerService = new WalletService();
+        $gasFee = 20;
 
-            // while (true) {
-            $bots = Bot::with(['exchange', 'market', 'user'])->where('started', 1)->get();
+        $wallerService = new WalletService();
 
-            foreach ($bots as $bot) {
+        // while (true) {
+        $bots = Bot::with(['exchange', 'market', 'user'])->where('started', 1)->get();
 
-                $bot->update(['running' => true]);
+        foreach ($bots as $bot) {
 
-                $settings = (object)  json_decode($bot->settings, true);
+            $bot->update(['running' => true]);
 
-                $trade_values =  (object) json_decode($bot->trade_values, true);
+            $settings = (object)  json_decode($bot->settings, true);
 
-                $market = $bot->market->coin;
+            $trade_values =  (object) json_decode($bot->trade_values, true);
 
-                // user Wallet
-                $wallet =  Wallet::where('user_id', $bot->user_id)->first();
+            $market = $bot->market->coin;
 
-                $user = $bot->user;
+            // user Wallet
+            $wallet =  Wallet::where('user_id', $bot->user_id)->first();
 
-                if (!empty($wallet)) {
+            $user = $bot->user;
 
-                    // check gas fee
-                    if ($wallet->fee > $gasFee) {
+            if (!empty($wallet)) {
 
-                        // connect to exchange
-                        $exchangeKey = ucfirst($bot->exchange->slug);
+                // check gas fee
+                if ($wallet->fee > $gasFee) {
 
-                        $exchangeService = "\\App\\Services\\Exchange\\{$exchangeKey}";
+                    // connect to exchange
+                    $exchangeKey = ucfirst($bot->exchange->slug);
 
-                        $userExchange = \App\Models\UserExchange::where('user_id', $bot->user_id)->where('exchange_id', $bot->exchange_id)->where('is_binded', true)->first();
+                    $exchangeService = "\\App\\Services\\Exchange\\{$exchangeKey}";
 
-                        if ($userExchange) {
+                    $userExchange = \App\Models\UserExchange::where('user_id', $bot->user_id)->where('exchange_id', $bot->exchange_id)->where('is_binded', true)->first();
 
-                            // Spot Trading
-                            if ($bot->trade_type === "spot") {
-                                $this->spotTrade($userExchange, $exchangeService, $trade_values, $market, $settings, $bot, $wallerService, $user, $gasFee, $wallet);
-                            }
+                    if ($userExchange) {
 
-                            // Futures Trading
-                            if ($bot->trade_type === "future") {
-                                $this->futuresTrade($userExchange, $exchangeService, $trade_values, $market, $settings, $bot, $wallerService, $user, $gasFee, $wallet);
-                            }
-                        } else {
-                            $bot->update([
-                                'started' => false,
-                                'running' => false,
-                                'logs'     => "{$bot->exchange->name} exchange is not binded",
-                            ]);
+                        // Spot Trading
+                        if ($bot->trade_type === "spot") {
+                            $this->spotTrade($userExchange, $exchangeService, $trade_values, $market, $settings, $bot, $wallerService, $user, $gasFee, $wallet);
+                        }
+
+                        // Futures Trading
+                        if ($bot->trade_type === "future") {
+                            $this->futuresTrade($userExchange, $exchangeService, $trade_values, $market, $settings, $bot, $wallerService, $user, $gasFee, $wallet);
                         }
                     } else {
                         $bot->update([
                             'started' => false,
                             'running' => false,
-                            'logs'     => "Your are low on gas fee. you need upto {$gasFee} USDT as gas fee. ",
+                            'logs'     => "{$bot->exchange->name} exchange is not binded",
                         ]);
                     }
                 } else {
@@ -99,9 +92,13 @@ class TradeBot extends Command
                         'logs'     => "Your are low on gas fee. you need upto {$gasFee} USDT as gas fee. ",
                     ]);
                 }
+            } else {
+                $bot->update([
+                    'started' => false,
+                    'running' => false,
+                    'logs'     => "Your are low on gas fee. you need upto {$gasFee} USDT as gas fee. ",
+                ]);
             }
-        } catch (\Exception $e) {
-            sendToLog($e);
         }
     }
 
@@ -243,7 +240,7 @@ class TradeBot extends Command
             }
         } catch (\Exception $e) {
 
-            logger($e->getMessage());
+            sendToLog($e);
 
             $responseString = $e->getMessage();
 
@@ -701,7 +698,7 @@ class TradeBot extends Command
                 }
             }
         } catch (\Exception $e) {
-            logger($e);
+            sendToLog($e);
 
             if ($e instanceof \ccxt\InsufficientFunds) {
                 // Handle InsufficientFunds exception
