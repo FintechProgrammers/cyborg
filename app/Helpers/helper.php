@@ -109,16 +109,16 @@ if (!function_exists('sendToLog')) { /* send to log" */
             logger($error);
         } else {
             try {
-                $logFilesPath = storage_path('logs');
-                // get all log files
-                $logFiles = File::glob($logFilesPath . '/*.log');
-                // get latest log
-                $latestLogFile = array_pop($logFiles);
+                // $logFilesPath = storage_path('logs');
+                // // get all log files
+                // $logFiles = File::glob($logFilesPath . '/*.log');
+                // // get latest log
+                // $latestLogFile = array_pop($logFiles);
 
-                $logFileContent = File::get($latestLogFile);
+                // $logFileContent = File::get($latestLogFile);
 
                 $payload = [
-                    'text' => $logFileContent
+                    'text' => $error
                 ];
 
                 $client = new \GuzzleHttp\Client();
