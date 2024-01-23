@@ -24,7 +24,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('run:bot')->everyMinute();
+        $schedule->command('run:bot')->everyMinute()->runInBackground();
     }
 
     /**
