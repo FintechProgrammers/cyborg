@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 
 if (!function_exists('generateReference')) { /* Check_for "generateReference" */
     function generateReference()
@@ -101,9 +102,45 @@ if (!function_exists('signalPlans')) { /* Check_for "plans allowed for signal" *
 }
 
 if (!function_exists('sendToLog')) { /* send to log" */
-    function sendToLog($log)
+    function sendToLog($error)
     {
-        logger($log);
+        // Log the exception if it's in a local environment
+        if (env('APP_ENV') === 'local') {
+            logger($error);
+        } else {
+            try {
+                $logFilesPath = storage_path('logs');
+                // get all log files
+                $logFiles = File::glob($logFilesPath . '/*.log');
+                // get latest log
+                $latestLogFile = array_pop($logFiles);
+
+                $logFileContent = File::get($latestLogFile);
+
+                $payload = [
+                    'channel' => env('SLACK_CHANNEL_ID'),
+                    'text' => "An error or exception occurred:\n\n$error\n",
+                    'files' => [
+                        [
+                            'name' => basename($latestLogFile),
+                            'content' => $logFileContent,
+                            'type' => 'text/plain',
+                        ],
+                    ],
+                ];
+
+                $client = new \GuzzleHttp\Client();
+                $client->post('https://slack.com/api/chat.postMessage', [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . env('SLACK_API_TOKEN'),
+                        'Content-Type' => 'application/json',
+                    ],
+                    'json' => $payload,
+                ]);
+            } catch (\Throwable $th) {
+                throw $th;
+            }
+        }
     }
 }
 
