@@ -698,7 +698,8 @@ class TradeBot extends Command
                 }
             }
         } catch (\Exception $e) {
-            sendToLog($e);
+            // sendToLog($e);
+            logger($e->getMessage());
 
             if ($e instanceof \ccxt\InsufficientFunds) {
                 // Handle InsufficientFunds exception
