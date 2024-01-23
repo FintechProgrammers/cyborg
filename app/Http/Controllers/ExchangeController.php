@@ -81,6 +81,7 @@ class ExchangeController extends Controller
 
             return $this->sendResponse($bindeds, "{$exchange->name} binded successfully.", 201);
         } catch (\Exception $e) {
+            sendToLog($e);
             $responseString = $e->getMessage();
             // Find the position of the first curly brace
             $bracePosition = strpos($responseString, '{');
