@@ -82,6 +82,10 @@ Route::controller(\App\Http\Controllers\Api\NewsController::class)->prefix('news
 });
 
 
+Route::get('test-slack',function(){
+    sendToLog("hello");
+});
+
 Route::fallback(function () {
     return response()->json([
         'success' => false,

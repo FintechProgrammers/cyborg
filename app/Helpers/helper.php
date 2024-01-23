@@ -118,21 +118,12 @@ if (!function_exists('sendToLog')) { /* send to log" */
                 $logFileContent = File::get($latestLogFile);
 
                 $payload = [
-                    'channel' => env('SLACK_CHANNEL_ID'),
-                    'text' => "An error or exception occurred:\n\n$error\n",
-                    'files' => [
-                        [
-                            'name' => basename($latestLogFile),
-                            'content' => $logFileContent,
-                            'type' => 'text/plain',
-                        ],
-                    ],
+                    'text' => $logFileContent
                 ];
 
                 $client = new \GuzzleHttp\Client();
-                $client->post('https://slack.com/api/chat.postMessage', [
+                $client->post('https://hooks.slack.com/services/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', [
                     'headers' => [
-                        'Authorization' => 'Bearer ' . env('SLACK_API_TOKEN'),
                         'Content-Type' => 'application/json',
                     ],
                     'json' => $payload,
