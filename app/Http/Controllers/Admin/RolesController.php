@@ -103,6 +103,6 @@ class RolesController extends Controller
         }
         $role->delete();
 
-        return response()->json(['success' => true, 'message' => ucfirst($role['name']) . ' role was successfully deleted.']);
+        return response()->json(['success' => true, 'message' =>' Role was successfully deleted.']);
     }
 }
