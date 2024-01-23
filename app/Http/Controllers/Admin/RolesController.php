@@ -36,6 +36,7 @@ class RolesController extends Controller
         }
 
         $role = Role::create([
+            'uuid' => \Illuminate\Support\Str::uuid()->toString(),
             'name' => $request->role_name,
             'guard_name' => 'admin'
         ]);
