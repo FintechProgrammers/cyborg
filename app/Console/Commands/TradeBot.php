@@ -38,7 +38,7 @@ class TradeBot extends Command
         $wallerService = new WalletService();
 
         // while (true) {
-        $bots = Bot::with(['exchange', 'market', 'user'])->where('started', true)->where('running',false)->get();
+        $bots = Bot::with(['exchange', 'market', 'user'])->where('started', true)->where('running', false)->get();
 
         foreach ($bots as $bot) {
 
@@ -299,7 +299,7 @@ class TradeBot extends Command
             $in_position = $trade_values->in_position;
             $trade_price = $trade_values->trade_price;
             $quantity = $trade_values->quantity;
-            $first_price = $trade_values->first_price;
+            // $first_price = $trade_values->first_price;
             $floating_loss = $trade_values->floating_loss;
             $current_profit = $trade_values->profit;
             $margin_calls = $trade_values->margin_calls;
@@ -465,7 +465,7 @@ class TradeBot extends Command
                 $tradeValues = [
                     'quantity'          => $quantity,
                     'trade_price'       => $trade_price,
-                    'first_price'       => $first_price,
+                    // 'first_price'       => $first_price,
                     'position_amount'   => $position_amount,
                     'margin_calls'      => $margin_calls,
                     'in_position'       => $in_position,
@@ -698,17 +698,47 @@ class TradeBot extends Command
                 }
             }
         } catch (\Exception $e) {
-            // sendToLog($e);
-            logger($e->getMessage());
 
-            if ($e instanceof \ccxt\InsufficientFunds) {
-                // Handle InsufficientFunds exception
-                $bot->update([
-                    'started' => false,
-                    'running' => false,
-                    'logs'     => $e->getMessage(),
-                ]);
+            $responseString = $e->getMessage();
+
+            // Find the position of the first curly brace
+            $bracePosition = strpos($responseString, '{');
+
+            if ($bracePosition !== false) {
+                // Extract the JSON string
+                $jsonString = substr($responseString, $bracePosition);
+
+                // Decode the JSON string
+                $responseArray = json_decode($jsonString, true);
+
+                if ($responseArray !== null && isset($responseArray['msg'])) {
+                    $errorMessage = $responseArray['msg'];
+
+                    // Handle InsufficientFunds exception
+                    $bot->update([
+                        'started' => false,
+                        'running' => false,
+                        'logs'     => $errorMessage,
+                    ]);
+
+                } else if ($responseArray !== null && isset($responseArray['retMsg'])) {
+                    $errorMessage = $responseArray['retMsg'];
+                    // Now $errorMessage contains the value of "msg"
+                    $bot->update([
+                        'started' => false,
+                        'running' => false,
+                        'logs'     => $errorMessage,
+                    ]);
+                }
             }
+
+            // if ($e instanceof \ccxt\InsufficientFunds) {
+            // }
+
+            // sendToLog($e);
+            logger($e);
+
+            return;
         }
     }
 
