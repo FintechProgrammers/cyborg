@@ -31,7 +31,7 @@ class StrategyController extends Controller
             $exchange = Exchange::where('uuid', $request->exchange)->first();
 
             // check if bot already exists
-            if ($request->trade_type == "future") {
+            if ($strategy->trade_type == "future") {
                 $botExists = Bot::where('user_id', $user->id)
                     ->where('trade_type', $strategy->trade_type)
                     ->where('exchange_id', $exchange->id)
@@ -43,7 +43,6 @@ class StrategyController extends Controller
                     ->where('trade_type', $strategy->trade_type)
                     ->where('exchange_id', $exchange->id)
                     ->where('market_id', $strategy->market_id)
-                    // ->where('strategy_mode', $request->strategy_mode)
                     ->first();
             }
 

@@ -9,6 +9,7 @@ use App\Http\Resources\TradeHistoryResource;
 use App\Models\ProfitRecord;
 use App\Models\Reward;
 use App\Models\TradeHistory;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class TradeRecordsController extends Controller
@@ -30,11 +31,14 @@ class TradeRecordsController extends Controller
         // Get the value of user_id from the URL parameters
         $user = $request->user;
 
-        $records = ProfitRecord::where('user_id', $user->id)->first();
+        $data['todayProfit'] = TradeHistory::where('user_id', $user->id)->where('is_profit', true)->whereDate('created_at', Carbon::today())->sum('profit');
+        $data['totalProfit'] = TradeHistory::where('user_id', $user->id)->where('is_profit', true)->sum('profit');
 
-        $records = new ProfitResource($records);
+        // $records = ProfitRecord::where('user_id', $user->id)->first();
 
-        return $this->sendResponse($records);
+        // $records = new ProfitResource($records);
+
+        return $this->sendResponse($data);
     }
 
     public function rewards(Request $request)

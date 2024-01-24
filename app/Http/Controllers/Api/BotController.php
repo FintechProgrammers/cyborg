@@ -56,7 +56,6 @@ class BotController extends Controller
                     ->where('trade_type', $request->trade_type)
                     ->where('exchange_id', $exchange->id)
                     ->where('market_id', $market->id)
-                    // ->where('strategy_mode', $request->strategy_mode)
                     ->first();
             }
 
