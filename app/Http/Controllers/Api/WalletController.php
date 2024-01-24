@@ -68,7 +68,7 @@ class WalletController extends Controller
     {
         $user = $request->user;
 
-        $transactions = Transaction::where('user_id', $user->id)->get();
+        $transactions = Transaction::where('user_id', $user->id)->latest()->get();
 
         $transaction = TransactionResource::collection($transactions);
 

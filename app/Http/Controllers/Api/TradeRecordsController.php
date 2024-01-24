@@ -19,7 +19,7 @@ class TradeRecordsController extends Controller
         // Get the value of user_id from the URL parameters
         $user = $request->user;
 
-        $tradeRecord = TradeHistory::where('user_id', $user->id)->get();
+        $tradeRecord = TradeHistory::where('user_id', $user->id)->latest()->get();
 
         $tradeRecord = TradeHistoryResource::collection($tradeRecord);
 
@@ -45,7 +45,7 @@ class TradeRecordsController extends Controller
     {
         $user = $request->user;
 
-        $rewards = Reward::where('user_id', $user->id)->get();
+        $rewards = Reward::where('user_id', $user->id)->latest()->get();
 
         $rewards = RewardResource::collection($rewards);
 
