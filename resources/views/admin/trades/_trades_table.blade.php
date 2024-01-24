@@ -6,6 +6,7 @@
                 <th>Exchange</th>
                 <th>Market</th>
                 <th>Trade Price</th>
+                <th>Profit</th>
                 <th>Quantity</th>
                 <th>Trade Type</th>
                 <th>Type</th>
@@ -32,6 +33,9 @@
                     </td>
                     <td class="text-center">
                         {{ $item->trade_price }}
+                    </td>
+                    <td class="text-center">
+                        {{ $item->profit }}
                     </td>
                     <td class="text-center">
                         {{ $item->quantity }}
