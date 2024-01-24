@@ -138,17 +138,7 @@ class BotController extends Controller
         }
 
         try {
-            $trade_Values = [
-                'position_amount'   => 0,
-                'in_position'       => false,
-                'buy_position'      => false,
-                'sell_position'     => false,
-                'margin_calls'      => 0,
-                'floating_loss'     => 0,
-                'trade_price'       => 0,
-                'quantity'          => 0,
-                'profit'            => 0
-            ];
+            $trade_Values = tradeValues();
 
             Bot::where('uuid', $request->bot)->update([
                 'started'           => true,
@@ -179,17 +169,7 @@ class BotController extends Controller
 
             $user = $request->user;
 
-            $trade_Values = [
-                'position_amount'   => 0,
-                'in_position'       => false,
-                'buy_position'      => false,
-                'sell_position'     => false,
-                'margin_calls'      => 0,
-                'floating_loss'     => 0,
-                'trade_price'       => 0,
-                'quantity'          => 0,
-                'profit'            => 0
-            ];
+            $trade_Values = tradeValues();
 
             Bot::where('uuid', $request->bot)->update([
                 'started'           => false,
