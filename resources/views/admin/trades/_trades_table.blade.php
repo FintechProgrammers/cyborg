@@ -35,7 +35,7 @@
                         {{ $item->trade_price }}
                     </td>
                     <td class="text-center">
-                        {{ $item->profit }}
+                        {{ number_format($item->profit,2) }}
                     </td>
                     <td class="text-center">
                         {{ $item->quantity }}
