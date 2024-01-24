@@ -59,11 +59,11 @@
                             </td>
                         </tr>
                     @empty
-                        <tr>
+                        {{-- <tr>
                             <td colspan="8">
                                 <x-no-data-component title="no bot available" />
                             </td>
-                        </tr>
+                        </tr> --}}
                     @endforelse
                 </tbody>
             </table>

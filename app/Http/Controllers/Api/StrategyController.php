@@ -67,27 +67,9 @@ class StrategyController extends Controller
                 $firstbuy_amount = 15;
             }
 
-            $settings  = [
-                'stop_loss'         => $strategy->stop_loss,
-                'take_profit'       => $strategy->take_profit,
-                'capital'           => $request->capital,
-                'first_buy'         => $firstbuy_amount,
-                'margin_limit'      => $strategy->margin_limit,
-                'm_ratio'           => $strategy->m_ration,
-                'price_drop'        => $strategy->price_drop,
-            ];
+            $settings  = tradeSettings($strategy->stop_loss, $strategy->take_profit, $request->capital, $firstbuy_amount, $strategy->margin_limit, $strategy->m_ration, $strategy->price_drop);
 
-            $trade_Values = [
-                'position_amount'   => 0,
-                'in_position'       => false,
-                'buy_position'      => false,
-                'sell_position'     => false,
-                'margin_calls'      => 0,
-                'floating_loss'     => 0,
-                'trade_price'       => 0,
-                'quantity'          => 0,
-                'profit'            => 0
-            ];
+            $trade_Values = tradeValues();
 
             $bot = Bot::Create([
                 'bot_name'      => $strategy->bot_name,

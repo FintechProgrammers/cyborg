@@ -208,27 +208,12 @@ class UserManagementController extends Controller
                 return $this->sendError("Bot already exists.", [], 400);
             }
 
-            $settings = [
-                'stop_loss'         => $request->stop_loss,
-                'take_profit'       => $request->take_profit,
-                'capital'           => $request->capital,
-                'first_buy'         => $request->first_buy,
-                'margin_limit'      => $request->margin_limit,
-                'm_ratio'           => $request->m_ratio,
-                'price_drop'        => $request->price_drop,
-            ];
+            $m_ratio = implode('|', $request->m_ratio);
+            $price_drop = implode('|', $request->price_drop);
 
-            $trade_Values = [
-                'position_amount'   => 0,
-                'in_position'       => false,
-                'buy_position'      => false,
-                'sell_position'     => false,
-                'margin_calls'      => 0,
-                'floating_loss'     => 0,
-                'trade_price'       => 0,
-                'quantity'          => 0,
-                'profit'            => 0
-            ];
+            $settings  = tradeSettings($request->stop_loss, $request->take_profit, $request->capital, $request->first_buy, $request->margin_limit, $m_ratio, $price_drop);
+
+            $trade_Values = tradeValues();
 
             $data = [
                 'bot_name'      => $request->bot_name,
@@ -237,14 +222,14 @@ class UserManagementController extends Controller
                 'market_id'     => $market->id,
                 'trade_type'    => $request->trade_type,
                 'settings'      => json_encode($settings),
-                'trade_Values'  => json_encode($trade_Values)
+                'trade_values'  => json_encode($trade_Values)
             ];
 
             if ($request->strategy_mode) {
                 $data['strategy_mode'] = $request->strategy_mode;
             }
 
-            $bot = Bot::Create($data);
+            $bot = Bot::create($data);
 
             return $this->sendResponse($bot, "Bot created Successfully");
         } catch (\Exception $e) {
@@ -256,17 +241,7 @@ class UserManagementController extends Controller
 
     function startBot(Bot $bot)
     {
-        $trade_Values = [
-            'position_amount'   => 0,
-            'in_position'       => false,
-            'buy_position'      => false,
-            'sell_position'     => false,
-            'margin_calls'      => 0,
-            'floating_loss'     => 0,
-            'trade_price'       => 0,
-            'quantity'          => 0,
-            'profit'            => 0
-        ];
+        $trade_Values = tradeValues();
 
         $bot->update([
             'started'           => true,
@@ -280,17 +255,7 @@ class UserManagementController extends Controller
 
     function stopBot(Bot $bot)
     {
-        $trade_Values = [
-            'position_amount'   => 0,
-            'in_position'       => false,
-            'buy_position'      => false,
-            'sell_position'     => false,
-            'margin_calls'      => 0,
-            'floating_loss'     => 0,
-            'trade_price'       => 0,
-            'quantity'          => 0,
-            'profit'            => 0
-        ];
+        $trade_Values = tradeValues();
 
         $bot->update([
             'started'           => false,

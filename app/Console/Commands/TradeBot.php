@@ -131,17 +131,14 @@ class TradeBot extends Command
                 $cal_qty = $quantity * 0.1 / 100;
                 $quantity = $quantity - $cal_qty;
 
-                $tradeValues = [
-                    'quantity'          => $quantity,
-                    'trade_price'       => $trade_price,
-                    'first_price'       => $trade_price,
-                    'position_amount'   => $position_amount,
-                    'margin_calls'      => 0,
-                    'in_position'       => true,
-                    'buy_position'      => true,
-                    'sell_position'     => false,
-                    'profit'            => 0
-                ];
+                $in_position = true;
+                $buy_position = true;
+                $sell_position = false;
+                $margin_calls = 0;
+                $floatingLoss = 0;
+                $profit = 0;
+
+                $tradeValues = tradeValues($position_amount, $in_position, $buy_position, $sell_position, $margin_calls, $floatingLoss, $trade_price, $quantity, $profit, $trade_price, $trade_price);
 
                 $bot->update([
                     'running'           => false,
@@ -173,9 +170,11 @@ class TradeBot extends Command
                     $trade_price = $order['trade_price'];
                     $orderId = $order['order_id'];
 
-                    $profit = $position_amount - $trade_values->position_amount;
+                    if ($position_amount > 0) {
+                        $profit = $position_amount - $trade_values->position_amount;
 
-                    $this->takeProfit($profit, $bot, $trade_price, $quantity, $gasFee, $wallerService, $wallet, $user, "sell");
+                        $this->takeProfit($profit, $bot, $trade_price, $quantity, $gasFee, $wallerService, $wallet, $user, "sell");
+                    }
 
                     return;
                 }
@@ -194,7 +193,7 @@ class TradeBot extends Command
 
                 $trade_price = (float) $exchange->fetchTicker();
 
-                if ($trade_price > $cal2) {
+                if ($trade_price < $cal2) {
                     $qty = (float) $settings->first_buy * (float) $m_ration[$margin_call] / $trade_price;
                     $qty = number_format($qty, 5);
                     $order = $exchange->createMarketBuyOrder($qty);
@@ -214,17 +213,30 @@ class TradeBot extends Command
 
                     $margin_call = $margin_call + 1;
 
-                    $tradeValues = [
-                        'quantity'          => $quantity,
-                        'trade_price'       => $trade_price,
-                        'first_price'       => $trade_price,
-                        'position_amount'   => $position_amount,
-                        'margin_calls'      => $margin_call,
-                        'in_position'       => true,
-                        'buy_position'      => true,
-                        'sell_position'     => false,
-                        'profit'            => $trade_values->profit
-                    ];
+                    $position_amount = $position_amount;
+                    $in_position = true;
+                    $buy_position = true;
+                    $sell_position = false;
+                    $margin_call = $margin_call;
+                    $floatingLoss = 0;
+                    $trade_price = $trade_price;
+                    $quantity = $quantity;
+                    $profit = $trade_values->profit;
+                    $firstPrice = $trade_values->first_price;
+
+                    $tradeValues = tradeValues(
+                        $position_amount,
+                        $in_position,
+                        $buy_position,
+                        $sell_position,
+                        $margin_call,
+                        $floatingLoss,
+                        $trade_price,
+                        $quantity,
+                        $profit,
+                        $firstPrice,
+                        $average_price
+                    );
 
                     $bot->update([
                         'running'           => false,
@@ -299,7 +311,7 @@ class TradeBot extends Command
             $in_position = $trade_values->in_position;
             $trade_price = $trade_values->trade_price;
             $quantity = $trade_values->quantity;
-            // $first_price = $trade_values->first_price;
+            $first_price =  $trade_values->first_price;
             $floating_loss = $trade_values->floating_loss;
             $current_profit = $trade_values->profit;
             $margin_calls = $trade_values->margin_calls;
@@ -348,19 +360,33 @@ class TradeBot extends Command
                             $position_amount = $order['position_amount'];
                             $trade_price = $order['trade_price'];
                             $orderId = $order['order_id'];
+                            $averagePrice = $order['trade_price'];
 
-                            $tradeValues = [
-                                'quantity'          => $quantity,
-                                'trade_price'       => $trade_price,
-                                'first_price'       => $trade_price,
-                                'position_amount'   => $position_amount,
-                                'margin_calls'      => 0,
-                                'in_position'       => true,
-                                'buy_position'      => false,
-                                'sell_position'     => false,
-                                'profit'            => 0,
-                                'floating_loss'     => 0,
-                            ];
+                            $position_amount = $position_amount;
+                            $in_position = true;
+                            $buy_position = false;
+                            $sell_position = false;
+                            $margin_call = 0;
+                            $floatingLoss = 0;
+                            $trade_price = $trade_price;
+                            $quantity = $quantity;
+                            $profit = 0;
+                            $firstPrice = $trade_price;
+                            $averagePrice = $averagePrice;
+
+                            $tradeValues = tradeValues(
+                                $position_amount,
+                                $in_position,
+                                $buy_position,
+                                $sell_position,
+                                $margin_call,
+                                $floatingLoss,
+                                $trade_price,
+                                $quantity,
+                                $profit,
+                                $firstPrice,
+                                $averagePrice
+                            );
 
                             $bot->update([
                                 'running'           => false,
@@ -439,18 +465,29 @@ class TradeBot extends Command
 
                 if ($position_amount === 'None' || $position_amount < 1) {
 
-                    $tradeValues = [
-                        'quantity'          => 0,
-                        'trade_price'       => 0,
-                        'first_price'       => 0,
-                        'position_amount'   => 0,
-                        'margin_calls'      => 0,
-                        'in_position'       => false,
-                        'buy_position'      => false,
-                        'sell_position'     => false,
-                        'profit'            => $current_profit,
-                        'floating_loss'     => $floating_loss,
-                    ];
+                    $position_amount = 0;
+                    $in_position = false;
+                    $buy_position = false;
+                    $sell_position = false;
+                    $margin_call = 0;
+                    $floatingLoss = $floating_loss;
+                    $trade_price = 0;
+                    $quantity = 0;
+                    $profit = $current_profit;
+                    $firstPrice = 0;
+
+                    $tradeValues = tradeValues(
+                        $position_amount,
+                        $in_position,
+                        $buy_position,
+                        $sell_position,
+                        $margin_call,
+                        $floatingLoss,
+                        $trade_price,
+                        $quantity,
+                        $profit,
+                        $firstPrice
+                    );
 
                     $bot->update([
                         'running'           => false,
@@ -462,18 +499,31 @@ class TradeBot extends Command
                 }
 
                 // capture all data and save again
-                $tradeValues = [
-                    'quantity'          => $quantity,
-                    'trade_price'       => $trade_price,
-                    // 'first_price'       => $first_price,
-                    'position_amount'   => $position_amount,
-                    'margin_calls'      => $margin_calls,
-                    'in_position'       => $in_position,
-                    'buy_position'      => false,
-                    'sell_position'     => false,
-                    'profit'            => $current_profit,
-                    'floating_loss'     => $floating_loss,
-                ];
+                $position_amount = $position_amount;
+                $in_position = $in_position;
+                $buy_position = false;
+                $sell_position = false;
+                $margin_call = $margin_calls;
+                $floatingLoss = $floating_loss;
+                $trade_price = $trade_price;
+                $quantity = $quantity;
+                $profit = $current_profit;
+                $firstPrice = $first_price;
+                $averagePrice = $avg_price;
+
+                $tradeValues = tradeValues(
+                    $position_amount,
+                    $in_position,
+                    $buy_position,
+                    $sell_position,
+                    $margin_call,
+                    $floatingLoss,
+                    $trade_price,
+                    $quantity,
+                    $profit,
+                    $firstPrice,
+                    $averagePrice
+                );
 
                 $bot->update([
                     'running'           => false,
@@ -502,7 +552,6 @@ class TradeBot extends Command
                             $profitDetails = $exchange->takeShort($quantity, $leverage);
                         }
                     }
-
 
                     $profit = $profitDetails['profit'];
                     $trade_price = $profitDetails['order_price'];
@@ -534,46 +583,36 @@ class TradeBot extends Command
 
                 if ($current_profit < $cap_cal) {
                     if ($bot->strategy_mode === "long") {
-                        // Get the current time in seconds with microsecond precision
-                        $t = microtime(true);
-
-                        // Convert the time to milliseconds
-                        $t = $t * 1000;
-
-                        // Convert to an integer
-                        $t = (int)$t;
-                        // Sleep for 3 seconds
-                        sleep(3);
-
-                        // create market sell order
-                        $options = [
-                            "leverage" => $leverage,
-                            "newClientOrderId" => "x-zcYWaQcS",
-                            "reduceOnly" => true,
-                        ];
-
-                        $order = $exchange->createMarketSellOrder($quantity, $options);
-                        $order_id = $order['order_id'];
-                        // Sleep for 3 seconds
-                        sleep(3);
-
-                        $profitDetails = $exchange->takeLong($t, $order_id, $leverage);
+                        $profitDetails = $exchange->takeLong($quantity, $leverage);
                     } else if ($bot->strategy_mode === "short") {
                         $profitDetails = $exchange->takeShort($quantity, $leverage);
                     }
 
-                    $tradeValues = [
-                        'in_position'       => false,
-                        'sell_position'     => false,
-                        'buy_position'      => false,
-                        'quantity'          => 0,
-                        'position_amount'   => 0,
-                        'trade_price'       => 0,
-                        'first_price'       => 0,
-                        'margin_calls'      => 0,
-                        'profit'            => $profitDetails['profit'],
-                        'floating_loss'     => 0,
-                    ];
+                    $position_amount = 0;
+                    $in_position = false;
+                    $buy_position = false;
+                    $sell_position = false;
+                    $margin_call = 0;
+                    $floatingLoss = 0;
+                    $trade_price = 0;
+                    $quantity = 0;
+                    $profit = $profitDetails['profit'];
+                    $firstPrice = 0;
+                    $averagePrice = $profitDetails['order_price'];
+
+                    $tradeValues = tradeValues(
+                        $position_amount,
+                        $in_position,
+                        $buy_position,
+                        $sell_position,
+                        $margin_call,
+                        $floatingLoss,
+                        $trade_price,
+                        $quantity,
+                        $profit,
+                        $firstPrice,
+                        $averagePrice
+                    );
 
                     $bot->update([
                         'running'           => false,
@@ -601,96 +640,124 @@ class TradeBot extends Command
 
                 if ($margin_limit > 0 && $margin_limit !=  $margin_call) {
 
-                    $cal = (float) $trade_values->first_price * (float)$price_drop[$margin_call] / 100;
-                    $cal2 = (float) $trade_values->first_price - $cal;
+                    $order = null;
+
+                    $cal = ((float) $first_price * (float)$price_drop[$margin_call]) / 100;
+
+                    if ($bot->strategy_mode === "long") {
+                        $cal2 = (float) $first_price - $cal;
+                    } else if ($bot->strategy_mode === "short") {
+                        $cal2 = (float) $first_price + $cal;
+                    }
 
                     $trade_price = (float) $exchange->fetchTicker();
 
-                    if ($trade_price > $cal2) {
-                        $qty = (float) $settings->first_buy * (float) $m_ratio[$margin_call] / $trade_price;
+                    $qty = (float) $settings->first_buy * (float) $m_ratio[$margin_call] / $trade_price;
 
-                        $tradec = (float)$settings->first_buy * (float)$m_ratio[$margin_call];
+                    $tradec = (float)$settings->first_buy * (float)$m_ratio[$margin_call];
 
-                        if ($balance['free'] > $tradec) {
+                    $options = [
+                        "newClientOrderId" => "x-zcYWaQcS",
+                    ];
 
-                            $options = [
-                                "newClientOrderId" => "x-zcYWaQcS",
-                            ];
+                    // if kucoin
+                    if ($bot->exchange->slug == "kucoin") {
+                        $lot = $exchange->fetchMarkets();
 
-                            // if kucoin
-                            if ($bot->exchange->slug == "kucoin") {
-                                $lot = $exchange->fetchMarkets();
+                        $qty = $tradec / $trade_price;
 
-                                $qty = $tradec / $trade_price;
+                        $qty = $qty / $lot;
 
-                                $qty = $qty / $lot;
+                        $qty = $qty * $leverage;
+                    }
 
-                                $qty = $qty * $leverage;
-                            }
-
-                            if ($bot->strategy_mode === "long") {
+                    if ($bot->strategy_mode === "long") {
+                        if ($trade_price < $cal2) {
+                            if ($balance['free'] > $tradec) {
                                 $order = $exchange->createMarketBuyOrder($qty, $options);
-                            } else if ($bot->strategy_mode === "short") {
-                                $order = $exchange->createMarketSellOrder($qty, $options);
-                            }
-
-                            if (!empty($order)) {
-                                $quantity = $order['quantity'];
-                                $position_amount = $order['position_amount'];
-                                $trade_price = $order['trade_price'];
-                                $orderId = $order['order_id'];
-
-                                $fetchOrder = $exchange->fetchOrder($orderId);
-
-                                sleep(3);
-
-                                $qtyusdt = $fetchOrder['qtyusdt'];
-
-                                $qtyusdt = (float) $qtyusdt / $leverage;
-
-                                $quantity = $fetchOrder['quantity'] + $quantity;
-
-                                $position_amount = $position_amount + $qtyusdt;
-
-                                $positions = $exchange->getPositions();
-
-                                $avg_price = $positions['average_price'];
-                                $profit = $positions['current_profit'];
-                                $floating_loss = $positions['floating_loss'];
-
-                                $margin_call = $margin_call + 1;
-
-                                $tradeValues = [
-                                    'quantity'          => $quantity,
-                                    'trade_price'       => $trade_price,
-                                    'first_price'       => $trade_price,
-                                    'position_amount'   => $position_amount,
-                                    'margin_calls'      => $margin_call,
-                                    'in_position'       => true,
-                                    'buy_position'      => false,
-                                    'sell_position'     => false,
-                                    'profit'            => $profit,
-                                    'floating_loss'     => $floating_loss,
-                                ];
-
+                            } else {
                                 $bot->update([
                                     'running'           => false,
-                                    'trade_values'      => json_encode($tradeValues),
-                                    'logs'              => "No {$margin_call} martingale buy successfully filled."
+                                    'logs'              => "Your exchange account does not have sufficient balance to proceed with the next Martingale entry."
                                 ]);
-
-                                // record trade history
-                                if ($bot->strategy_mode === "long") {
-                                    $this->recordTrade($bot, $trade_price, $quantity, "buy", $profit, false);
-                                } else if ($bot->strategy_mode === "short") {
-                                    $this->recordTrade($bot, $trade_price, $quantity, "sell", $profit, false);
-                                }
                             }
-                        } else {
-                            $bot->update([
-                                'running'           => false,
-                                'logs'              => "Your exchange account does not have sufficient balance to proceed with the next Martingale entry."
-                            ]);
+                        }
+                    } else if ($bot->strategy_mode === "short") {
+                        if ($trade_price >= $cal2) {
+                            if ($balance['free'] > $tradec) {
+                                $order = $exchange->createMarketSellOrder($qty, $options);
+                            } else {
+                                $bot->update([
+                                    'running'           => false,
+                                    'logs'              => "Your exchange account does not have sufficient balance to proceed with the next Martingale entry."
+                                ]);
+                            }
+                        }
+                    }
+
+                    if (!empty($order)) {
+                        $quantity = $order['quantity'];
+                        $position_amount = $order['position_amount'];
+                        $trade_price = $order['trade_price'];
+                        $orderId = $order['order_id'];
+
+                        $fetchOrder = $exchange->fetchOrder($orderId);
+
+                        sleep(3);
+
+                        $qtyusdt = $fetchOrder['qtyusdt'];
+
+                        $qtyusdt = (float) $qtyusdt / $leverage;
+
+                        $quantity = $fetchOrder['quantity'] + $quantity;
+
+                        $position_amount = $position_amount + $qtyusdt;
+
+                        $positions = $exchange->getPositions();
+
+                        $avg_price = $positions['average_price'];
+                        $profit = $positions['current_profit'];
+                        $floating_loss = $positions['floating_loss'];
+
+                        $margin_call = $margin_call + 1;
+
+                        $position_amount = $position_amount;
+                        $in_position = true;
+                        $buy_position = false;
+                        $sell_position = false;
+                        $margin_call = $margin_call;
+                        $floatingLoss = $floating_loss;
+                        $trade_price = $trade_price;
+                        $quantity = $quantity;
+                        $profit = $profit;
+                        $firstPrice = $trade_values->first_price;
+                        $avg_price = $avg_price;
+
+                        $tradeValues = tradeValues(
+                            $position_amount,
+                            $in_position,
+                            $buy_position,
+                            $sell_position,
+                            $margin_call,
+                            $floatingLoss,
+                            $trade_price,
+                            $quantity,
+                            $profit,
+                            $firstPrice,
+                            $avg_price
+                        );
+
+                        $bot->update([
+                            'running'           => false,
+                            'trade_values'      => json_encode($tradeValues),
+                            'logs'              => "No {$margin_call} martingale buy successfully filled."
+                        ]);
+
+                        // record trade history
+                        if ($bot->strategy_mode === "long") {
+                            $this->recordTrade($bot, $trade_price, $quantity, "buy", $profit, false);
+                        } else if ($bot->strategy_mode === "short") {
+                            $this->recordTrade($bot, $trade_price, $quantity, "sell", $profit, false);
                         }
                     }
 
@@ -720,7 +787,6 @@ class TradeBot extends Command
                         'running' => false,
                         'logs'     => $errorMessage,
                     ]);
-
                 } else if ($responseArray !== null && isset($responseArray['retMsg'])) {
                     $errorMessage = $responseArray['retMsg'];
                     // Now $errorMessage contains the value of "msg"
@@ -744,18 +810,20 @@ class TradeBot extends Command
 
     function takeProfit($profit, $bot, $trade_price, $quantity, $gasFee, $wallerService, $wallet, $user, $type = "sell")
     {
-        $tradeValues = [
-            'in_position'       => false,
-            'sell_position'     => false,
-            'buy_position'      => false,
-            'quantity'          => 0,
-            'position_amount'   => 0,
-            'trade_price'       => 0,
-            'first_price'       => 0,
-            'margin_calls'      => 0,
-            'profit'            => $profit,
-            'floating_loss'     => 0,
-        ];
+
+        $position_amount = 0;
+        $in_position = false;
+        $buy_position = false;
+        $sell_position = false;
+        $margin_calls = 0;
+        $floatingLoss = 0;
+        $profit = $profit;
+        $quantity = $quantity;
+        $trade_price = $trade_price;
+        $firstPrice = 0;
+        $average_price = $trade_price;
+
+        $tradeValues = tradeValues($position_amount, $in_position, $buy_position, $sell_position, $margin_calls, $floatingLoss, $trade_price, $quantity, $profit, $firstPrice, $average_price);
 
         $bot->update([
             'running'           => false,

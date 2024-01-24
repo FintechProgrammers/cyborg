@@ -50,7 +50,7 @@ class StrategyController extends Controller
             'm_ration'     => implode('|', $request->margin_ratio),
             'price_drop'   => implode('|', $request->price_drop),
             'trade_type'    => $request->market_type,
-            'strategy_mode' => $request->strategy_mode? $request->strategy_mode : "short",
+            'strategy_mode' => $request->strategy_mode ? $request->strategy_mode : "short",
             'capital'   => $request->mimimum_capital,
         ]);
 
@@ -85,12 +85,12 @@ class StrategyController extends Controller
         $strategy->update([
             'bot_name'  =>  $request->bot_name,
             // 'market_id'       => $request->market,
-            // 'margin_limit'  => $request->margin_limit,
+            'margin_limit'  => $request->margin_limit,
             'stop_loss'    => $request->stop_loss,
             'take_profit'  => $request->take_profit,
             'capital'   => $request->mimimum_capital,
-            // 'm_ration'     => implode('|', $request->margin_ratio),
-            // 'price_drop'   => implode('|', $request->price_drop),
+            'm_ration'     => implode('|', $request->margin_ratio),
+            'price_drop'   => implode('|', $request->price_drop),
             // 'trade_type'    => $request->market_type,
             // 'strategy_mode' => $request->strategy_mode
         ]);
@@ -102,15 +102,18 @@ class StrategyController extends Controller
         foreach ($bots as $bot) {
             $bSettings = json_decode($bot->settings);
 
-            $settings  = [
-                'stop_loss'         => $request->stop_loss,
-                'take_profit'       => $request->take_profit,
-                'capital'           => $bSettings->capital,
-                'first_buy'         => $bSettings->first_buy,
-                'margin_limit'      => $bSettings->margin_limit,
-                'm_ratio'           => $bSettings->m_ratio,
-                'price_drop'        => $bSettings->price_drop,
-            ];
+            $m_ratio = implode('|', $request->margin_ratio);
+            $price_drop = implode('|', $request->price_drop);
+
+            $settings = tradeSettings(
+                $request->stop_loss,
+                $request->take_profit,
+                $bSettings->capital,
+                $bSettings->first_buy,
+                $request->margin_limit,
+                $m_ratio,
+                $price_drop
+            );
 
             $bot->update([
                 'settings'      => json_encode($settings),

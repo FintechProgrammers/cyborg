@@ -251,3 +251,39 @@ if (!function_exists('formatNumber')) {
         return $formattedNumber;
     }
 }
+
+
+if (!function_exists('tradeSettings')) {
+    function tradeSettings($stopLoss,$takeProfit,$capital,$firstBuy,$marginLimit,$mRatio,$priceDrop)
+    {
+        return [
+            'stop_loss'         => $stopLoss,
+            'take_profit'       => $takeProfit,
+            'capital'           => $capital,
+            'first_buy'         => $firstBuy,
+            'margin_limit'      => $marginLimit,
+            'm_ratio'           => $mRatio,
+            'price_drop'        => $priceDrop,
+        ];
+    }
+}
+
+
+if (!function_exists('tradeValues')) {
+    function tradeValues($positionAmount=0,$inPosition=false,$buyPosition=false,$sellPosition=false,$marginCalls=0,$floatingLoss=0,$tradePrice=0,$quantity=0,$profit=0,$firstPrice=0,$averagePrice=0)
+    {
+        return [
+            'position_amount'   => $positionAmount,
+            'in_position'       => $inPosition,
+            'buy_position'      => $buyPosition,
+            'sell_position'     => $sellPosition,
+            'margin_calls'      => $marginCalls,
+            'floating_loss'     => $floatingLoss,
+            'trade_price'       => $tradePrice,
+            'quantity'          => $quantity,
+            'profit'            => $profit,
+            'first_price'       => $firstPrice,
+            'average_price'     => $averagePrice,
+        ];
+    }
+}

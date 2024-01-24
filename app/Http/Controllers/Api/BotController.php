@@ -64,27 +64,9 @@ class BotController extends Controller
                 return $this->sendError("Bot already exists.", [], 400);
             }
 
-            $settings  = [
-                'stop_loss'         => $request->stop_loss,
-                'take_profit'       => $request->take_profit,
-                'capital'           => $request->capital,
-                'first_buy'         => $request->first_buy,
-                'margin_limit'      => $request->margin_limit,
-                'm_ratio'           => $request->m_ratio,
-                'price_drop'        => $request->price_drop,
-            ];
+            $settings  = tradeSettings($request->stop_loss, $request->take_profit, $request->capital, $request->first_buy, $request->margin_limit, $request->m_ratio, $request->price_drop);
 
-            $trade_Values = [
-                'position_amount'   => 0,
-                'in_position'       => false,
-                'buy_position'      => false,
-                'sell_position'     => false,
-                'margin_calls'      => 0,
-                'floating_loss'     => 0,
-                'trade_price'       => 0,
-                'quantity'          => 0,
-                'profit'            => 0
-            ];
+            $trade_Values = tradeValues();
 
             $bot = Bot::Create(
                 [
@@ -116,27 +98,9 @@ class BotController extends Controller
 
         $market = Market::where('uuid', $request->market)->first();
 
-        $settings  = [
-            'stop_loss'         => $request->stop_loss,
-            'take_profit'       => $request->take_profit,
-            'capital'           => $request->capital,
-            'first_buy'         => $request->first_buy,
-            'margin_limit'      => $request->margin_limit,
-            'm_ratio'           => $request->m_ratio,
-            'price_drop'        => $request->price_drop,
-        ];
+        $settings  = tradeSettings($request->stop_loss, $request->take_profit, $request->capital, $request->first_buy, $request->margin_limit, $request->m_ratio, $request->price_drop);
 
-        $trade_Values = [
-            'position_amount'   => 0,
-            'in_position'       => false,
-            'buy_position'      => false,
-            'sell_position'     => false,
-            'margin_calls'      => 0,
-            'floating_loss'     => 0,
-            'trade_price'       => 0,
-            'quantity'          => 0,
-            'profit'            => 0
-        ];
+        $trade_Values = tradeValues();
 
         try {
             $user = $request->user;
