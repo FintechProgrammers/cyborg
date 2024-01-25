@@ -25,13 +25,13 @@ jobs:
       - name: Create deployment artifact
         env:
           GITHUB_SHA: ${{ github.sha }}
-        run: tar -cf ${{ github.sha }}.tar --exclude=*.git .
+        run: tar -cf ${{ github.sha }}.tar.gz --exclude=*.git .
 
       - name: Store artifact for distribution
         uses: actions/upload-artifact@v3
         with:
           name: app-build
-          path: ${{ github.sha }}.tar
+          path: ${{ github.sha }}.tar.gz
 
       - name: Export deployment matrix
         id: export-deployment-matrix
@@ -60,5 +60,5 @@ jobs:
           username: ${{ matrix.server.username }}
           password: ${{ matrix.server.password }}
           port: ${{ matrix.server.port }}
-          source: ${{ github.sha }}.tar
+          source: ${{ github.sha }}.tar.gz
           target: ${{ matrix.server.path }}/artifacts
