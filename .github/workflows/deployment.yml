@@ -22,16 +22,13 @@ jobs:
         run: |
           composer install --no-dev --no-interaction --prefer-dist
 
-      - name: Create deployment artifact
-        env:
-          GITHUB_SHA: ${{ github.sha }}
-        run: tar -czf app.tar.gz --exclude=*.git --exclude=tests *
+
 
       - name: Store artifact for distribution
         uses: actions/upload-artifact@v3
         with:
           name: app-build
-          path: ./${{ github.sha }}.tar.gz
+          path: build
 
       - name: Export deployment matrix
         id: export-deployment-matrix
