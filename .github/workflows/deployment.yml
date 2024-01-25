@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: app-build
-          path: ${{ github.sha }}.tar.gz
+          path: ./${{ github.sha }}.tar.gz
 
       - name: Export deployment matrix
         id: export-deployment-matrix
