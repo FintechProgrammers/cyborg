@@ -60,5 +60,5 @@ jobs:
           username: ${{ matrix.server.username }}
           password: ${{ matrix.server.password }}
           port: ${{ matrix.server.port }}
-          source: ${{ github.sha }}.tar.gz
+          source: ${{ github.sha }}.tar
           target: ${{ matrix.server.path }}/artifacts
