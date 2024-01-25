@@ -36,11 +36,11 @@ jobs:
       - name: Export deployment matrix
         id: export-deployment-matrix
         run: |
-            delimiter = "$(openssl rand -hex 8)"
             JSON="$(cat ./deployment-config.json)"
-            echo "DEPLOYMENT_MATRIX<<${delimiter}" >> "${GITHUB_OUTPUT}"
-            echo "$JSON" >> "${GITHUB_OUTPUT}"
-            echo "${delimiter}" >> "${GITHUB_OUTPUT}"
+            JSON="${JSON//'%'/'%25'}"
+            JSON="${JSON//$'\n'/'%0A'}"
+            JSON="${JSON//$'\r'/'%0D'}"
+            echo "::set-output name=DEPLOYMENT_MATRIX::$JSON"
 
   prepare-release-on-servers:
     name: "${{ matrix.server.name }}: Prepare release"
