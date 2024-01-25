@@ -31,8 +31,8 @@ class TradeRecordsController extends Controller
         // Get the value of user_id from the URL parameters
         $user = $request->user;
 
-        $data['todayProfit'] = TradeHistory::where('user_id', $user->id)->where('is_profit', true)->whereDate('created_at', Carbon::today())->sum('profit');
-        $data['totalProfit'] = TradeHistory::where('user_id', $user->id)->where('is_profit', true)->sum('profit');
+        $data['today_profit'] = TradeHistory::where('user_id', $user->id)->where('is_profit', true)->whereDate('created_at', Carbon::today())->sum('profit');
+        $data['total_Profit'] = TradeHistory::where('user_id', $user->id)->where('is_profit', true)->sum('profit');
 
         // $records = ProfitRecord::where('user_id', $user->id)->first();
 

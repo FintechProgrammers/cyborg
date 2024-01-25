@@ -88,9 +88,8 @@
                     <h5>Margin Settings</h5>
                     <div class="mb-3">
                         <label for="example-text-input" class="form-label">Margin Limit</label>
-                        <input class="form-control" type="number" min="1" step="any"
-                            id="{{ isset($strategy) ? '' : 'margin_limit' }}" name="margin_limit"
-                            value="{{ isset($strategy) ? $strategy->margin_limit : '' }}">
+                        <input class="form-control" type="number" min="1" step="any" id="margin_limit"
+                            name="margin_limit" value="{{ isset($strategy) ? $strategy->margin_limit : '' }}">
                         @error('margin_limit')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -106,8 +105,8 @@
                                         @endphp
                                         @foreach ($price_drop as $item)
                                             <div class="mb-3">
-                                                <input class="form-control" type="number" min="0" name="price_drop[]"
-                                                    value="{{ $item }}">
+                                                <input class="form-control" type="number" min="0"
+                                                    name="price_drop[]" value="{{ $item }}">
                                             </div>
                                         @endforeach
                                     @endif
@@ -125,8 +124,8 @@
                                         @endphp
                                         @foreach ($m_ratio as $item)
                                             <div class="mb-3">
-                                                <input class="form-control" type="number" min="0" name="margin_ratio[]"
-                                                    value="{{ $item }}">
+                                                <input class="form-control" type="number" min="0"
+                                                    name="margin_ratio[]" value="{{ $item }}">
                                             </div>
                                         @endforeach
                                     @endif
@@ -139,7 +138,9 @@
                     </div>
                 </div>
                 <div class="mt-4">
-                    <button type="submit" class="btn btn-primary w-lg">Create Bot</button>
+                    <button type="submit" class="btn btn-primary w-lg">
+                        {{ isset($strategy) ? 'Update Bot' : 'Create Bot' }}
+                    </button>
                 </div>
             </div>
         </div>

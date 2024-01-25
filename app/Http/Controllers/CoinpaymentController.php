@@ -9,6 +9,7 @@ class CoinpaymentController extends Controller
 {
     public function __invoke(Request $req)
     {
+
         $cp_merchant_id   = config('constants.coinpay.marchant_id');
         $cp_ipn_secret    = config('constants.coinpay.private_key');
         $cp_debug_email   = "";
