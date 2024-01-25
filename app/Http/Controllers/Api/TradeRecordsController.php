@@ -32,7 +32,7 @@ class TradeRecordsController extends Controller
         $user = $request->user;
 
         $data['today_profit'] = TradeHistory::where('user_id', $user->id)->where('is_profit', true)->whereDate('created_at', Carbon::today())->sum('profit');
-        $data['total_Profit'] = TradeHistory::where('user_id', $user->id)->where('is_profit', true)->sum('profit');
+        $data['total_profit'] = TradeHistory::where('user_id', $user->id)->where('is_profit', true)->sum('profit');
 
         // $records = ProfitRecord::where('user_id', $user->id)->first();
 
