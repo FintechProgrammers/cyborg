@@ -55,7 +55,7 @@ class StrategyController extends Controller
             }
 
             if ($request->capital >= 500) {
-                $numbers = explode("|", $strategy->price_drop);
+                $numbers = explode("|", $strategy->m_ration);
 
                 $entries = array_sum($numbers);
 
