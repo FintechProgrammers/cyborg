@@ -13,7 +13,7 @@ class SupportController extends Controller
 {
     function index()
     {
-        $data['tickets'] = Ticket::get();
+        $data['tickets'] = Ticket::latest()->get();
 
         return view('admin.support.index', $data);
     }

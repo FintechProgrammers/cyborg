@@ -13,6 +13,15 @@ class Coinpay
         $this->client = new Client();
     }
 
+    public function getBalance()
+    {
+        $params = [
+            'all' => 1
+        ];
+
+        return $this->handle('balances', $params);
+    }
+
     public function getDepositAddress()
     {
         $params = [
@@ -25,12 +34,12 @@ class Coinpay
 
     public function withdrawal($data)
     {
-        // Your API credentials or any required parameters
         $apiParams = [
-            'amount'        => $data['amount'],    // Replace 'value1' with the actual parameter value
-            // 'add_tx_fee'    => 'value2',
-            'currency'      => $data['currency'],
-            'currency2'     => $data['currency2'],
+            'amount'        => $data['amount'],
+            'address'       => $data['address'],
+            'add_tx_fee'    => 0,
+            'auto_confirm'  => 1,
+            'currency'      => strtoupper('usdt.trc20'),
             'ipn_url'       => config('constants.coinpay.ipn_url')
         ];
 

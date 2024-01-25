@@ -30,14 +30,14 @@ class UserManagementController extends Controller
     {
         $data['user'] = $user;
         $data['wallet'] = Wallet::where('user_id', $user->id)->first();
-        $data['exchanges'] = UserExchange::where('user_id', $user->id)->get();
-        $data['transactions'] = Transaction::where('user_id', $user->id)->get();
-        $data['trades'] = TradeHistory::where('user_id', $user->id)->get();
-        $data['rewards'] = Reward::where('user_id', $user->id)->get();
+        $data['exchanges'] = UserExchange::where('user_id', $user->id)->latest()->get();
+        $data['transactions'] = Transaction::where('user_id', $user->id)->latest()->get();
+        $data['trades'] = TradeHistory::where('user_id', $user->id)->latest()->get();
+        $data['rewards'] = Reward::where('user_id', $user->id)->latest()->get();
         $data['todayProfit'] = TradeHistory::where('user_id', $user->id)->where('is_profit', true)->whereDate('created_at', Carbon::today())->sum('profit');
         $data['totalProfit'] = TradeHistory::where('user_id', $user->id)->where('is_profit', true)->sum('profit');
-        $data['activeBots'] = Bot::where('user_id', $user->id)->where('started', true)->get();
-        $data['bots'] = Bot::where('user_id', $user->id)->get();
+        $data['activeBots'] = Bot::where('user_id', $user->id)->where('started', true)->latest()->get();
+        $data['bots'] = Bot::where('user_id', $user->id)->latest()->get();
 
         return view('admin.users.show', $data);
     }

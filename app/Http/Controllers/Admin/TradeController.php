@@ -10,7 +10,7 @@ class TradeController extends Controller
 {
     function index()
     {
-        $data['trades'] = TradeHistory::get();
+        $data['trades'] = TradeHistory::latest()->get();
 
         return view('admin.trades.index', $data);
     }

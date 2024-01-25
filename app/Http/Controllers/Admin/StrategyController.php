@@ -12,7 +12,7 @@ class StrategyController extends Controller
 {
     function index()
     {
-        $data['stretegy'] = Strategy::get();
+        $data['stretegy'] = Strategy::latest()->get();
 
         return view('admin.bot.index', $data);
     }

@@ -11,7 +11,7 @@ class BannerController extends Controller
 {
     function index()
     {
-        $data['banners'] = Banner::get();
+        $data['banners'] = Banner::latest()->get();
 
         return view('admin.banner.index', $data);
     }

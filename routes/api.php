@@ -35,7 +35,7 @@ Route::middleware('validate.user')->group(function () {
         });
 
         Route::post('deposit', DepositController::class);
-        Route::post('withdraw', WithdrawalController::class);
+        Route::post('withdraw', WithdrawalController::class)->middleware('withrawal.enable');
     });
 
     Route::controller(ExchangeController::class)->prefix('exchanges')->group(function () {
@@ -82,7 +82,7 @@ Route::controller(\App\Http\Controllers\Api\NewsController::class)->prefix('news
 });
 
 
-Route::get('test-slack',function(){
+Route::get('test-slack', function () {
     sendToLog("hello");
 });
 

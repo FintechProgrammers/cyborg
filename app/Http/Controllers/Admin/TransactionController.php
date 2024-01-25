@@ -10,7 +10,7 @@ class TransactionController extends Controller
 {
     function index()
     {
-        $data['transactions'] = Transaction::get();
+        $data['transactions'] = Transaction::latest()->get();
 
         return view('admin.transactions.index', $data);
     }
@@ -24,7 +24,7 @@ class TransactionController extends Controller
 
     function withdrawals()
     {
-        $data['transactions'] = Transaction::where('action', 'withdrawal')->where('status', 'pending')->get();
+        $data['transactions'] = Transaction::where('action', 'withdrawal')->where('status', 'pending')->where('is_manual',true)->latest()->get();
 
         return view('admin.transactions.withdrawals', $data);
     }

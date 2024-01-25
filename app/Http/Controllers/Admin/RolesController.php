@@ -11,7 +11,7 @@ class RolesController extends Controller
 {
     function index()
     {
-        $data['roles'] = Role::latest()->get();
+        $data['roles'] = Role::latest()->latest()->get();
 
         return view('admin.roles.index', $data);
     }

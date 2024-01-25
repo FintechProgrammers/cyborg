@@ -10,7 +10,7 @@ class NewsController extends Controller
 {
     function index()
     {
-        $data['news'] = News::get();
+        $data['news'] = News::latest()->get();
 
         return view('admin.news.index', $data);
     }

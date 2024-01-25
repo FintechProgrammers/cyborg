@@ -31,6 +31,14 @@
             </span>
         </td>
     </tr>
+    @if (!empty($transaction->address))
+        <tr>
+            <th>Address:</th>
+            <td>
+                {{ $transaction->address }}
+            </td>
+        </tr>
+    @endif
     <tr>
         <th>Date:</th>
         <td> {{ $transaction->created_at->format('jS F, Y H:i:s') }}</td>
@@ -41,7 +49,8 @@
     </tr>
 </table>
 @if ($transaction->action == 'withdrawal' && $transaction->status == 'pending')
-    <button type="button" class="btn btn-primary" id="approve" data-url="{{ route('admin.transactions.approve',$transaction->uuid) }}">
+    <button type="button" class="btn btn-primary" id="approve"
+        data-url="{{ route('admin.transactions.approve', $transaction->uuid) }}">
         <span class="spinner-border" role="status" style="display: none">
             <span class="sr-only">Loading...</span>
         </span>
