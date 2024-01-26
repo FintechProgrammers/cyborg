@@ -73,9 +73,9 @@ jobs:
           port: ${{ matrix.server.port }}
           envs: GITHUB_SHA
           script: |
-            mkdir -p "${{ matrix.server.path }}/releases/${GITHUB_SHA}"
-            tar xzf ${{ matrix.server.path }}/artifacts/${GITHUB_SHA}.tar.gz -C "${{ matrix.server.path }}/releases/${GITHUB_SHA}"
-            rm -rf ${{ matrix.server.path }}/releases/${GITHUB_SHA}/storage
+            mkdir -p "${{ matrix.server.path }}/releases/${{ github.sha }}"
+            tar xzf ${{ matrix.server.path }}/artifacts/${{ github.sha }}.tar.gz -C "${{ matrix.server.path }}/releases/${{ github.sha }}"
+            rm -rf ${{ matrix.server.path }}/releases/${{ github.sha }}/storage
 
             mkdir -p ${{ matrix.server.path }}/storage/{app,public,framework,logs}
             mkdir -p ${{ matrix.server.path }}/storage/framework/{cache,sessions,testing,views}
