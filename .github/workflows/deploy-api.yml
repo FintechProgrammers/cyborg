@@ -21,7 +21,6 @@ jobs:
       - name: Configure Composer 2.5.5
         run: |
           php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-          php -r "if (hash_file('sha384', 'composer-setup.php') === 'c31e96b1f933ad3a1b3875f5547f44d19bfca752a2e67d060525b9c79b202340') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
           php composer-setup.php --install-dir=/usr/local/bin --filename=composer --version=2.5.5
           php -r "unlink('composer-setup.php');"
       - name: Composer install
