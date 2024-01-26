@@ -47,6 +47,7 @@ class BotResource extends JsonResource
                 'quantity'          => !empty($trade_Values->quantity) ? $trade_Values->quantity : 0,
                 'profit'            => !empty($trade_Values->profit) ? $trade_Values->profit : 0,
             ],
+            'logs'  => $trade_Values->logs,
             'is_copied'      => (bool) $this->is_copied,
         ];
     }
