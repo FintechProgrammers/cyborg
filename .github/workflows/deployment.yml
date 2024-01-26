@@ -63,7 +63,7 @@ jobs:
           source: ${{ github.sha }}.tar.gz
           target: ${{ matrix.server.path }}/artifacts
       - name: Extract archive and create directories
-        uses: appleboy/scp-action@v0.1.3
+        uses: appleboy/ssh-action@master
         env:
           GITHUB_SHA: ${{ github.sha }}
         with:
