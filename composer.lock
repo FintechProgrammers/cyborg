@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "33cf93e5d151b188916dd9a86147ad19",
+    "content-hash": "370d1feaada70e46b4970c07727fa418",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -281,16 +281,16 @@
         },
         {
             "name": "ccxt/ccxt",
-            "version": "4.2.10",
+            "version": "4.2.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ccxt/ccxt.git",
-                "reference": "1ad6dfcbfef3e12969b489033a523b93e3fbcadf"
+                "reference": "6e263c4d3e9d73c3a379579a99b88d8d2ef3be20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ccxt/ccxt/zipball/1ad6dfcbfef3e12969b489033a523b93e3fbcadf",
-                "reference": "1ad6dfcbfef3e12969b489033a523b93e3fbcadf",
+                "url": "https://api.github.com/repos/ccxt/ccxt/zipball/6e263c4d3e9d73c3a379579a99b88d8d2ef3be20",
+                "reference": "6e263c4d3e9d73c3a379579a99b88d8d2ef3be20",
                 "shasum": ""
             },
             "require": {
@@ -556,7 +556,7 @@
             ],
             "support": {
                 "issues": "https://github.com/ccxt/ccxt/issues",
-                "source": "https://github.com/ccxt/ccxt/tree/4.2.10"
+                "source": "https://github.com/ccxt/ccxt/tree/4.2.22"
             },
             "funding": [
                 {
@@ -564,7 +564,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2024-01-08T15:36:11+00:00"
+            "time": "2024-01-25T18:16:21+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
