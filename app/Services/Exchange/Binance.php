@@ -15,7 +15,7 @@ class Binance
     {
         $this->trade_type = $data['trade_type'];
 
-        $this->exchange = new  ccxt\binance([
+        $this->exchange = new ccxt\binance([
             // 'enableRateLimit' => True,
             'apiKey'  => $data['apikey'],
             'secret'  => $data['secret'],
@@ -231,30 +231,30 @@ class Binance
 
     public function takeLong($quantity, $leverage = 1)
     {
-         // Get the current time in seconds with microsecond precision
-         $t = microtime(true);
+        // Get the current time in seconds with microsecond precision
+        $t = microtime(true);
 
-         // Convert the time to milliseconds
-         $t = $t * 1000;
+        // Convert the time to milliseconds
+        $t = $t * 1000;
 
-         // Convert to an integer
-         $t = (int)$t;
+        // Convert to an integer
+        $t = (int)$t;
 
-         // Sleep for 3 seconds
-         sleep(3);
+        // Sleep for 3 seconds
+        sleep(3);
 
-         // create market sell order
-         $options = [
-             "leverage" => $leverage,
-             "newClientOrderId" => "x-zcYWaQcS",
-             "reduceOnly" => true,
-         ];
+        // create market sell order
+        $options = [
+            "leverage" => $leverage,
+            "newClientOrderId" => "x-zcYWaQcS",
+            "reduceOnly" => true,
+        ];
 
-         $order = $this->createMarketSellOrder($quantity, $options);
+        $order = $this->createMarketSellOrder($quantity, $options);
 
-         $order_id = $order['order_id'];
-         // Sleep for 3 seconds
-         sleep(3);
+        $order_id = $order['order_id'];
+        // Sleep for 3 seconds
+        sleep(3);
 
         $myTrades = $this->myTrades($t);
 
