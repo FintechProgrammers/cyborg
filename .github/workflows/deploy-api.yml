@@ -21,7 +21,7 @@ jobs:
 
       - name: Composer install
         run: |
-          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Create deployment artifact
         env:
