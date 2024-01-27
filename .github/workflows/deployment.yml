@@ -22,7 +22,6 @@ jobs:
       - name: Composer install
         run: |
           composer install --no-interaction --prefer-dist
-          composer require ccxt/ccxt
 
       - name: Create deployment artifact
         env:
