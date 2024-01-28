@@ -17,6 +17,7 @@ class Binance
 
         $this->exchange = new  ccxt\binance([
             // 'enableRateLimit' => True,
+            'timeout' => 20000,
             'apiKey'  => $data['apikey'],
             'secret'  => $data['secret'],
             'options' =>  [

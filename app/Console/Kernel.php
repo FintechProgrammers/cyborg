@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\GetExchange;
 use App\Console\Commands\TradeBot;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -14,7 +15,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        TradeBot::class
+        TradeBot::class,
+        GetExchange::class
     ];
 
 
@@ -25,6 +27,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('run:bot')->everyMinute()->runInBackground();
+        $schedule->command('fetch:balace')->everyMinute()->runInBackground();
     }
 
     /**
