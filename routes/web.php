@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return route('admin.login');
+    return redirect()->route('admin.login');
 });
 
 Route::post('coinpayment/ipn', CoinpaymentController::class);
