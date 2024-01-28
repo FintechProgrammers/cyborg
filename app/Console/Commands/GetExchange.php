@@ -21,7 +21,7 @@ class GetExchange extends Command
      *
      * @var string
      */
-    protected $description = 'et Balance of binded exchange.';
+    protected $description = 'Get Balance of binded exchange.';
 
     /**
      * Execute the console command.
