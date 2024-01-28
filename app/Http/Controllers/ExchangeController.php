@@ -149,7 +149,7 @@ class ExchangeController extends Controller
     {
         $user = $request->user;
 
-        $binded = UserExchange::where('user_id', $user->id)->get();
+        $binded = UserExchange::where('user_id', $user->id)->where('is_binded',true)->latest()->get();
 
         $binded = BindedExchangeResource::collection($binded);
 
