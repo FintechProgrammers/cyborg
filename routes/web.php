@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return route('admin.login');
 });
 
 Route::post('coinpayment/ipn', CoinpaymentController::class);
@@ -25,5 +25,5 @@ Route::get('queue-work', function () {
 })->name('queue.work');
 
 Route::get('cron', function () {
-	return Illuminate\Support\Facades\Artisan::call('schedule:run');
+    return Illuminate\Support\Facades\Artisan::call('schedule:run');
 })->name('cron');
