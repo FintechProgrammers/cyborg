@@ -157,19 +157,6 @@ jobs:
       matrix:
         server: ${{ fromJson(needs.create-deployment-artifacts.outputs.DEPLOYMENT_MATRIX) }}
     steps:
-      - name: Clear Laravel cache
-        uses: appleboy/ssh-action@master
-        env:
-          RELEASE_PATH: ${{ matrix.server.path }}/releases/${{ github.sha }}
-          BASE_PATH: ${{ matrix.server.path }}
-        with:
-          host: ${{ matrix.server.ip }}
-          username: ${{ matrix.server.username }}
-          password: ${{ matrix.server.password }}
-          envs: RELEASE_PATH, BASE_PATH
-          script: |
-            php $RELEASE_PATH/artisan optimize:clear
-
       - name: Run after hooks
         uses: appleboy/ssh-action@master
         env:
