@@ -21,11 +21,11 @@
                 <div class="flex-grow-1">
                     <label class="form-label" for="password">Password</label>
                 </div>
-                <div class="flex-shrink-0">
+                {{-- <div class="flex-shrink-0">
                     <div class="">
                         <a href="{{ route('admin.forgot.password') }}" class="text-muted">Forgot password?</a>
                     </div>
-                </div>
+                </div> --}}
             </div>
 
             <div class="input-group auth-pass-inputgroup">
