@@ -40,7 +40,7 @@
                         @endphp
                         @forelse ($stretegy as $item)
                             <tr>
-                                <td>{{ $sno++ }}</td>
+                                <td class="text-center">{{ $sno++ }}</td>
                                 <td>{{ $item->bot_name }}</td>
                                 <td>{{ $item->market->name }}</td>
                                 <td>{{ $item->trade_type }}</td>
