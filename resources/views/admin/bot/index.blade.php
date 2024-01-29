@@ -7,67 +7,69 @@
         <div class="page-title-right">
             <div class="card-body">
                 <div class="d-flex flex-wrap gap-2">
-                    <a href="{{ route('admin.bot.create') }}" type="button"
-                        class="btn btn-success waves-effect waves-light">Create Bot</a>
+                    @if (auth()->user()->can('create wallet') ?? false)
+                        <a href="{{ route('admin.bot.create') }}" type="button"
+                            class="btn btn-success waves-effect waves-light">Create Bot</a>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
     <div class="card">
         <div class="card-body">
-           <div class="table-responsive">
-            <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100 table-hover">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Bot Name</th>
-                        <th>Market</th>
-                        <th>Market Type</th>
-                        <th>Margin Limit</th>
-                        <th>Margin Ratio</th>
-                        <th>Price Drop</th>
-                        <th>Stop Loss</th>
-                        <th>Take Profit</th>
-                        <th>Minimum Capital</th>
-                        <th width="20%">Option</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @php
-                        $sno = 1;
-                    @endphp
-                    @forelse ($stretegy as $item)
+            <div class="table-responsive">
+                <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100 table-hover">
+                    <thead>
                         <tr>
-                            <td>{{ $sno++ }}</td>
-                            <td>{{ $item->bot_name }}</td>
-                            <td>{{ $item->market->name }}</td>
-                            <td>{{ $item->trade_type }}</td>
-                            <td class="text-center">{{ $item->margin_limit }}</td>
-                            <td class="text-center">{{ $item->m_ration }}</td>
-                            <td class="text-center">{{ $item->price_drop }}</td>
-                            <td class="text-center">{{ $item->stop_loss }}%</td>
-                            <td class="text-center">{{ $item->take_profit }}%</td>
-                            <td class="text-center">{{ $item->capital }} USDT</td>
-                            <td>
-                                <a href="{{ route('admin.bot.edit', $item->uuid) }}" class="btn btn-primary">
-                                    Edit
-                                </a>
-                                <a href="#" class="btn btn-danger delete"
-                                    data-url="{{ route('admin.bot.delete', $item->uuid) }}">
-                                    Delete
-                                </a>
-                            </td>
+                            <th>ID</th>
+                            <th>Bot Name</th>
+                            <th>Market</th>
+                            <th>Market Type</th>
+                            <th>Margin Limit</th>
+                            <th>Margin Ratio</th>
+                            <th>Price Drop</th>
+                            <th>Stop Loss</th>
+                            <th>Take Profit</th>
+                            <th>Minimum Capital</th>
+                            <th width="20%">Option</th>
                         </tr>
-                    @empty
-                        {{-- <tr>
+                    </thead>
+                    <tbody>
+                        @php
+                            $sno = 1;
+                        @endphp
+                        @forelse ($stretegy as $item)
+                            <tr>
+                                <td>{{ $sno++ }}</td>
+                                <td>{{ $item->bot_name }}</td>
+                                <td>{{ $item->market->name }}</td>
+                                <td>{{ $item->trade_type }}</td>
+                                <td class="text-center">{{ $item->margin_limit }}</td>
+                                <td class="text-center">{{ $item->m_ration }}</td>
+                                <td class="text-center">{{ $item->price_drop }}</td>
+                                <td class="text-center">{{ $item->stop_loss }}%</td>
+                                <td class="text-center">{{ $item->take_profit }}%</td>
+                                <td class="text-center">{{ $item->capital }} USDT</td>
+                                <td>
+                                    <a href="{{ route('admin.bot.edit', $item->uuid) }}" class="btn btn-primary">
+                                        Edit
+                                    </a>
+                                    <a href="#" class="btn btn-danger delete"
+                                        data-url="{{ route('admin.bot.delete', $item->uuid) }}">
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        @empty
+                            {{-- <tr>
                             <td colspan="8">
                                 <x-no-data-component title="no bot available" />
                             </td>
                         </tr> --}}
-                    @endforelse
-                </tbody>
-            </table>
-           </div>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 @endsection
