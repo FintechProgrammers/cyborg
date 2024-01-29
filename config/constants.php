@@ -6,7 +6,7 @@ return [
         'public_key'    => env('COINPAY_PUBLIC_KEY'),
         'private_key'   => env('COINPAY_PRIVATE_KEY'),
         'marchant_id'   => env('COINPAY_MERCHANT_ID'),
-        'ipn_url'       => env('COINPAY_IPN_URL'),
+        'ipn_url'       => 'https://deltacyborgapi.com/coinpayment/ipn',
         'api_format'    => env('COINPAY_API_FORMAT')
     ]
 ];

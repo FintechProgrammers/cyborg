@@ -18,3 +18,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::post('coinpayment/ipn', CoinpaymentController::class);
+
