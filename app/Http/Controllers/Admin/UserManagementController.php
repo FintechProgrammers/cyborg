@@ -68,6 +68,12 @@ class UserManagementController extends Controller
 
         $wallet = Wallet::where('user_id', $user->id)->first();
 
+        if (!$wallet) {
+            $wallet = Wallet::create([
+                'user_id'  => $user->id,
+            ]);
+        }
+
         if ($request->type == "fee") {
 
             $wallet->update([
