@@ -18,23 +18,29 @@ class Navigation
                 'name'  => 'Users',
                 'route' => 'admin.users.index',
                 'icon'  => 'users',
-                'hasPermission' => true
+                'hasPermission' => auth()->user()->can('manage user') ?? false
+            ],
+            (object) [
+                'name'  => 'Administrators',
+                'route' => 'admin.administrators.index',
+                'icon'  => 'users',
+                'hasPermission' => auth()->user()->can('admin user') ?? false
             ],
             (object) [
                 'name'      => 'Media',
                 'icon'      => 'grid',
                 'routes'    => ['admin.news.index', 'admin.banner.index'],
-                'hasPermission' => true,
+                'hasPermission' => auth()->user()->can('manage media') ?? false,
                 'subMenu'   => (object) [
                     (object) [
                         'name'  => 'Banner',
                         'route' => 'admin.banner.index',
-                        'hasPermission' => true
+                        'hasPermission' => auth()->user()->can('manage banner') ?? false
                     ],
                     (object) [
                         'name'  => 'News',
                         'route' => 'admin.news.index',
-                        'hasPermission' => true
+                        'hasPermission' => auth()->user()->can('manage news') ?? false
                     ]
                 ],
             ],
@@ -42,23 +48,23 @@ class Navigation
                 'name'  => 'Bot',
                 'route' => 'admin.bot.index',
                 'icon'  => 'cpu',
-                'hasPermission' => true
+                'hasPermission' => auth()->user()->can('manage strategy') ?? false
             ],
             (object) [
                 'name'      => 'Finance',
                 'icon'      => 'align-justify',
                 'routes'    => ['admin.transactions.index', 'admin.banner.index'],
-                'hasPermission' => true,
+                'hasPermission' => auth()->user()->can('manage finance') ?? false,
                 'subMenu'   => (object) [
                     (object) [
                         'name'  => 'Transactions',
                         'route' => 'admin.transactions.index',
-                        'hasPermission' => true
+                        'hasPermission' => auth()->user()->can('manage transactions') ?? false
                     ],
                     (object) [
                         'name'  => 'Pending Withdrawals',
                         'route' => 'admin.transactions.withdrawals.index',
-                        'hasPermission' => true
+                        'hasPermission' => auth()->user()->can('manage withdrawal') ?? false
                     ]
                 ],
             ],
@@ -66,25 +72,25 @@ class Navigation
                 'name'  => 'Trades',
                 'route' => 'admin.trades.index',
                 'icon'  => 'bar-chart-2',
-                'hasPermission' => true
+                'hasPermission' => auth()->user()->can('manage trades') ?? false
             ],
             (object) [
                 'name'  => 'Support',
                 'route' => 'admin.supports.index',
                 'icon'  => 'headphones',
-                'hasPermission' => true
+                'hasPermission' => auth()->user()->can('manage ticket') ?? false
             ],
             (object) [
                 'name'  => 'Roles and Permissions',
                 'route' => 'admin.roles.index',
                 'icon'  => 'anchor',
-                'hasPermission' => true
+                'hasPermission' => auth()->user()->can('roles permissions') ?? false
             ],
             (object) [
                 'name'  => 'Settings',
                 'route' => 'admin.settings.index',
                 'icon'  => 'settings',
-                'hasPermission' => true
+                'hasPermission' => auth()->user()->can('manage settings') ?? false
             ],
         ];
     }

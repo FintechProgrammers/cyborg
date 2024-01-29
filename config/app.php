@@ -57,7 +57,7 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
-    'asset_url' => 'https://deltadigitalbotadmin.com',
+    'asset_url' => env('ASSET_URL'),
 
     /*
     |--------------------------------------------------------------------------

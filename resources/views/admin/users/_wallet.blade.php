@@ -6,10 +6,16 @@
                 <h6>{{ number_format(!empty($wallet) ? $wallet->balance : 0, 2) }} USDT</h6>
             </div>
             <div>
-                <button class="btn btn-primary take-wallet-action" data-bs-toggle="modal" data-bs-target="#funWallet"
-                    data-url="{{ route('admin.users.fund', ['user' => $user->uuid, 'wallet' => 'main']) }}">Credit</button>
-                <button class="btn btn-danger take-wallet-action" data-bs-toggle="modal" data-bs-target="#funWallet"
-                    data-url="{{ route('admin.users.debit', ['user' => $user->uuid, 'wallet' => 'main']) }}">Debit</button>
+                @if (auth()->user()->can('fund wallet') ?? false)
+                    <button class="btn btn-primary take-wallet-action" data-bs-toggle="modal" data-bs-target="#funWallet"
+                        data-url="{{ route('admin.users.fund', ['user' => $user->uuid, 'wallet' => 'main']) }}">Credit</button>
+                @endif
+
+                @if (auth()->user()->can('debit') ?? false)
+                    <button class="btn btn-danger take-wallet-action" data-bs-toggle="modal" data-bs-target="#funWallet"
+                        data-url="{{ route('admin.users.debit', ['user' => $user->uuid, 'wallet' => 'main']) }}">Debit</button>
+                @endif
+
             </div>
         </div>
     </div>
@@ -23,10 +29,16 @@
                 <h6>{{ number_format(!empty($wallet) ? $wallet->fee : 0, 2) }} USDT</h6>
             </div>
             <div>
-                <button class="btn btn-primary take-wallet-action" data-bs-toggle="modal" data-bs-target="#funWallet"
-                    data-url="{{ route('admin.users.fund', ['user' => $user->uuid, 'wallet' => 'fee']) }}">Credit</button>
-                <button class="btn btn-danger take-wallet-action" data-bs-toggle="modal" data-bs-target="#funWallet"
-                    data-url="{{ route('admin.users.debit', ['user' => $user->uuid, 'wallet' => 'fee']) }}">Debit</button>
+                @if (auth()->user()->can('fund wallet') ?? false)
+                    <button class="btn btn-primary take-wallet-action" data-bs-toggle="modal"
+                        data-bs-target="#funWallet"
+                        data-url="{{ route('admin.users.fund', ['user' => $user->uuid, 'wallet' => 'fee']) }}">Credit</button>
+                @endif
+
+                @if (auth()->user()->can('debit') ?? false)
+                    <button class="btn btn-danger take-wallet-action" data-bs-toggle="modal" data-bs-target="#funWallet"
+                        data-url="{{ route('admin.users.debit', ['user' => $user->uuid, 'wallet' => 'fee']) }}">Debit</button>
+                @endif
             </div>
         </div>
     </div>
@@ -73,4 +85,3 @@
         </div>
     </div>
 </div>
-

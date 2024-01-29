@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\SupportController;
 use App\Http\Controllers\Admin\TradeController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\UserManagementController;
+use App\Http\Controllers\ManageAdministratorsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -114,5 +115,14 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::controller(SettingsController::class)->prefix('settings')->name('settings.')->group(function () {
         Route::get('', 'index')->name('index');
         Route::post('', 'store')->name('store');
+    });
+
+    Route::controller(ManageAdministratorsController::class)->prefix('administrators')->name('administrators.')->group(function () {
+        Route::get('','index')->name('index');
+        Route::get('create','create')->name('create');
+        Route::post('create','store')->name('store');
+        Route::get('/{admin}','show')->name('show');
+        Route::post('update/{admin}','update')->name('update');
+        Route::delete('{admin}','destroy')->name('delete');
     });
 });
