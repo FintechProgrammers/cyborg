@@ -45,20 +45,20 @@ class ExchangeController extends Controller
             // connect to exchange
             $exchangeKey = ucfirst($exchange->slug);
 
-            $exchangeService = "\\App\\Services\\Exchange\\{$exchangeKey}";
+            // $exchangeService = "\\App\\Services\\Exchange\\{$exchangeKey}";
 
-            $exchangeService = new $exchangeService($setupData);
+            // $exchangeService = new $exchangeService($setupData);
 
-            $spotBalance = $exchangeService->getBalance();
+            // $spotBalance = $exchangeService->getBalance();
 
-            if ($exchange->futures) {
+            // if ($exchange->futures) {
 
-                $setupData['trade_type'] = "future";
+            //     $setupData['trade_type'] = "future";
 
-                $exchangeFuturesService = new $exchangeService($setupData);
+            //     $exchangeFuturesService = new $exchangeService($setupData);
 
-                $futuresBalance = $exchangeFuturesService->getBalance();
-            }
+            //     $futuresBalance = $exchangeFuturesService->getBalance();
+            // }
 
             $binded = UserExchange::updateOrCreate(
                 [

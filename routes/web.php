@@ -20,10 +20,3 @@ Route::get('/', function () {
 
 Route::post('coinpayment/ipn', CoinpaymentController::class);
 
-Route::get('queue-work', function () {
-    return Illuminate\Support\Facades\Artisan::call('queue:work', ['--stop-when-empty' => true]);
-})->name('queue.work');
-
-Route::get('cron', function () {
-	return Illuminate\Support\Facades\Artisan::call('schedule:run');
-})->name('cron');
