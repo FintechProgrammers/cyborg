@@ -109,16 +109,16 @@ if (!function_exists('sendToLog')) { /* send to log" */
             logger($error);
         } else {
             try {
-                $logFilesPath = storage_path('logs');
-                // // get all log files
-                $logFiles = File::glob($logFilesPath . '/*.log');
-                // // get latest log
-                $latestLogFile = array_pop($logFiles);
+                // $logFilesPath = storage_path('logs');
+                // // // get all log files
+                // $logFiles = File::glob($logFilesPath . '/*.log');
+                // // // get latest log
+                // $latestLogFile = array_pop($logFiles);
 
-                $logFileContent = File::get($latestLogFile);
+                // $logFileContent = File::get($latestLogFile);
 
                 $payload = [
-                    'text' => $logFileContent
+                    'text' => $error
                 ];
 
                 $client = new \GuzzleHttp\Client();
@@ -254,7 +254,7 @@ if (!function_exists('formatNumber')) {
 
 
 if (!function_exists('tradeSettings')) {
-    function tradeSettings($stopLoss,$takeProfit,$capital,$firstBuy,$marginLimit,$mRatio,$priceDrop)
+    function tradeSettings($stopLoss, $takeProfit, $capital, $firstBuy, $marginLimit, $mRatio, $priceDrop)
     {
         return [
             'stop_loss'         => $stopLoss,
@@ -270,7 +270,7 @@ if (!function_exists('tradeSettings')) {
 
 
 if (!function_exists('tradeValues')) {
-    function tradeValues($positionAmount=0,$inPosition=false,$buyPosition=false,$sellPosition=false,$marginCalls=0,$floatingLoss=0,$tradePrice=0,$quantity=0,$profit=0,$firstPrice=0,$averagePrice=0)
+    function tradeValues($positionAmount = 0, $inPosition = false, $buyPosition = false, $sellPosition = false, $marginCalls = 0, $floatingLoss = 0, $tradePrice = 0, $quantity = 0, $profit = 0, $firstPrice = 0, $averagePrice = 0)
     {
         return [
             'position_amount'   => $positionAmount,

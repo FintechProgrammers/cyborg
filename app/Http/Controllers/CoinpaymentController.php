@@ -61,7 +61,8 @@ class CoinpaymentController extends Controller
         $amount = $request->input('amount');
         $txn_id = $request->input('deposit_id');
         $currency = $request->input('currency');
-        $fee = $request->input('fee');
+        // $fee = $request->input('fee');
+        $fee = 0;
 
         // check if transactions already exist
         $transactionExist =  Transaction::where('reference', $txn_id)->first();
@@ -84,6 +85,7 @@ class CoinpaymentController extends Controller
                     'type'          => 'credit',
                     'action'        => 'deposit',
                     'status'        => 'complete',
+                    'fee'           => $fee,
                     'narration'     => $request->status_text
                 ]);
             }
