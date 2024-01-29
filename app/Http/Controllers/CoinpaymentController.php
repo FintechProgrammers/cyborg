@@ -13,6 +13,9 @@ class CoinpaymentController extends Controller
     {
 
         try {
+
+            sendToLog(["Coinpay webhook Log" => $request->all()]);
+
             // Validated marchante id
             $cp_merchant_id = config('constants.coinpay.marchant_id'); //defined in pure_config
             $cp_ipn_secret = config('constants.coinpay.private_key'); //defined in pure_config
