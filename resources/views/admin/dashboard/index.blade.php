@@ -3,55 +3,58 @@
 @section('title', 'Dashboard')
 
 @section('content')
-    <div class="row">
-        <div class="col-xl-6 col-md-12">
-            <!-- card -->
-            <div class="card card-h-100 bg-dark border-0">
-                <!-- card body -->
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-6">
-                            <span class="text-white mb-3 lh-1 d-block text-truncate">Deposits</span>
-                            <h4 class="mb-3 text-white">
-                                <span class=" text-white">${{ formatNumber(number_format($totalDeposit, 1)) }}</span>
-                            </h4>
-                        </div>
+    @if (auth()->user()->hasRole('super admin'))
+        <div class="row">
 
-                        <div class="col-6">
-                            <div id="mini-chart1" data-colors='["#fff"]' class="apex-charts mb-2"></div>
-                        </div>
-                    </div>
-                    {{-- <div class="text-nowrap">
-                        <span class="badge bg-success-subtle text-success">+20.9k</span>
-                        <span class="ms-1  font-size-13 text-white">Since today</span>
-                    </div> --}}
-                </div><!-- end card body -->
-            </div><!-- end card -->
-        </div><!-- end col -->
+            <div class="col-xl-6 col-md-12">
+                <!-- card -->
+                <div class="card card-h-100 bg-dark border-0">
+                    <!-- card body -->
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                <span class="text-white mb-3 lh-1 d-block text-truncate">Deposits</span>
+                                <h4 class="mb-3 text-white">
+                                    <span class=" text-white">${{ formatNumber(number_format($totalDeposit, 1)) }}</span>
+                                </h4>
+                            </div>
 
-        <div class="col-xl-6 col-md-12">
-            <!-- card -->
-            <div class="card card-h-100">
-                <!-- card body -->
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-6">
-                            <span class="text-muted mb-3 lh-1 d-block text-truncate">Withdrawals</span>
-                            <h4 class="mb-3">
-                                <span class="">${{ formatNumber(number_format($totalWithdrawal,1)) }}</span>
-                            </h4>
+                            <div class="col-6">
+                                <div id="mini-chart1" data-colors='["#fff"]' class="apex-charts mb-2"></div>
+                            </div>
                         </div>
-                        <div class="col-6">
-                            <div id="mini-chart2" data-colors='["#5156be"]' class="apex-charts mb-2"></div>
+                        {{-- <div class="text-nowrap">
+                    <span class="badge bg-success-subtle text-success">+20.9k</span>
+                    <span class="ms-1  font-size-13 text-white">Since today</span>
+                </div> --}}
+                    </div><!-- end card body -->
+                </div><!-- end card -->
+            </div><!-- end col -->
+
+            <div class="col-xl-6 col-md-12">
+                <!-- card -->
+                <div class="card card-h-100">
+                    <!-- card body -->
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                <span class="text-muted mb-3 lh-1 d-block text-truncate">Withdrawals</span>
+                                <h4 class="mb-3">
+                                    <span class="">${{ formatNumber(number_format($totalWithdrawal, 1)) }}</span>
+                                </h4>
+                            </div>
+                            <div class="col-6">
+                                <div id="mini-chart2" data-colors='["#5156be"]' class="apex-charts mb-2"></div>
+                            </div>
                         </div>
-                    </div>
-                    {{-- <div class="text-nowrap">
-                        <span class="badge bg-danger-subtle text-danger">-29 Unpaid</span>
-                    </div> --}}
-                </div><!-- end card body -->
-            </div><!-- end card -->
+                        {{-- <div class="text-nowrap">
+                    <span class="badge bg-danger-subtle text-danger">-29 Unpaid</span>
+                </div> --}}
+                    </div><!-- end card body -->
+                </div><!-- end card -->
+            </div>
         </div>
-    </div>
+    @endif
     <div class="row">
         <div class="col-xl-3 col-md-6">
             <!-- card -->
@@ -96,47 +99,49 @@
             </div><!-- end card -->
         </div><!-- end col-->
 
-        <div class="col-xl-3 col-md-6">
-            <!-- card -->
-            <div class="card card-h-100 bg-danger border-0">
-                <!-- card body -->
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-6">
-                            <span class="text-white mb-3 lh-1 d-block text-truncate">Users Balance</span>
-                            <h4 class="mb-3 text-white">
-                                $<span class=" text-white">{{ formatNumber(number_format($usersBalance, 1)) }}</span>
-                            </h4>
+        @if (auth()->user()->hasRole('super admin'))
+            <div class="col-xl-3 col-md-6">
+                <!-- card -->
+                <div class="card card-h-100 bg-danger border-0">
+                    <!-- card body -->
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                <span class="text-white mb-3 lh-1 d-block text-truncate">Users Balance</span>
+                                <h4 class="mb-3 text-white">
+                                    $<span class=" text-white">{{ formatNumber(number_format($usersBalance, 1)) }}</span>
+                                </h4>
+                            </div>
                         </div>
-                    </div>
-                    {{-- <div class="text-nowrap">
+                        {{-- <div class="text-nowrap">
                         <span class="badge bg-danger-subtle text-danger">+ $2.8k</span>
                         <span class="ms-1 text-white font-size-13">Since last week</span>
                     </div> --}}
-                </div><!-- end card body -->
-            </div><!-- end card -->
-        </div><!-- end col -->
+                    </div><!-- end card body -->
+                </div><!-- end card -->
+            </div><!-- end col -->
 
-        <div class="col-xl-3 col-md-6">
-            <!-- card -->
-            <div class="card card-h-100 bg-primary border-0">
-                <!-- card body -->
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-6">
-                            <span class="mb-3 lh-1 d-block text-truncate text-white">Total Fee</span>
-                            <h4 class="mb-3">
-                                <span class=" text-white">${{ formatNumber(number_format($feeBalance, 1)) }}</span>
-                            </h4>
+            <div class="col-xl-3 col-md-6">
+                <!-- card -->
+                <div class="card card-h-100 bg-primary border-0">
+                    <!-- card body -->
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                <span class="mb-3 lh-1 d-block text-truncate text-white">Total Fee</span>
+                                <h4 class="mb-3">
+                                    <span class=" text-white">${{ formatNumber(number_format($feeBalance, 1)) }}</span>
+                                </h4>
+                            </div>
                         </div>
-                    </div>
-                    {{-- <div class="text-nowrap">
+                        {{-- <div class="text-nowrap">
                         <span class="badge bg-success-subtle text-success">+2.95%</span>
                         <span class="ms-1 text-white font-size-13">Since last week</span>
                     </div> --}}
-                </div><!-- end card body -->
-            </div><!-- end card -->
-        </div><!-- end col -->
+                    </div><!-- end card body -->
+                </div><!-- end card -->
+            </div><!-- end col -->
+        @endif
     </div>
     <div class="row">
         @foreach ($bindedExcahnges as $item)
@@ -161,6 +166,7 @@
 
     <div class="row">
 
+        @if (auth()->user()->hasRole('super admin'))
         <div class="col-xl-8">
             <div class="card">
                 <div class="card-header">
@@ -174,6 +180,7 @@
                 </div>
             </div>
         </div> <!-- end col -->
+        @endif
         <!-- end col -->
         <div class="col-xl-4">
             <div class="card bg-primary text-white shadow-primary card-h-100">
