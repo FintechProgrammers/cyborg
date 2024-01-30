@@ -17,7 +17,8 @@
                 <tr>
                     <td>{{ $sno++ }}</td>
                     <td>
-                        {{ ucfirst($item->invit->name) }}
+                        {{ !empty(ucfirst($item->invit))
+                        ? $item->invit : '' }}
                     </td>
                     <td>
                         {{ $item->amount }} USDT
