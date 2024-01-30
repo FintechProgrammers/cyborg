@@ -33,7 +33,7 @@ class TradeBot extends Command
     public function handle()
     {
 
-        $gasFee = 20;
+        $gasFee = systemSettings()->trade_fee;
 
         $wallerService = new WalletService();
 
@@ -157,8 +157,7 @@ class TradeBot extends Command
                 $cal2 = (float)$trade_values->trade_price + $cal;
                 $trade_price = (float)$exchange->fetchTicker();
 
-                if ($trade_price > $cal2) {
-
+                if ($trade_price >= $cal2) {
                     $nqty = (float)$trade_values->quantity * 0.1 / 100;
                     $quantity = (float)$trade_values->quantity - $nqty;
                     $quantity = number_format($quantity, 5);
