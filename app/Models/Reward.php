@@ -12,7 +12,7 @@ class Reward extends Model
 
     protected $guarded = [];
 
-    function invit()
+    function invited()
     {
         return $this->belongsTo(User::class, 'invit');
     }
