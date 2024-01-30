@@ -240,17 +240,19 @@ if (!function_exists('systemSettings')) {
 if (!function_exists('formatNumber')) {
     function formatNumber($number)
     {
-        if ($number >= 1000000) {
-            $formattedNumber = $number / 1000000;
-            $formattedNumber = $formattedNumber . 'M';
-        } elseif ($number >= 1000) {
-            $formattedNumber = $number / 1000;
-            $formattedNumber = $formattedNumber . 'K';
-        } else {
-            $formattedNumber = $number;
-        }
+        // if ($number >= 1000000) {
+        //     $formattedNumber = $number / 1000000;
+        //     $formattedNumber = $formattedNumber . 'M';
+        // } elseif ($number >= 1000) {
+        //     $formattedNumber = $number / 1000;
+        //     $formattedNumber = $formattedNumber . 'K';
+        // } else {
+        //     $formattedNumber = $number;
+        // }
 
-        return $formattedNumber;
+        // return $formattedNumber;
+
+        return $number;
     }
 }
 
