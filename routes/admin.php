@@ -35,7 +35,7 @@ Route::controller(AuthenticationController::class)->group(function () {
 Route::middleware(['auth:admin'])->group(function () {
     Route::controller(DashBoardController::class)->prefix('dashboard')->name('dashboard.')->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::get('get-stattistics','getStatistics')->name('getStatistics');
+        Route::get('get-stattistics', 'getStatistics')->name('getStatistics');
     });
 
     Route::get('/logout', [AuthenticationController::class, 'logout'])->name('logout');
@@ -87,9 +87,10 @@ Route::middleware(['auth:admin'])->group(function () {
 
     Route::controller(TransactionController::class)->prefix('transactions')->name('transactions.')->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::get('/{transaction}', 'show')->name('show');
+        Route::get('show/{transaction}', 'show')->name('show');
         Route::get('/withdrawals/pending', 'withdrawals')->name('withdrawals.index');
         Route::post('/approve/{transaction}', 'approveTranasction')->name('approve');
+        Route::match(['get', 'post'], '/filter', 'filterTransactions')->name('filter');
     });
 
     Route::controller(TradeController::class)->prefix('trades')->name('trades.')->group(function () {
@@ -118,11 +119,11 @@ Route::middleware(['auth:admin'])->group(function () {
     });
 
     Route::controller(ManageAdministratorsController::class)->prefix('administrators')->name('administrators.')->group(function () {
-        Route::get('','index')->name('index');
-        Route::get('create','create')->name('create');
-        Route::post('create','store')->name('store');
-        Route::get('/{admin}','show')->name('show');
-        Route::post('update/{admin}','update')->name('update');
-        Route::delete('{admin}','destroy')->name('delete');
+        Route::get('', 'index')->name('index');
+        Route::get('create', 'create')->name('create');
+        Route::post('create', 'store')->name('store');
+        Route::get('/{admin}', 'show')->name('show');
+        Route::post('update/{admin}', 'update')->name('update');
+        Route::delete('{admin}', 'destroy')->name('delete');
     });
 });

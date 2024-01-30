@@ -1,63 +1,68 @@
-<div class="table-responsive">
-    <table id="datatable" class="table table-bordered dt-responsive nowrap w-100 table-hover">
-        <thead>
-            <tr>
-                <th>S/N</th>
-                <th>Reference</th>
-                <th>Amount</th>
-                <th>Type</th>
-                <th>Action</th>
-                <th>Status</th>
-                <th>Date</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @php
-                $sno = 1;
-            @endphp
-            @forelse ($transactions as $item)
-                <tr>
-                    <td>{{ $sno++ }}</td>
-                    <td>{{ $item->reference }}</td>
-                    <td class="text-center">
-                        {{ number_format($item->amount, 2) }}{{ $item->coin }}
-                    </td>
-                    <td class="text-center">
-                        <span class="{{ $item->type()->class }}">
-                            <span class="badge-label">{{ $item->type()->name }}</span>
-                        </span>
-                    </td>
-                    <td class="text-center">
-                        <span class="{{ $item->action()->class }}">
-                            <span class="badge-label">{{ $item->action()->name }}</span>
-                        </span>
-                    </td>
-                    <td class="text-center">
-                        <span class="{{ $item->status()->class }}">
-                            <span class="badge-label">{{ $item->status()->name }}</span>
-                        </span>
-                    </td>
-                    <td>
-                        {{ $item->created_at->format('jS F, Y H:i:s') }}
-                    </td>
-                    <td>
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#transactionDetails"
-                            class="btn btn-primary btn-sm details"
-                            data-url="{{ route('admin.transactions.show', $item->uuid) }}">Details</a>
-                    </td>
-                </tr>
-            @empty
-                {{-- <tr>
-                    <td colspan="8">
-                        <x-no-data-component title="no bot created" />
-                    </td>
-                </tr> --}}
-            @endforelse
-        </tbody>
-    </table>
+<div class="card">
+    <div class="card-body">
+        <h6 class="make-text-bold mb-3">Filter the information your want.</h6>
+        <div class="row align-items-end">
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <label>Reference</label>
+                    <input type="text" id="reference" placeholder="Transaction Reference" class="form-control">
+                    <input type="hidden" id="userId" value="{{ isset($user) ? $user->id : '' }}">
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <label>Type</label>
+                    <select name="" id="type" class="form-control">
+                        <option value="">--select-transaction--type--</option>
+                        <option value="debit">Debit</option>
+                        <option value="credit">Credit</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <label>Action</label>
+                    <select name="" id="action" class="form-control">
+                        <option value="">--select-action--</option>
+                        <option value="withdrawal">Withdrawal</option>
+                        <option value="deposit">Deposit</option>
+                        <option value="transfer">Transfer</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <label>Status</label>
+                    <select name="" id="transaction_status" class="form-control">
+                        <option value="">--select-status--</option>
+                        <option value="pending">Pending</option>
+                        <option value="completed">Competed</option>
+                        <option value="failed">Failed</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <label>Date</label>
+                    <input type="text" id="search-date" name="daterange" class="form-control">
+                </div>
+            </div>
+            <div class="col-lg-4 pt-4">
+                <button class="btn btn-primary btn-lg" id="filter">Filter</button>
+                <button class="btn btn-light btn-lg lg-2" id="reset">Reset</button>
+            </div>
 
+        </div>
+    </div>
 </div>
+<div class="card">
+    <div class="card-body" id="transactions-body">
+        @include('admin.transactions._table')
+    </div>
+</div>
+<input type="hidden" name="hidden_page" id="hidden_page" value="1" />
 @include('admin.partials._transaction_modal')
 @push('scripts')
     <script>
@@ -155,5 +160,93 @@
                 timeout: 8000,
             });
         })
+    </script>
+    <script>
+        $('body').on('click', '.pagination a', function(event) {
+            event.preventDefault();
+            var page = $(this).attr('href').split('page=')[1];
+            $('#hidden_page').val(page);
+
+            var ref = $('#reference').val();
+            var status = $('#transaction_status').val();
+            var action = $('#action').val();
+            var type = $('#type').val();
+
+            var date = $("#search-date").val();
+            let [startDate, endDate] = date.split(" - ");
+
+
+            getData(page, ref, status, type, action, startDate, endDate)
+
+        });
+
+        $('#filter').click(function(e) {
+            e.preventDefault();
+
+            $('#hidden_page').val(1);
+
+            var page = $('#hidden_page').val();
+
+            var ref = $('#reference').val();
+            var status = $('#transaction_status').val();
+            var action = $('#action').val();
+            var type = $('#type').val();
+
+            var date = $("#search-date").val();
+            let [startDate, endDate] = date.split(" - ");
+
+            getData(page, ref, status, type, action, startDate, endDate)
+
+        })
+
+        $('#reset').click(function(e) {
+            e.preventDefault();
+
+            location.reload()
+        })
+
+        function getData(page, reference = null, status = null, type = null, action = null, startDate = null, endDate =
+            null) {
+
+            txBody = $('#transactions-body');
+
+            $.ajax({
+                url: `/admin/transactions/filter?page=${page}`,
+                method: "GET",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    ref: reference,
+                    date_from: startDate,
+                    date_to: endDate,
+                    status: status,
+                    action: action,
+                    type: type,
+                    user: $('#userId').val()
+                },
+                beforeSend: function() {
+                    txBody.html(
+                        `
+                        <div class="d-flex justify-content-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                        </div>
+                        `
+                    );
+                },
+                success: function(result) {
+                    setTimeout(() => {
+                        txBody.empty().html(result);
+                    }, 1000);
+                },
+                error: function(jqXHR, testStatus, error) {
+                    displayMessage(
+                        "Error occured while trying to sort and filter transactions records.",
+                        "error"
+                    );
+                },
+                timeout: 8000,
+            });
+        }
     </script>
 @endpush

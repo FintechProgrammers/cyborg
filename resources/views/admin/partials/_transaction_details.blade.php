@@ -48,7 +48,10 @@
         <td>{{ $transaction->narration }}</td>
     </tr>
 </table>
-@if ($transaction->action == 'withdrawal' && $transaction->status == 'pending')
+@if (
+    $transaction->action == 'withdrawal' && $transaction->is_manual &&
+        $transaction->status == 'pending' &&
+        auth()->user()->can('approve transaction'))
     <button type="button" class="btn btn-primary" id="approve"
         data-url="{{ route('admin.transactions.approve', $transaction->uuid) }}">
         <span class="spinner-border" role="status" style="display: none">
