@@ -169,11 +169,11 @@ class TradeBot extends Command
                     $trade_price = $order['trade_price'];
                     $orderId = $order['order_id'];
 
-                    if ($position_amount > 0) {
-                        $profit = $position_amount - $trade_values->position_amount;
+                    // if ($position_amount > 0) {
+                    $profit = $position_amount - $trade_values->position_amount;
 
-                        $this->takeProfit($profit, $bot, $trade_price, $quantity, $gasFee, $wallerService, $wallet, $user, "sell");
-                    }
+                    $this->takeProfit($profit, $bot, $trade_price, $quantity, $gasFee, $wallerService, $wallet, $user, "sell");
+                    // }
 
                     return;
                 }
