@@ -21,7 +21,7 @@
                         ? $item->invited->name : '' }}
                     </td>
                     <td>
-                        {{ number_format($item->amount,2) }} USDT
+                        {{ number_format($item->amount,4) }} USDT
                     </td>
                     <td class="text-center">
                         {{ $item->description }}
