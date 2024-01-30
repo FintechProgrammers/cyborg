@@ -167,19 +167,19 @@
     <div class="row">
 
         @if (auth()->user()->hasRole('super admin'))
-        <div class="col-xl-8">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title mb-0">Deposit/Withdraw</h4>
-                </div>
-                <div class="card-body">
+            <div class="col-xl-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">Deposit/Withdraw</h4>
+                    </div>
+                    <div class="card-body">
 
-                    <canvas id="lineChart" class="chartjs-chart"
-                        data-colors='["rgba(81, 86, 190, 0.2)", "#5156be", "rgba(235, 239, 242, 0.2)", "#ebeff2"]'></canvas>
+                        <canvas id="lineChart" class="chartjs-chart"
+                            data-colors='["rgba(81, 86, 190, 0.2)", "#5156be", "rgba(235, 239, 242, 0.2)", "#ebeff2"]'></canvas>
 
+                    </div>
                 </div>
-            </div>
-        </div> <!-- end col -->
+            </div> <!-- end col -->
         @endif
         <!-- end col -->
         <div class="col-xl-4">
