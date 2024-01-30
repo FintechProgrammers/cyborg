@@ -241,9 +241,11 @@ if (!function_exists('formatNumber')) {
     function formatNumber($number)
     {
         if ($number >= 1000000) {
-            $formattedNumber = $number / 1000000 . 'M';
+            $formattedNumber = $number / 1000000;
+            $formattedNumber = $formattedNumber . 'M';
         } elseif ($number >= 1000) {
-            $formattedNumber = $number / 1000 . 'K';
+            $formattedNumber = $number / 1000;
+            $formattedNumber = $formattedNumber . 'K';
         } else {
             $formattedNumber = $number;
         }
@@ -254,7 +256,7 @@ if (!function_exists('formatNumber')) {
 
 
 if (!function_exists('tradeSettings')) {
-    function tradeSettings($stopLoss,$takeProfit,$capital,$firstBuy,$marginLimit,$mRatio,$priceDrop)
+    function tradeSettings($stopLoss, $takeProfit, $capital, $firstBuy, $marginLimit, $mRatio, $priceDrop)
     {
         return [
             'stop_loss'         => $stopLoss,
@@ -270,7 +272,7 @@ if (!function_exists('tradeSettings')) {
 
 
 if (!function_exists('tradeValues')) {
-    function tradeValues($positionAmount=0,$inPosition=false,$buyPosition=false,$sellPosition=false,$marginCalls=0,$floatingLoss=0,$tradePrice=0,$quantity=0,$profit=0,$firstPrice=0,$averagePrice=0)
+    function tradeValues($positionAmount = 0, $inPosition = false, $buyPosition = false, $sellPosition = false, $marginCalls = 0, $floatingLoss = 0, $tradePrice = 0, $quantity = 0, $profit = 0, $firstPrice = 0, $averagePrice = 0)
     {
         return [
             'position_amount'   => $positionAmount,
