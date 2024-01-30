@@ -16,12 +16,12 @@
             @forelse ($rewards as $item)
                 <tr>
                     <td>{{ $sno++ }}</td>
-                    <td>
-                        {{ !empty(ucfirst($item->invit))
-                        ? $item->invit : '' }}
+                    <td class="text-capitalize">
+                        {{ !empty(ucfirst($item->invited))
+                        ? $item->invited->name : '' }}
                     </td>
                     <td>
-                        {{ $item->amount }} USDT
+                        {{ number_format($item->amount,2) }} USDT
                     </td>
                     <td class="text-center">
                         {{ $item->description }}
