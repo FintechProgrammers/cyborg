@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AuthenticationController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\DashBoardController;
 use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\RolesController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\StrategyController;
@@ -125,5 +126,11 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('/{admin}', 'show')->name('show');
         Route::post('update/{admin}', 'update')->name('update');
         Route::delete('{admin}', 'destroy')->name('delete');
+    });
+
+    Route::controller(ProfileController::class)->prefix('profile')->name('profile.')->group(function(){
+        Route::get('','index')->name('index');
+        Route::post('/update-password', 'updatePassword')->name('update.password');
+        Route::post('', 'updateProfile')->name('update');
     });
 });

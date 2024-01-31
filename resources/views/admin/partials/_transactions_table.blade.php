@@ -5,7 +5,7 @@
             <div class="col-lg-4">
                 <div class="mb-3">
                     <label>Reference</label>
-                    <input type="text" id="reference" placeholder="Transaction Reference" class="form-control">
+                    <input type="text" id="reference" placeholder="By Transaction Reference" class="form-control">
                     <input type="hidden" id="userId" value="{{ isset($user) ? $user->id : '' }}">
                 </div>
             </div>
