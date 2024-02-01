@@ -46,10 +46,6 @@ class TradeBot extends Command
 
             foreach ($bots as $bot) {
 
-                $bot->update(['running' => true]);
-
-                $bot->refresh();
-
                 $settings = (object)  json_decode($bot->settings, true);
 
                 $trade_values =  (object) json_decode($bot->trade_values, true);
@@ -105,6 +101,10 @@ class TradeBot extends Command
                         'logs'     => "Your are low on gas fee. you need upto {$gasFee} USDT as gas fee. ",
                     ]);
                 }
+
+                $bot->update(['running' => true]);
+
+                $bot->refresh();
             }
         // }
     }
