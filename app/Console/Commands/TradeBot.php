@@ -41,12 +41,14 @@ class TradeBot extends Command
             $bots = Bot::with(['exchange', 'market', 'user'])
                 ->where('started', true)
                 ->where('running', false)
-                ->where('updated_at', '<', now()->subMinutes(5))
+                ->where('updated_at', '<', now()->subMinutes(1))
                 ->get();
 
             foreach ($bots as $bot) {
 
                 $bot->update(['running' => true]);
+
+                $bot->refresh();
 
                 $settings = (object)  json_decode($bot->settings, true);
 
