@@ -19,7 +19,7 @@ class BotController extends Controller
         // Get the value of user_id from the URL parameters
         $user = $request->user;
 
-        $bots = Bot::where('user_id', $user->id)->latest()->get();
+        $bots = Bot::where('user_id', $user->id)->latest()->orderByDesc('started')->get();
 
         $bots = BotResource::collection($bots);
 

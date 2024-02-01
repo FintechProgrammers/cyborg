@@ -88,6 +88,18 @@ class CoinpaymentController extends Controller
                     'fee'           => $fee,
                     'narration'     => $request->status_text
                 ]);
+
+                $pushToken = $wallet->user->fcm_token;
+
+                $fcmTokens = [$pushToken];
+
+                $data = [
+                    'push_tokens' => $fcmTokens,
+                    'title' => "Deposit",
+                    'message' => "Your deposit of {$amount} USDT was successfully.",
+                ];
+
+                dispatch(new \App\Jobs\PushNotificationJob($data));
             }
         }
     }
@@ -103,6 +115,18 @@ class CoinpaymentController extends Controller
             $transaction->update([
                 'status'        => 'complete',
             ]);
+
+            $pushToken = $transaction->user->fcm_token;
+
+            $fcmTokens = [$pushToken];
+
+            $data = [
+                'push_tokens' => $fcmTokens,
+                'title' => "Deposit",
+                'message' => "Your withdrawal of {$transaction->amount} USDT was successfully.",
+            ];
+
+            dispatch(new \App\Jobs\PushNotificationJob($data));
         }
     }
 }
