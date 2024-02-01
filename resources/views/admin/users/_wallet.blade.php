@@ -85,3 +85,32 @@
         </div>
     </div>
 </div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5>Reward Today</h5>
+                        <h6>{{ number_format($rewardToday, 2) }} USDT</h6>
+                    </div>
+                </div>
+            </div>
+            <!-- end card body -->
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5>Total Reward</h5>
+                        <h6>{{ number_format($totalReward, 2) }} USDT</h6>
+                    </div>
+                </div>
+            </div>
+            <!-- end card body -->
+        </div>
+    </div>
+</div>

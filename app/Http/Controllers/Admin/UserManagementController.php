@@ -39,6 +39,8 @@ class UserManagementController extends Controller
         $data['activeBots'] = Bot::where('user_id', $user->id)->where('started', true)->latest()->get();
         $data['bots'] = Bot::where('user_id', $user->id)->latest()->get();
         $data['showUser'] = true;
+        $data['rewardToday'] = Reward::where('user_id', $user->id)->whereDate('created_at', Carbon::today())->sum('amount');
+        $data['totalReward'] = Reward::where('user_id', $user->id)->latest()->sum('amount');
 
         return view('admin.users.show', $data);
     }
