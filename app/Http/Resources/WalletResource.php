@@ -14,8 +14,8 @@ class WalletResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $feeBalance = !empty($this->fee) ? $this->fee : 0.00 . ' USDT';
-        $balance = !empty($this->balance) ? $this->balance : 0.00 . ' USDT';
+        $feeBalance = !empty($this->fee) ? $this->fee : 0.00;
+        $balance = !empty($this->balance) ? $this->balance : 0.00;
 
         return [
             'main_balance' => $balance,
