@@ -37,8 +37,11 @@ class TradeBot extends Command
 
         $wallerService = new WalletService();
 
-        // while (true) {
-        $bots = Bot::with(['exchange', 'market', 'user'])->where('started', true)->where('running', false)->get();
+        $bots = Bot::with(['exchange', 'market', 'user'])
+            ->where('started', true)
+            ->where('running', false)
+            ->where('updated_at', '<=', now()->subMinutes(3))
+            ->get();
 
         foreach ($bots as $bot) {
 
