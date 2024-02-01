@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::table('wallets', function (Blueprint $table) {
             // Update the 'balance' column to a new type or modify constraints
-            $table->string('fee')->change();
+            $table->string('fee')->change()->default(0.00);
+            $table->string('balance')->change()->default(0.00);
         });
     }
 
