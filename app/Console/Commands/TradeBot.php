@@ -46,6 +46,10 @@ class TradeBot extends Command
 
             foreach ($bots as $bot) {
 
+                $bot->update(['running' => true]);
+
+                $bot->refresh();
+
                 $settings = (object)  json_decode($bot->settings, true);
 
                 $trade_values =  (object) json_decode($bot->trade_values, true);
@@ -102,9 +106,7 @@ class TradeBot extends Command
                     ]);
                 }
 
-                $bot->update(['running' => true]);
 
-                $bot->refresh();
             }
         // }
     }
