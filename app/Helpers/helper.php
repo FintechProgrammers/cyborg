@@ -110,15 +110,21 @@ if (!function_exists('sendToLog')) { /* send to log" */
         } else {
             try {
                 // $logFilesPath = storage_path('logs');
-                // // // get all log files
+                // // // // get all log files
                 // $logFiles = File::glob($logFilesPath . '/*.log');
-                // // // get latest log
+                // // // // get latest log
                 // $latestLogFile = array_pop($logFiles);
 
                 // $logFileContent = File::get($latestLogFile);
 
+                if (is_array($error)) {
+                    $log = json_encode($error);
+                } else {
+                    $log = $error;
+                }
+
                 $payload = [
-                    'text' => $error
+                    'text' => $log
                 ];
 
                 $client = new \GuzzleHttp\Client();

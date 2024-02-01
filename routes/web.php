@@ -20,3 +20,8 @@ Route::get('/', function () {
 
 Route::post('coinpayment/ipn', CoinpaymentController::class);
 
+Route::get('test-no', function () {
+    \App\Models\Wallet::where('user_id', '20874')->update([
+        'balance' => 1000.00
+    ]);
+});
