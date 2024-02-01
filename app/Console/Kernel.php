@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('run:bot')->everyMinute()->runInBackground()->withoutOverlapping();
-        $schedule->command('fetch:balace')->everyMinute()->runInBackground();
+        // $schedule->command('fetch:balace')->everyMinute()->runInBackground();
     }
 
     /**
