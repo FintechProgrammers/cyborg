@@ -1,0 +1,79 @@
+<?php
+
+namespace ccxt\pro;
+
+// rounding mode duplicated from CCXT
+// const TRUNCATE = 0;
+// const ROUND = 1;
+// const ROUND_UP = 2;
+// const ROUND_DOWN = 3;
+
+class Exchange extends \ccxt\async\Exchange {
+
+    use ClientTrait;
+
+    public static $exchanges = array();
+}
+
+// the override below is technically an error
+// todo: fix the conflict of ccxt.exchanges vs ccxtpro.exchanges
+
+Exchange::$exchanges = array(
+    'alpaca',
+    'ascendex',
+    'bequant',
+    'binance',
+    'binancecoinm',
+    'binanceus',
+    'binanceusdm',
+    'bingx',
+    'bitcoincom',
+    'bitfinex',
+    'bitfinex2',
+    'bitget',
+    'bitmart',
+    'bitmex',
+    'bitopro',
+    'bitpanda',
+    'bitrue',
+    'bitstamp',
+    'bitvavo',
+    'blockchaincom',
+    'bybit',
+    'cex',
+    'coinbase',
+    'coinbasepro',
+    'coinex',
+    'cryptocom',
+    'currencycom',
+    'deribit',
+    'exmo',
+    'gate',
+    'gateio',
+    'gemini',
+    'hitbtc',
+    'hollaex',
+    'htx',
+    'huobi',
+    'huobijp',
+    'idex',
+    'independentreserve',
+    'kraken',
+    'krakenfutures',
+    'kucoin',
+    'kucoinfutures',
+    'luno',
+    'mexc',
+    'ndax',
+    'okcoin',
+    'okx',
+    'phemex',
+    'poloniex',
+    'poloniexfutures',
+    'probit',
+    'upbit',
+    'wazirx',
+    'whitebit',
+    'woo',
+);
+
