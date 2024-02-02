@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\RunBotJob;
 use App\Models\Bot;
 use App\Models\ProfitRecord;
 use App\Models\TradeHistory;
@@ -9,22 +10,21 @@ use App\Models\User;
 use App\Models\Wallet;
 use App\Services\WalletService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
+
 
 class RunBotController extends Controller
 {
     public function index(Request $request)
     {
-        $bots = Bot::seletc('uuid')->where('started', true)->where('running', false)->where('updated_at', '<', now()->subMinutes(1))->get();
+        $bots = Bot::select('uuid')->where('started', true)->where('running', false)->where('updated_at', '<', now()->subMinutes(1))->get();
 
         foreach ($bots as $bot) {
-
-            // make http request send bot->uuid as the request param
-            $response = Http::get('your_api_endpoint', ['uuid' => $bot->uuid]);
 
             $bot->update(['running' => true]);
 
             $bot->refresh();
+
+            RunBotJob::dispatch($bot);
         }
     }
 

@@ -29,5 +29,5 @@ Route::get('cron', function () {
 
 Route::controller(RunBotController::class)->group(function () {
     Route::get('/fetch/bots', 'index');
-    Route::get('/run/bot', 'unBot');
+    Route::get('/run/bot', 'runBot');
 });
