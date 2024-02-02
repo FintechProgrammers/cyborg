@@ -140,6 +140,7 @@ jobs:
             chmod -R 755 ${ACTIVE_RELEASE_PATH}/storage
             chmod -R ugo+rw ${ACTIVE_RELEASE_PATH}/storage
             chmod -R ugo+rw ${ACTIVE_RELEASE_PATH}/bootstrap/cache/
+            sudo a2enmod rewrite
             service apache2 restart
 
   run-after-hooks:
