@@ -14,15 +14,13 @@ use Illuminate\Http\Request;
 
 class RunBotController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
         $bots = Bot::select('uuid')->where('started', true)->where('running', false)->where('updated_at', '<', now()->subMinutes(1))->get();
 
         foreach ($bots as $bot) {
 
             $bot->update(['running' => true]);
-
-            $bot->refresh();
 
             RunBotJob::dispatch($bot);
         }

@@ -86,6 +86,7 @@ Route::get('test-slack', function () {
     sendToLog("hello");
 });
 
+
 Route::fallback(function () {
     return response()->json([
         'success' => false,
@@ -93,3 +94,5 @@ Route::fallback(function () {
         'data' => []
     ], Response::HTTP_NOT_FOUND);
 });
+
+
