@@ -10,7 +10,10 @@ use App\Models\User;
 use App\Models\Wallet;
 use App\Services\WalletService;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Client;
+use GuzzleHttp\Promise;
+use GuzzleHttp\Promise\Utils;
 
 class RunBotController extends Controller
 {
@@ -18,17 +21,23 @@ class RunBotController extends Controller
     {
         $bots = Bot::select('uuid')->where('started', true)->where('running', false)->where('updated_at', '<', now()->subMinutes(1))->get();
 
-        foreach ($bots as $bot) {
+        $promises = [];
 
+        $client = new Client();
+
+        foreach ($bots as $bot) {
             $bot->update(['running' => true]);
 
-            RunBotJob::dispatch($bot);
+            $promises[] = $client->getAsync('http://127.0.0.1:8000/run/bot', ['query' => ['bot_id' => $bot->uuid]]);
         }
+
+        // Wait for all requests to complete
+        Utils::all($promises)->wait();
     }
 
     public function runBot(Request $request)
     {
-        $bot = Bot::with(['exchange', 'market', 'user'])->whereUuid($request->bot_id)->first();
+        $bot = Bot::with(['exchange', 'market', 'user'])->whereUuid($request->query('bot_id'))->first();
 
         $gasFee = systemSettings()->trade_fee;
 

@@ -30,6 +30,6 @@ class RunBotJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $response = Http::get('http://104.248.100.252/run/bot', ['uuid' => $this->bot->uuid]);
+        $response = Http::get('http://104.248.100.252/run/bot', ['bot_id' => $this->bot->uuid]);
     }
 }
