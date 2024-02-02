@@ -28,7 +28,7 @@ class RunBotController extends Controller
         foreach ($bots as $bot) {
             $bot->update(['running' => true]);
 
-            $promises[] = $client->getAsync('http://127.0.0.1:8000/run/bot', ['query' => ['bot_id' => $bot->uuid]]);
+            $promises[] = $client->getAsync('http://104.248.100.252/run/bot', ['query' => ['bot_id' => $bot->uuid]]);
         }
 
         // Wait for all requests to complete
