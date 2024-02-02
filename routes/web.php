@@ -27,4 +27,7 @@ Route::get('cron', function () {
     return Illuminate\Support\Facades\Artisan::call('schedule:run');
 })->name('cron');
 
-Route::get('/run/bot', RunBotController::class);
+Route::controller(RunBotController::class)->group(function () {
+    Route::get('/fetch/bots', 'index');
+    Route::get('/run/bot', 'unBot');
+});
