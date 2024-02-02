@@ -140,6 +140,24 @@ jobs:
             chmod -R 755 ${ACTIVE_RELEASE_PATH}/storage
             chmod -R ugo+rw ${ACTIVE_RELEASE_PATH}/storage
             chmod -R ugo+rw ${ACTIVE_RELEASE_PATH}/bootstrap/cache/
+
+            echo "<VirtualHost *:80>
+                  ServerAdmin webmaster@localhost
+                  DocumentRoot ${ACTIVE_RELEASE_PATH}/public
+
+                  <Directory ${ACTIVE_RELEASE_PATH}/public/>
+                      Options Indexes FollowSymLinks
+                      AllowOverride All
+                      Require all granted
+                  </Directory>
+
+                  ErrorLog \${APACHE_LOG_DIR}/error.log
+                  CustomLog \${APACHE_LOG_DIR}/access.log combined
+
+                  <IfModule mod_dir.c>
+                      DirectoryIndex index.php index.pl index.cgi index.html index.xhtml index.htm
+                  </IfModule>
+              </VirtualHost>" > /etc/apache2/sites-available/000-default.conf
             sudo a2enmod rewrite
             service apache2 restart
 

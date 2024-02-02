@@ -8,5 +8,35 @@
       "beforeHooks": "",
       "afterHooks": "",
       "path": "/var/www/html"
-    }
+    },
+    {
+        "name": "server-2",
+        "ip": "164.92.137.41",
+        "username": "root",
+        "password":"164.92.137.41",
+        "port": "22",
+        "beforeHooks": "",
+        "afterHooks": "",
+        "path": "/var/www/html"
+      },
+      {
+        "name": "server-3",
+        "ip": "164.92.198.228",
+        "username": "root",
+        "password":"164.92.137.41",
+        "port": "22",
+        "beforeHooks": "",
+        "afterHooks": "",
+        "path": "/var/www/html"
+      },
+      {
+        "name": "server-4",
+        "ip": "164.92.198.198",
+        "username": "root",
+        "password":"164.92.137.41",
+        "port": "22",
+        "beforeHooks": "",
+        "afterHooks": "",
+        "path": "/var/www/html"
+      }
   ]
