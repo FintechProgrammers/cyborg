@@ -20,25 +20,23 @@ class RunBotController extends Controller
     {
         $bots = Bot::select('uuid')->where('started', true)->where('running', false)->where('updated_at', '<', now()->subMinutes(1))->get();
 
+        $client = new Client();
         $promises = [];
 
         foreach ($bots as $bot) {
-
             $bot->update(['running' => true]);
 
-            // Build the shell command
-            $command = "curl -X GET 'http://104.248.100.252/run/bot' --data 'bot_id={$bot->uuid}'";
-
-            // Execute the shell command
-            $response = shell_exec($command);
-
-            // $response = Http::get('http://104.248.100.252/run/bot', ['bot_id' => $bot->uuid]);
+            // Omit the port number if you are using the default HTTP port (80)
+            $promises[] = $client->getAsync('http://104.248.100.252/run/bot', ['query' => ['bot_id' => $bot->uuid]]);
         }
+
+        // Wait for all requests to complete
+        Promise\Utils::all($promises)->wait();
     }
 
     public function runBot(Request $request)
     {
-        $bot = Bot::with(['exchange', 'market', 'user'])->whereUuid($request->bot_id)->first();
+        $bot = Bot::with(['exchange', 'market', 'user'])->whereUuid($request->query('bot_id'))->first();
 
         $gasFee = systemSettings()->trade_fee;
 
