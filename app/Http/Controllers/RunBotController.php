@@ -27,11 +27,13 @@ class RunBotController extends Controller
             $bot->update(['running' => true]);
 
             // Omit the port number if you are using the default HTTP port (80)
-            $client->get('http://104.248.100.252/run/bot', ['query' => ['bot_id' => $bot->uuid]]);
+            $promises[] = $client->getAsync('http://104.248.100.252/run/bot', ['query' => ['bot_id' => $bot->uuid]]);
         }
 
         // Wait for all requests to complete
+        Promise\Utils::all($promises)->wait();
 
+        return response('Successful', 200)->header('Content-Type', 'text/plain');
     }
 
     public function runBot(Request $request)
@@ -39,14 +41,13 @@ class RunBotController extends Controller
 
         $bot = Bot::with(['exchange', 'market', 'user'])->whereUuid($request->query('bot_id'))->first();
 
-        if(!$bot)
-        {
-            sendToLog("Bot not found");
+        if (!$bot) {
+            $botid = $request->query('bot_id');
+            sendToLog("bot {$botid} not found");
+            return response('Successful', 200)->header('Content-Type', 'text/plain');
         }
 
         $gasFee = systemSettings()->trade_fee;
-
-        sendToLog("check here");
 
         $wallerService = new WalletService();
 
@@ -61,8 +62,6 @@ class RunBotController extends Controller
         $user = $bot->user;
 
         if (!empty($wallet)) {
-
-            sendToLog("first pass");
 
             // check gas fee
             if ($wallet->fee > $gasFee) {
@@ -81,22 +80,16 @@ class RunBotController extends Controller
                         $this->spotTrade($userExchange, $exchangeService, $trade_values, $market, $settings, $bot, $wallerService, $user, $gasFee, $wallet);
                     }
 
-                    sendToLog("second pass");
-
                     // Futures Trading
                     if ($bot->trade_type === "future") {
                         $this->futuresTrade($userExchange, $exchangeService, $trade_values, $market, $settings, $bot, $wallerService, $user, $gasFee, $wallet);
                     }
-
-                    sendToLog("third pass");
                 } else {
                     $bot->update([
                         'started' => false,
                         'running' => false,
                         'logs'     => "{$bot->exchange->name} exchange is not binded",
                     ]);
-
-                    sendToLog("4 pass");
                 }
             } else {
                 $bot->update([
@@ -104,8 +97,6 @@ class RunBotController extends Controller
                     'running' => false,
                     'logs'     => "Your are low on gas fee. you need upto {$gasFee} USDT as gas fee. ",
                 ]);
-
-                sendToLog("6 pass");
             }
         } else {
             $bot->update([
@@ -113,11 +104,7 @@ class RunBotController extends Controller
                 'running' => false,
                 'logs'     => "Your are low on gas fee. you need upto {$gasFee} USDT as gas fee. ",
             ]);
-
-            sendToLog("7 pass");
         }
-
-        sendToLog("it is here");
 
         return response('Successful', 200)->header('Content-Type', 'text/plain');
     }
