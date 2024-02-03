@@ -3,6 +3,9 @@
         <thead>
             <tr>
                 <th>ID</th>
+                @unless ($showUser)
+                    <th>User</th>
+                @endunless
                 <th>Exchange</th>
                 <th>Market</th>
                 <th>Trade Price</th>
@@ -20,6 +23,9 @@
             @forelse ($trades as $item)
                 <tr>
                     <td>{{ $sno++ }}</td>
+                    @unless ($showUser)
+                        <td class="text-capitalize">{{ $item->user->username }}</td>
+                    @endunless
                     <td>
                         {{ ucfirst($item->exchange->name) }}
                         @if ($item->is_profit)
@@ -35,7 +41,7 @@
                         {{ $item->trade_price }}
                     </td>
                     <td class="text-center">
-                        {{ number_format($item->profit,3) }}
+                        {{ number_format($item->profit, 3) }}
                     </td>
                     <td class="text-center">
                         {{ $item->quantity }}

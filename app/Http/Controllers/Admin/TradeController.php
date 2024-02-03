@@ -11,6 +11,7 @@ class TradeController extends Controller
     function index()
     {
         $data['trades'] = TradeHistory::latest()->get();
+        $data['showUser'] = false;
 
         return view('admin.trades.index', $data);
     }
