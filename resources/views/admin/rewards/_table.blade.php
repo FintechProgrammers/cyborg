@@ -31,11 +31,11 @@
                     </td>
                 </tr>
             @empty
-                <tr>
+                {{-- <tr>
                     <td colspan="5">
                         <x-no-data-component title="no rewards available" />
                     </td>
-                </tr>
+                </tr> --}}
             @endforelse
         </tbody>
     </table>

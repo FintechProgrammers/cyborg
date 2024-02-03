@@ -33,7 +33,7 @@
                             <tr>
                                 <td>{{ $sno++ }}</td>
                                 <td>{{ $item->title }}</td>
-                                <td>{{ createCaption($item->content) }}</td>
+                                <td>{{ !empty($item->content) ? createCaption($item->content) : '' }}</td>
                                 <td>
                                     <a href="{{ route('admin.news.edit', $item->uuid) }}" class="btn btn-primary">
                                         Edit

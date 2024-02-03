@@ -32,7 +32,7 @@ class UserManagementController extends Controller
         $data['wallet'] = Wallet::where('user_id', $user->id)->first();
         $data['exchanges'] = UserExchange::where('user_id', $user->id)->latest()->get();
         $data['transactions'] = Transaction::where('user_id', $user->id)->latest()->paginate(10);
-        $data['trades'] = TradeHistory::where('user_id', $user->id)->latest()->get();
+        $data['trades'] = TradeHistory::where('user_id', $user->id)->latest()->paginate(10);
         $data['rewards'] = Reward::where('user_id', $user->id)->latest()->get();
         $data['todayProfit'] = TradeHistory::where('user_id', $user->id)->where('is_profit', true)->whereDate('created_at', Carbon::today())->sum('profit');
         $data['totalProfit'] = TradeHistory::where('user_id', $user->id)->where('is_profit', true)->sum('profit');

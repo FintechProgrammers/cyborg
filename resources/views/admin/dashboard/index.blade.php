@@ -152,7 +152,7 @@
                         <div class="col-6">
                             <span class="text-white mb-3 lh-1 d-block text-truncate">Active Bots</span>
                             <h4 class="mb-3 text-white">
-                                <span class=" text-white">{{ formatNumber(number_format($activeBots, 1)) }}</span>
+                                <span class=" text-white">{{ formatNumber(number_format($activeBots)) }}</span>
                             </h4>
                         </div>
 

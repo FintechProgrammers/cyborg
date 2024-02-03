@@ -22,7 +22,8 @@
                         <tr>
                             <td>{{ $sno++ }}</td>
                             <td class="text-capitalize">{{ $item->user->name }}</td>
-                            <td class="text-capitalize">{{ $item->subject }}</td>
+                            <td class="text-capitalize">{{ !empty($item->subject) ? createCaption($item->subject) : '' }}
+                            </td>
                             <td>
                                 <a href="{{ route('admin.supports.show', $item->uuid) }}" class="btn btn-primary">
                                     Reply
