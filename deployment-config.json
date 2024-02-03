@@ -38,5 +38,25 @@
         "beforeHooks": "",
         "afterHooks": "",
         "path": "/var/www/html"
+      },
+      {
+        "name": "server-5",
+        "ip": "138.68.71.114",
+        "username": "root",
+        "password":"Delta2022Digital",
+        "port": "22",
+        "beforeHooks": "",
+        "afterHooks": "",
+        "path": "/var/www/html"
+      },
+      {
+        "name": "server-6",
+        "ip": "164.92.130.0",
+        "username": "root",
+        "password":"Delta2022Digital",
+        "port": "22",
+        "beforeHooks": "",
+        "afterHooks": "",
+        "path": "/var/www/html"
       }
   ]

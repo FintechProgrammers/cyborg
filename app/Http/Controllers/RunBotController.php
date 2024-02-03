@@ -106,6 +106,8 @@ class RunBotController extends Controller
             ]);
         }
 
+        sendToLog("success");
+
         return response('Successful', 200)->header('Content-Type', 'text/plain');
     }
 
