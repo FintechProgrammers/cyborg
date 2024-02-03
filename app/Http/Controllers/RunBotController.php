@@ -27,16 +27,20 @@ class RunBotController extends Controller
             $bot->update(['running' => true]);
 
             // Omit the port number if you are using the default HTTP port (80)
-            $promises[] = $client->getAsync('http://104.248.100.252/run/bot', ['query' => ['bot_id' => $bot->uuid]]);
+            $client->get('http://104.248.100.252/run/bot', ['query' => ['bot_id' => $bot->uuid]]);
         }
 
         // Wait for all requests to complete
-        Promise\Utils::all($promises)->wait();
+
     }
 
     public function runBot(Request $request)
     {
+
+        sendToLog("hello");
+
         $bot = Bot::with(['exchange', 'market', 'user'])->whereUuid($request->query('bot_id'))->first();
+
 
         $gasFee = systemSettings()->trade_fee;
 
@@ -75,6 +79,8 @@ class RunBotController extends Controller
                     if ($bot->trade_type === "future") {
                         $this->futuresTrade($userExchange, $exchangeService, $trade_values, $market, $settings, $bot, $wallerService, $user, $gasFee, $wallet);
                     }
+
+                    return response('Successful', 200)->header('Content-Type', 'text/plain');
                 } else {
                     $bot->update([
                         'started' => false,
