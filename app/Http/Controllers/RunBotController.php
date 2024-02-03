@@ -37,8 +37,6 @@ class RunBotController extends Controller
     public function runBot(Request $request)
     {
 
-        sendToLog("hello");
-
         $bot = Bot::with(['exchange', 'market', 'user'])->whereUuid($request->query('bot_id'))->first();
 
 
@@ -79,8 +77,6 @@ class RunBotController extends Controller
                     if ($bot->trade_type === "future") {
                         $this->futuresTrade($userExchange, $exchangeService, $trade_values, $market, $settings, $bot, $wallerService, $user, $gasFee, $wallet);
                     }
-
-                    return response('Successful', 200)->header('Content-Type', 'text/plain');
                 } else {
                     $bot->update([
                         'started' => false,
@@ -102,6 +98,8 @@ class RunBotController extends Controller
                 'logs'     => "Your are low on gas fee. you need upto {$gasFee} USDT as gas fee. ",
             ]);
         }
+
+        return response('Successful', 200)->header('Content-Type', 'text/plain');
     }
 
     function spotTrade($userExchange, $exchangeService, $trade_values, $market, $settings, $bot, $wallerService, $user, $gasFee, $wallet)
