@@ -39,6 +39,11 @@ class RunBotController extends Controller
 
         $bot = Bot::with(['exchange', 'market', 'user'])->whereUuid($request->query('bot_id'))->first();
 
+        if(!$bot)
+        {
+            sendToLog("Bot not found");
+        }
+
         $gasFee = systemSettings()->trade_fee;
 
         sendToLog("check here");
