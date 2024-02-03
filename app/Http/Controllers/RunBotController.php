@@ -41,6 +41,8 @@ class RunBotController extends Controller
 
         $gasFee = systemSettings()->trade_fee;
 
+        sendToLog("check here");
+
         $wallerService = new WalletService();
 
         $settings = (object)  json_decode($bot->settings, true);
