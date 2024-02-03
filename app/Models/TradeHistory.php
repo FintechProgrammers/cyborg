@@ -19,7 +19,7 @@ class TradeHistory extends Model
 
     function exchange()
     {
-        return $this->belongsTo(Exchange::class,'exchange_id');
+        return $this->belongsTo(Exchange::class, 'exchange_id');
     }
 
     /**
@@ -40,5 +40,20 @@ class TradeHistory extends Model
     public function resolveRouteBinding($value, $field = null)
     {
         return $this->where('uuid', $value)->firstOrFail();
+    }
+
+    public function scopeFilterTrades($query, $username = null, $exchange = null, $tradeType = null)
+    {
+        return $query->when(!empty($username), function ($query) use ($username) {
+            return $query->whereHas('user', function ($userQuery) use ($username) {
+                $userQuery->where('users.username', 'like', "%$username%");
+            });
+        })
+        ->when(!empty($exchange), function ($query) use ($exchange) {
+                return $query->where('exchange_id', $exchange);
+            })
+            ->when(!empty($tradeType), function ($query) use ($tradeType) {
+                return $query->where('trade_type', $tradeType);
+            });
     }
 }

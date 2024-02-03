@@ -96,7 +96,8 @@ Route::middleware(['auth:admin'])->group(function () {
 
     Route::controller(TradeController::class)->prefix('trades')->name('trades.')->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::get('/{trades}', 'show')->name('show');
+        Route::get('/show/{trades}', 'show')->name('show');
+        Route::match(['get', 'post'], '/filter', 'filterTrades')->name('filter');
     });
 
     Route::controller(RolesController::class)->prefix('roles')->name('roles.')->group(function () {
@@ -128,8 +129,8 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::delete('{admin}', 'destroy')->name('delete');
     });
 
-    Route::controller(ProfileController::class)->prefix('profile')->name('profile.')->group(function(){
-        Route::get('','index')->name('index');
+    Route::controller(ProfileController::class)->prefix('profile')->name('profile.')->group(function () {
+        Route::get('', 'index')->name('index');
         Route::post('/update-password', 'updatePassword')->name('update.password');
         Route::post('', 'updateProfile')->name('update');
     });

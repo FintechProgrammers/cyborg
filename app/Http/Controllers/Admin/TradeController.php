@@ -19,4 +19,25 @@ class TradeController extends Controller
     function show(TradeHistory $tradeHistory)
     {
     }
+
+    public function filterTrades(Request $request)
+    {
+        $data = [];
+
+        if ($request->user) {
+            $data['showUser'] = true;
+        } else {
+            $data['showUser'] = false;
+        }
+
+        $query = TradeHistory::filterTrades($request->username, $request->exchange, $request->trade_type, $request->type)
+            ->when(!empty($request->user), fn ($query) => $query->where('user_id', $request->user))
+            ->latest();
+
+        $trades = $query->paginate(10);
+
+        $data['trades'] = $trades;
+
+        return view('admin.trades._trades_table', $data);
+    }
 }

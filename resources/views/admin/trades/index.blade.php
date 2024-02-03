@@ -5,10 +5,7 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            @include('admin.trades._trades_table')
+            @include('admin.trades._trades')
         </div>
     </div>
 @endsection
-@push('scripts')
-    <script></script>
-@endpush

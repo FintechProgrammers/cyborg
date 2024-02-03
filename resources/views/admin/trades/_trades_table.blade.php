@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100 table-hover">
+    <table class="table table-bordered dt-responsive nowrap w-100 table-hover">
         <thead>
             <tr>
                 <th>ID</th>
@@ -57,52 +57,15 @@
                     </td>
                 </tr>
             @empty
-                {{-- <tr>
-                    <td colspan="8">
+                <tr>
+                    <td colspan="10">
                         <x-no-data-component title="no trades available" />
                     </td>
-                </tr> --}}
+                </tr>
             @endforelse
         </tbody>
     </table>
-
 </div>
-@include('admin.partials._transaction_modal')
-@push('scripts')
-    <script>
-        $('body').on('click', '.details', function(e) {
-            e.preventDefault();
-
-            var txBody = $('#transactionBody')
-
-            var url = $(this).data('url')
-
-            $.ajax({
-                url: url,
-                method: "GET",
-                beforeSend: function() {
-                    txBody.html(
-                        `<div class="d-flex justify-content-center">
-                            <div class="spinner-border" role="status">
-                                <span class="sr-only">Loading...</span>
-                            </div>
-                        </div>`
-                    )
-                },
-                success: function(result) {
-                    setTimeout(() => {
-                        txBody.empty().html(result);
-                    }, 1000);
-                },
-                error: function(jqXHR, testStatus, error) {
-                    console.log(jqXHR.responseText, testStatus, error);
-                    displayMessage(
-                        "Error occured while trying to get transactions records.",
-                        "error"
-                    );
-                },
-                timeout: 8000,
-            });
-        })
-    </script>
-@endpush
+<div>
+    {!! $trades->links('pagination::bootstrap-5') !!}
+</div>
