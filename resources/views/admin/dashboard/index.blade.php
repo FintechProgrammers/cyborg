@@ -5,7 +5,6 @@
 @section('content')
     @if (auth()->user()->hasRole('super admin'))
         <div class="row">
-
             <div class="col-xl-6 col-md-12">
                 <!-- card -->
                 <div class="card card-h-100 bg-dark border-0">
@@ -142,6 +141,57 @@
                 </div><!-- end card -->
             </div><!-- end col -->
         @endif
+    </div>
+    <div class="row">
+        <div class="col-xl-6 col-md-12">
+            <!-- card -->
+            <div class="card card-h-100 bg-primary border-0">
+                <!-- card body -->
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-6">
+                            <span class="text-white mb-3 lh-1 d-block text-truncate">Active Bots</span>
+                            <h4 class="mb-3 text-white">
+                                <span class=" text-white">{{ formatNumber(number_format($activeBots, 1)) }}</span>
+                            </h4>
+                        </div>
+
+                        <div class="col-6">
+                            <div id="mini-chart1" data-colors='["#fff"]' class="apex-charts mb-2"></div>
+                        </div>
+                    </div>
+                    {{-- <div class="text-nowrap">
+                <span class="badge bg-success-subtle text-success">+20.9k</span>
+                <span class="ms-1  font-size-13 text-white">Since today</span>
+            </div> --}}
+                </div><!-- end card body -->
+            </div><!-- end card -->
+        </div><!-- end col -->
+
+        <div class="col-xl-6 col-md-12">
+            <!-- card -->
+            <div class="card card-h-100 bg-primary border-0">
+                <!-- card body -->
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-6">
+                            <span class="text-white mb-3 lh-1 d-block text-truncate">Total Bots</span>
+                            <h4 class="mb-3 text-white">
+                                <span class=" text-white">{{ formatNumber(number_format($totalBots)) }}</span>
+                            </h4>
+                        </div>
+
+                        <div class="col-6">
+                            <div id="mini-chart1" data-colors='["#fff"]' class="apex-charts mb-2"></div>
+                        </div>
+                    </div>
+                    {{-- <div class="text-nowrap">
+                <span class="badge bg-success-subtle text-success">+20.9k</span>
+                <span class="ms-1  font-size-13 text-white">Since today</span>
+            </div> --}}
+                </div><!-- end card body -->
+            </div><!-- end card -->
+        </div><!-- end col -->
     </div>
     <div class="row">
         @foreach ($bindedExcahnges as $item)

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Bot;
 use App\Models\Exchange;
 use App\Models\Transaction;
 use App\Models\User;
@@ -21,6 +22,8 @@ class DashBoardController extends Controller
         $data['usersBalance'] = Wallet::sum('balance');
         $data['feeBalance'] = Wallet::sum('fee');
         $data['bindedExcahnges'] = self::bindedExchanges();
+        $data['totalBots'] = Bot::count();
+        $data['activeBots'] = Bot::where('started',true)->count();
 
         return view('admin.dashboard.index', $data);
     }
