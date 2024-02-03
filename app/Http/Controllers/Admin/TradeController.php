@@ -10,7 +10,7 @@ class TradeController extends Controller
 {
     function index()
     {
-        $data['trades'] = TradeHistory::latest()->get();
+        $data['trades'] = TradeHistory::latest()->paginate(10);
         $data['showUser'] = false;
 
         return view('admin.trades.index', $data);
