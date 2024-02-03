@@ -24,7 +24,7 @@
                 <tr>
                     <td>{{ $sno++ }}</td>
                     @unless ($showUser)
-                        <td class="text-capitalize">{{ $item->user->username }}</td>
+                        <td class="text-capitalize">{{ !empty($item->user) ? $item->user->username : null }}</td>
                     @endunless
                     <td>
                         {{ ucfirst($item->exchange->name) }}
