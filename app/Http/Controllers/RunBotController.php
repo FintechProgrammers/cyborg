@@ -39,7 +39,6 @@ class RunBotController extends Controller
 
         $bot = Bot::with(['exchange', 'market', 'user'])->whereUuid($request->query('bot_id'))->first();
 
-
         $gasFee = systemSettings()->trade_fee;
 
         $wallerService = new WalletService();
@@ -98,6 +97,8 @@ class RunBotController extends Controller
                 'logs'     => "Your are low on gas fee. you need upto {$gasFee} USDT as gas fee. ",
             ]);
         }
+
+        sendToLog("it is here");
 
         return response('Successful', 200)->header('Content-Type', 'text/plain');
     }
