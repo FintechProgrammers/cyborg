@@ -55,6 +55,8 @@ class RunBotController extends Controller
 
         if (!empty($wallet)) {
 
+            sendToLog("first pass");
+
             // check gas fee
             if ($wallet->fee > $gasFee) {
 
@@ -72,16 +74,22 @@ class RunBotController extends Controller
                         $this->spotTrade($userExchange, $exchangeService, $trade_values, $market, $settings, $bot, $wallerService, $user, $gasFee, $wallet);
                     }
 
+                    sendToLog("second pass");
+
                     // Futures Trading
                     if ($bot->trade_type === "future") {
                         $this->futuresTrade($userExchange, $exchangeService, $trade_values, $market, $settings, $bot, $wallerService, $user, $gasFee, $wallet);
                     }
+
+                    sendToLog("third pass");
                 } else {
                     $bot->update([
                         'started' => false,
                         'running' => false,
                         'logs'     => "{$bot->exchange->name} exchange is not binded",
                     ]);
+
+                    sendToLog("4 pass");
                 }
             } else {
                 $bot->update([
@@ -89,6 +97,8 @@ class RunBotController extends Controller
                     'running' => false,
                     'logs'     => "Your are low on gas fee. you need upto {$gasFee} USDT as gas fee. ",
                 ]);
+
+                sendToLog("6 pass");
             }
         } else {
             $bot->update([
@@ -96,6 +106,8 @@ class RunBotController extends Controller
                 'running' => false,
                 'logs'     => "Your are low on gas fee. you need upto {$gasFee} USDT as gas fee. ",
             ]);
+
+            sendToLog("7 pass");
         }
 
         sendToLog("it is here");
