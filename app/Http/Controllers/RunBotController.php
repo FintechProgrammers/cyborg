@@ -18,7 +18,9 @@ class RunBotController extends Controller
 {
     public function index()
     {
-        $bots = Bot::select('uuid')->where('started', true)->where('running', false)->where('updated_at', '<', now()->subMinutes(1))->get();
+        $bots = Bot::select('uuid')->where('started', true)->where('running', false)
+            // ->where('updated_at', '<', now()->subMinutes(1))
+            ->get();
 
         $client = new Client();
         $promises = [];
