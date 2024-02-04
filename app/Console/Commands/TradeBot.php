@@ -38,64 +38,60 @@ class TradeBot extends Command
         $wallerService = new WalletService();
 
         // while (true) {
-            $bots = Bot::with(['exchange', 'market', 'user'])
-                ->where('started', true)
-                ->where('running', false)
-                ->where('updated_at', '<', now()->subMinutes(1))
-                ->get();
+        $bots = Bot::with(['exchange', 'market', 'user'])
+            ->where('started', true)
+            ->where('running', false)
+            ->where('updated_at', '<', now()->subMinutes(1))
+            ->get();
 
-            foreach ($bots as $bot) {
+        foreach ($bots as $bot) {
 
-                $bot->update(['running' => true]);
+            $bot->update(['running' => true]);
 
-                $bot->refresh();
+            $bot->refresh();
 
-                $settings = (object)  json_decode($bot->settings, true);
+            $settings = (object)  json_decode($bot->settings, true);
 
-                $trade_values =  (object) json_decode($bot->trade_values, true);
+            $trade_values =  (object) json_decode($bot->trade_values, true);
 
-                $market = $bot->market->coin;
+            $market = $bot->market->coin;
 
-                // user Wallet
-                $wallet =  Wallet::where('user_id', $bot->user_id)->first();
+            // user Wallet
+            $wallet =  Wallet::where('user_id', $bot->user_id)->first();
 
-                $user = $bot->user;
+            $user = $bot->user;
 
-                if (!empty($wallet)) {
+            // calculate fee percentage
+            $feePercentage = ($wallet->fee * $gasFee) / 100;
 
-                    // check gas fee
-                    if ($wallet->fee > $gasFee) {
+            if (!empty($wallet)) {
 
-                        // connect to exchange
-                        $exchangeKey = ucfirst($bot->exchange->slug);
+                // check gas fee
+                if ($wallet->fee > $gasFee) {
 
-                        $exchangeService = "\\App\\Services\\Exchange\\{$exchangeKey}";
+                    // connect to exchange
+                    $exchangeKey = ucfirst($bot->exchange->slug);
 
-                        $userExchange = \App\Models\UserExchange::where('user_id', $bot->user_id)->where('exchange_id', $bot->exchange_id)->where('is_binded', true)->first();
+                    $exchangeService = "\\App\\Services\\Exchange\\{$exchangeKey}";
 
-                        if ($userExchange) {
+                    $userExchange = \App\Models\UserExchange::where('user_id', $bot->user_id)->where('exchange_id', $bot->exchange_id)->where('is_binded', true)->first();
 
-                            // Spot Trading
-                            if ($bot->trade_type === "spot") {
-                                $this->spotTrade($userExchange, $exchangeService, $trade_values, $market, $settings, $bot, $wallerService, $user, $gasFee, $wallet);
-                            }
+                    if ($userExchange) {
 
-                            // Futures Trading
-                            if ($bot->trade_type === "future") {
-                                $this->futuresTrade($userExchange, $exchangeService, $trade_values, $market, $settings, $bot, $wallerService, $user, $gasFee, $wallet);
-                            }
-                        } else {
-                            $bot->update([
-                                'started' => false,
-                                'running' => false,
-                                'logs'     => "{$bot->exchange->name} exchange is not binded",
-                            ]);
+                        // Spot Trading
+                        if ($bot->trade_type === "spot") {
+                            $this->spotTrade($userExchange, $exchangeService, $trade_values, $market, $settings, $bot, $wallerService, $user, $gasFee, $wallet);
+                        }
+
+                        // Futures Trading
+                        if ($bot->trade_type === "future") {
+                            $this->futuresTrade($userExchange, $exchangeService, $trade_values, $market, $settings, $bot, $wallerService, $user, $gasFee, $wallet);
                         }
                     } else {
                         $bot->update([
                             'started' => false,
                             'running' => false,
-                            'logs'     => "Your are low on gas fee. you need upto {$gasFee} USDT as gas fee. ",
+                            'logs'     => "{$bot->exchange->name} exchange is not binded",
                         ]);
                     }
                 } else {
@@ -105,9 +101,14 @@ class TradeBot extends Command
                         'logs'     => "Your are low on gas fee. you need upto {$gasFee} USDT as gas fee. ",
                     ]);
                 }
-
-
+            } else {
+                $bot->update([
+                    'started' => false,
+                    'running' => false,
+                    'logs'     => "Your are low on gas fee. you need upto {$gasFee} USDT as gas fee. ",
+                ]);
             }
+        }
         // }
     }
 
@@ -327,10 +328,13 @@ class TradeBot extends Command
 
             $check_balance = $settings->capital - 5;
 
+            // calculate percentage of exchange balance
+            $balancePercentage = ($check_balance * 80) / 100;
+
             // First entry
             if (!$in_position && $margin_calls === 0) {
 
-                if ($balance['free'] > $check_balance) {
+                if ($balance['free'] >= $balancePercentage) {
                     if ($settings->capital > 1) {
 
                         $trade_price = (float) $exchange->fetchTicker();
