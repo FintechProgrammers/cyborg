@@ -334,7 +334,7 @@ class TradeBot extends Command
             // First entry
             if (!$in_position && $margin_calls === 0) {
 
-                if ($balance['free'] >= $balancePercentage) {
+                if ($balance['free'] >= 0) {
                     if ($settings->capital > 1) {
 
                         $trade_price = (float) $exchange->fetchTicker();
