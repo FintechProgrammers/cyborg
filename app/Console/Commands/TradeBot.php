@@ -329,7 +329,7 @@ class TradeBot extends Command
             $check_balance = $settings->capital - 5;
 
             // calculate percentage of exchange balance
-            $balancePercentage = ($check_balance * 50) / 100;
+            $balancePercentage = ($check_balance * 20) / 100;
 
             // First entry
             if (!$in_position && $margin_calls === 0) {
