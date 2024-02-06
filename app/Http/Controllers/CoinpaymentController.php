@@ -89,17 +89,17 @@ class CoinpaymentController extends Controller
                     'narration'     => $request->status_text
                 ]);
 
-                $pushToken = $wallet->user->fcm_token;
+                // $pushToken = $wallet->user->fcm_token;
 
-                $fcmTokens = [$pushToken];
+                // $fcmTokens = [$pushToken];
 
-                $data = [
-                    'push_tokens' => $fcmTokens,
-                    'title' => "Deposit",
-                    'message' => "Your deposit of {$amount} USDT was successfully.",
-                ];
+                // $data = [
+                //     'push_tokens' => $fcmTokens,
+                //     'title' => "Deposit",
+                //     'message' => "Your deposit of {$amount} USDT was successfully.",
+                // ];
 
-                dispatch(new \App\Jobs\PushNotificationJob($data));
+                // dispatch(new \App\Jobs\PushNotificationJob($data));
             }
         }
     }
@@ -116,17 +116,17 @@ class CoinpaymentController extends Controller
                 'status'        => 'complete',
             ]);
 
-            $pushToken = $transaction->user->fcm_token;
+            // $pushToken = $transaction->user->fcm_token;
 
-            $fcmTokens = [$pushToken];
+            // $fcmTokens = [$pushToken];
 
-            $data = [
-                'push_tokens' => $fcmTokens,
-                'title' => "Deposit",
-                'message' => "Your withdrawal of {$transaction->amount} USDT was successfully.",
-            ];
+            // $data = [
+            //     'push_tokens' => $fcmTokens,
+            //     'title' => "Deposit",
+            //     'message' => "Your withdrawal of {$transaction->amount} USDT was successfully.",
+            // ];
 
-            dispatch(new \App\Jobs\PushNotificationJob($data));
+            // dispatch(new \App\Jobs\PushNotificationJob($data));
         }
     }
 }
