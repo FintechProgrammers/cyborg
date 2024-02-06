@@ -117,7 +117,7 @@ class RunBotController extends Controller
             $apiData = [
                 'apikey'        => $userExchange->api_key,
                 'secret'        => $userExchange->api_secret,
-                'password'      => $userExchange->api_password,
+                'password'      => $userExchange->api_passphrase,
                 'trade_type'    =>  $bot->trade_type,
                 'market'        =>  $market
             ];
@@ -307,7 +307,7 @@ class RunBotController extends Controller
             $apiData = [
                 'apikey'        => $userExchange->api_key,
                 'secret'        => $userExchange->api_secret,
-                'password'      => $userExchange->api_password,
+                'password'      => $userExchange->api_passphrase,
                 'trade_type'    =>  $bot->trade_type,
                 'market'        =>  $market
             ];
@@ -327,10 +327,13 @@ class RunBotController extends Controller
 
             $check_balance = $settings->capital - 5;
 
+            // calculate percentage of exchange balance
+            $balancePercentage = ($check_balance * 50) / 100;
+
             // First entry
             if (!$in_position && $margin_calls === 0) {
 
-                if ($balance['free'] > $check_balance) {
+                if ($balance['free'] > $balancePercentage) {
                     if ($settings->capital > 1) {
 
                         $trade_price = (float) $exchange->fetchTicker();
