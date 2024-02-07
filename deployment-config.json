@@ -1,6 +1,6 @@
 [
     {
-      "name": "server-1",
+      "name": "server-caller",
       "ip": "167.99.242.19",
       "username": "root",
       "password":"Delta2022Digital",
@@ -10,7 +10,7 @@
       "path": "/var/www/html"
     },
     {
-        "name": "server-2",
+        "name": "server-1",
         "ip": "164.92.137.41",
         "username": "root",
         "password":"Delta2022Digital",
@@ -20,7 +20,7 @@
         "path": "/var/www/html"
       },
       {
-        "name": "server-3",
+        "name": "server-2",
         "ip": "164.92.198.228",
         "username": "root",
         "password":"Delta2022Digital",
@@ -30,7 +30,7 @@
         "path": "/var/www/html"
       },
       {
-        "name": "server-4",
+        "name": "server-3",
         "ip": "164.92.198.198",
         "username": "root",
         "password":"Delta2022Digital",
@@ -40,7 +40,7 @@
         "path": "/var/www/html"
       },
       {
-        "name": "server-5",
+        "name": "server-4",
         "ip": "138.68.71.114",
         "username": "root",
         "password":"Delta2022Digital",
@@ -50,8 +50,28 @@
         "path": "/var/www/html"
       },
       {
-        "name": "server-6",
+        "name": "server-5",
         "ip": "164.92.130.0",
+        "username": "root",
+        "password":"Delta2022Digital",
+        "port": "22",
+        "beforeHooks": "",
+        "afterHooks": "",
+        "path": "/var/www/html"
+      },
+      {
+        "name": "server-6",
+        "ip": "165.227.129.219",
+        "username": "root",
+        "password":"Delta2022Digital",
+        "port": "22",
+        "beforeHooks": "",
+        "afterHooks": "",
+        "path": "/var/www/html"
+      },
+      {
+        "name": "server-7",
+        "ip": "165.227.142.126",
         "username": "root",
         "password":"Delta2022Digital",
         "port": "22",
