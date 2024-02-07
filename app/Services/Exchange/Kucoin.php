@@ -43,7 +43,7 @@ class Kucoin
             if ($data['trade_type'] == "spot") {
                 $this->market = $data['market'] . '/USDT';
             } else {
-                $this->market = $data['market'] . '/USDT';
+                $this->market = $data['market'] . 'USDTM';
             }
         }
     }
@@ -113,6 +113,7 @@ class Kucoin
         foreach ($lots as $lot) {
             if ($lot['id'] == $this->market) {
                 $lot = $lot['contractSize'];
+                break;
             }
         }
 

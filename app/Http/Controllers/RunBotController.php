@@ -343,12 +343,10 @@ class RunBotController extends Controller
 
                         // if kucoin
                         if ($bot->exchange->slug == "kucoin") {
-                            $lot = $exchange->fetchMarkets();
+                            $lot =(float) $exchange->fetchMarkets();
 
                             $quantity = $quantity / $lot;
                         }
-
-                        $quantity = number_format($quantity, 5);
 
                         $options = [
                             "leverage" => $leverage,
@@ -673,7 +671,7 @@ class RunBotController extends Controller
 
                     // if kucoin
                     if ($bot->exchange->slug == "kucoin") {
-                        $lot = $exchange->fetchMarkets();
+                        $lot =(float) $exchange->fetchMarkets();
 
                         $qty = $tradec / $trade_price;
 
