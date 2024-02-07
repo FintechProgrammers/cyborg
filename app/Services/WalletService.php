@@ -11,7 +11,7 @@ class WalletService
     {
         $wallet = Wallet::where('user_id', $userId)->first();
 
-        if ($wallet) {
+        if (!empty($wallet)) {
             $wallet->update([
                 'balance'  => $wallet->balance + $amount
             ]);
