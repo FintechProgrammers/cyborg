@@ -140,6 +140,7 @@ jobs:
             chmod -R 755 ${ACTIVE_RELEASE_PATH}/storage
             chmod -R ugo+rw ${ACTIVE_RELEASE_PATH}/storage
             chmod -R ugo+rw ${ACTIVE_RELEASE_PATH}/bootstrap/cache/
+            cd ${ACTIVE_RELEASE_PATH} && php artisan optimize:clear
 
             echo "<VirtualHost *:80>
                   ServerAdmin webmaster@localhost
