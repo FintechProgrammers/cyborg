@@ -12,9 +12,9 @@ class CoinpaymentController extends Controller
     public function __invoke(Request $request)
     {
 
-        try {
+        // sendToLog(["Coinpay webhook Log" => file_get_contents('php://input')]);
 
-            sendToLog(["Coinpay webhook Log" => file_get_contents('php://input')]);
+        try {
 
             // Validated marchante id
             $cp_merchant_id = config('constants.coinpay.marchant_id'); //defined in pure_config
