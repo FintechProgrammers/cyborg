@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\BannerController;
 use App\Http\Controllers\Api\BotController;
 use App\Http\Controllers\Api\DepositController;
+use App\Http\Controllers\Api\SettingsController;
 use App\Http\Controllers\Api\StrategyController;
 use App\Http\Controllers\Api\SupportController;
 use App\Http\Controllers\Api\TradeRecordsController;
@@ -81,6 +82,7 @@ Route::controller(\App\Http\Controllers\Api\NewsController::class)->prefix('news
     Route::get('', 'index');
 });
 
+Route::get('settings', SettingsController::class);
 
 Route::get('test-slack', function () {
     sendToLog("hello");
