@@ -33,7 +33,8 @@
                             <option value="">--select-status--</option>
                             @foreach (\App\Models\Settings::STATUS as $item)
                                 <option value="{{ $item }}"
-                                    {{ systemSettings()->automatic_withdrawal == $item ? 'Selected' : '' }}>{{ $item }}
+                                    {{ systemSettings()->automatic_withdrawal == $item ? 'Selected' : '' }}>
+                                    {{ $item }}
                                 </option>
                             @endforeach
                         </select>
@@ -81,7 +82,8 @@
                             <option value="">--select-status--</option>
                             @foreach (\App\Models\Settings::STATUS as $item)
                                 <option value="{{ $item }}"
-                                    {{ systemSettings()->trade_status == $item ? 'Selected' : '' }}>{{ $item }}</option>
+                                    {{ systemSettings()->trade_status == $item ? 'Selected' : '' }}>{{ $item }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -89,8 +91,28 @@
                         <div class="mb-3">
                             <label for="example-search-input" class="form-label">Trading Fee</label>
                             <input class="form-control" type="number" min="0" name="trading_fee" step="any"
-                                value="{{ systemSettings()->trade_fee }}" placeholder="Trading fee " id="example-search-input">
+                                value="{{ systemSettings()->trade_fee }}" placeholder="Trading fee "
+                                id="example-search-input">
                         </div>
+                    </div>
+                </div>
+                <h4>Services</h4>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-check form-switch form-switch-lg mb-3" dir="ltr">
+                            <input type="checkbox" class="form-check-input" name="apple_pay" id="applePay"
+                                {{ systemSettings()->apple_pay ? 'checked' : '' }}>
+                            <label class="form-check-label" for="applePay">ApplePay</label>
+                        </div>
+                        <small>Toggle to active or deactivate Applepay</small>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-check form-switch form-switch-lg mb-3" dir="ltr">
+                            <input type="checkbox" class="form-check-input" name="cyborg" id="cyborgBut"
+                                {{ systemSettings()->cyborg ? 'checked' : '' }}>
+                            <label class="form-check-label" for="cyborgBut">Cyborg</label>
+                        </div>
+                        <small>Toggle to active or deactivate Cyborg</small>
                     </div>
                 </div>
                 <div class="mb-3">

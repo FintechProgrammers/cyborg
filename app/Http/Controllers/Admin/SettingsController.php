@@ -26,7 +26,9 @@ class SettingsController extends Controller
             'maximum_widthdrawal'   => $request->maximum_withdrawal,
             'withdrawal_fee'        => $request->minimum_fee,
             'trade_status'          => $request->trading_status,
-            'trade_fee'             => $request->trading_fee
+            'trade_fee'             => $request->trading_fee,
+            'apple_pay'             => $request->apple_pay == 'on' ? true : false,
+            'cyborg'                => $request->cyborg == 'on' ? true : false,
         ]);
 
         return back()->with('success', 'Settings updated successfully.');
