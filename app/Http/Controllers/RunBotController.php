@@ -857,7 +857,7 @@ class RunBotController extends Controller
             if ($level1) {
                 $teamfee = $profit * 5 / 100;
 
-                // $wallerService->updateBalance($level1->id, $teamfee);
+                $wallerService->updateBalance($level1->id, $teamfee);
 
                 $wallerService->recordReward($level1->id, $user->id, $teamfee);
             }
@@ -865,7 +865,7 @@ class RunBotController extends Controller
             if ($level2) {
                 $teamfee = $profit * 3 / 100;
 
-                // $wallerService->updateBalance($level2->id, $teamfee);
+                $wallerService->updateBalance($level2->id, $teamfee);
 
                 $wallerService->recordReward($level2->id, $user->id, $teamfee);
             }
@@ -873,7 +873,7 @@ class RunBotController extends Controller
             if ($level3) {
                 $teamfee = $profit * 2 / 100;
 
-                // $wallerService->updateBalance($level3->id, $teamfee);
+                $wallerService->updateBalance($level3->id, $teamfee);
 
                 $wallerService->recordReward($level3->id, $user->id, $teamfee);
             }
