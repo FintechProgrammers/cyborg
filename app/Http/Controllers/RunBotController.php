@@ -61,7 +61,7 @@ class RunBotController extends Controller
 
         $wallet =  Wallet::where('user_id', $bot->user_id)->first();
 
-        $user = $bot->user;
+        $user = $bot->user_id;
 
         if (!empty($wallet)) {
 
@@ -848,6 +848,8 @@ class RunBotController extends Controller
             $wallet->update([
                 'fee'  => $wallet->fee - $fee,
             ]);
+
+            $user = $bot->user;
 
             // profit sharings
             $level1 = User::where('username', $user->ref)->first();
