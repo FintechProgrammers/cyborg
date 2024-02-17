@@ -17,8 +17,8 @@
                 <tr>
                     <td>{{ $sno++ }}</td>
                     <td class="text-capitalize">
-                        {{ !empty(ucfirst($item->invited))
-                        ? $item->invited->name : '' }}
+                        {{-- {{ !empty(ucfirst($item->invited))
+                        ? $item->invited->name : '' }} --}}
                     </td>
                     <td>
                         {{ number_format($item->amount,4) }} USDT
