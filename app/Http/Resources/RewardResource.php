@@ -16,7 +16,8 @@ class RewardResource extends JsonResource
     {
         return [
             'id'            => $this->uuid,
-            'invite'        => !empty($this->invited) ? $this->invited->name : null,
+            // 'invite'        => !empty($this->invited) ? $this->invited->name : null,
+            'invite'         => "",
             'amount'        => $this->amount,
             'description'   => $this->description,
             'created_at'    => $this->created_at
