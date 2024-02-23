@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\DashBoardController;
 use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\RewardController;
 use App\Http\Controllers\Admin\RolesController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\StrategyController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Admin\TradeController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\ManageAdministratorsController;
+use App\Http\Resources\RewardCollection;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -135,3 +137,6 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::post('', 'updateProfile')->name('update');
     });
 });
+
+
+Route::get('/settle/rewards',[RewardController::class,'settleReward']);

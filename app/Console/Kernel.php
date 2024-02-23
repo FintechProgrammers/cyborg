@@ -30,7 +30,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         // $schedule->command('run:bot')->everyMinute()->runInBackground();
         // $schedule->command('fetch:balace')->everyMinute()->runInBackground();
-        $schedule->command('settle:reward')->hourly()->runInBackground();
+        $schedule->command('settle:reward')->runInBackground();
     }
 
     /**

@@ -48,5 +48,11 @@ class SettleReward extends Command
                 'is_settled' => true
             ]);
         }
+
+        // $reward = Reward::get();
+
+        // $reward->toQuery()->update([
+        //     'is_settled' => false
+        // ]);
     }
 }
