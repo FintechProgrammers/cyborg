@@ -13,12 +13,12 @@ class WalletService
 
         if (!empty($wallet)) {
             $wallet->update([
-                'balance'  => (int)$wallet->balance + (int)$amount
+                'balance'  => $wallet->balance + $amount
             ]);
         } else {
             Wallet::create([
                 'user_id' => $userId,
-                'balance'  => (int)$amount
+                'balance'  => $amount
             ]);
         }
     }
