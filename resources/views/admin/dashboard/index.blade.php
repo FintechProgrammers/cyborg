@@ -61,7 +61,7 @@
                     <div class="card-body">
                         <div class="row align-items-center">
                             <div class="col-6">
-                                <span class="text-white mb-3 lh-1 d-block text-truncate">Deposits</span>
+                                <span class="text-white mb-3 lh-1 d-block text-truncate">Deposits this Month</span>
                                 <h4 class="mb-3 text-white">
                                     <span class=" text-white">${{ formatNumber(number_format($monthlyTotalDeposit, 1)) }}</span>
                                 </h4>
@@ -86,7 +86,7 @@
                     <div class="card-body">
                         <div class="row align-items-center">
                             <div class="col-6">
-                                <span class="text-white mb-3 lh-1 d-block text-truncate">Withdrawals</span>
+                                <span class="text-white mb-3 lh-1 d-block text-truncate">Withdrawals this Month</span>
                                 <h4 class="mb-3">
                                     <span class="text-white">${{ formatNumber(number_format($monthlyTotalWithdrawal, 1)) }}</span>
                                 </h4>

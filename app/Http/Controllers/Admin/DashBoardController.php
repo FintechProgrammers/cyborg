@@ -27,11 +27,11 @@ class DashBoardController extends Controller
         $data['bindedExcahnges'] = self::bindedExchanges();
         $data['totalBots'] = Bot::count();
         $data['activeBots'] = Bot::where('started', true)->count();
-        $data['monthlyTotalDeposit'] = Transaction::where('action', 'withdrawal')
+        $data['monthlyTotalDeposit'] = Transaction::where('action', 'deposit')
             ->whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', $currentYear)
             ->sum('amount');
-        $data['monthlyTotalWithdrawal'] = Transaction::where('action', 'deposit')
+        $data['monthlyTotalWithdrawal'] = Transaction::where('action', 'withdrawal')
             ->whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', $currentYear)
             ->sum('amount');
