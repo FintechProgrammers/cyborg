@@ -15,6 +15,9 @@ class DashBoardController extends Controller
 {
     function index()
     {
+        $currentMonth = Carbon::now()->month;
+        $currentYear = Carbon::now()->year;
+
         $data['totalUsers'] = User::count();
         $data['paidUsers']  = User::where('iseligible', 1)->count();
         $data['totalDeposit'] = Transaction::where('action', 'deposit')->sum('amount');
@@ -23,7 +26,15 @@ class DashBoardController extends Controller
         $data['feeBalance'] = Wallet::sum('fee');
         $data['bindedExcahnges'] = self::bindedExchanges();
         $data['totalBots'] = Bot::count();
-        $data['activeBots'] = Bot::where('started',true)->count();
+        $data['activeBots'] = Bot::where('started', true)->count();
+        $data['monthlyTotalDeposit'] = Transaction::where('action', 'withdrawal')
+            ->whereMonth('created_at', $currentMonth)
+            ->whereYear('created_at', $currentYear)
+            ->sum('amount');
+        $data['monthlyTotalWithdrawal'] = Transaction::where('action', 'deposit')
+            ->whereMonth('created_at', $currentMonth)
+            ->whereYear('created_at', $currentYear)
+            ->sum('amount');
 
         return view('admin.dashboard.index', $data);
     }
