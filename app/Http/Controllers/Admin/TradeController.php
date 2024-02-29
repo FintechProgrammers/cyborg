@@ -30,8 +30,15 @@ class TradeController extends Controller
             $data['showUser'] = false;
         }
 
-        $query = TradeHistory::filterTrades($request->username, $request->exchange, $request->trade_type, $request->type)
+        $tradeStatus = $request->trade_status;
+
+        $query = TradeHistory::filterTrades($request->username, $request->exchange, $request->trade_type, $request->type, $request->trade_status)
             ->when(!empty($request->user), fn ($query) => $query->where('user_id', $request->user))
+            ->when(!empty($tradeStatus), function ($query) use ($tradeStatus) {
+                if ($tradeStatus == "profit") {
+                    return $query->where('is_profit', true);
+                }
+            })
             ->latest();
 
         $trades = $query->paginate(10);

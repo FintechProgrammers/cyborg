@@ -11,13 +11,22 @@
                 </div>
             @endunless --}}
             <input type="hidden" id="userId" value="{{ isset($user) ? $user->id : '' }}">
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <x-exchange-component />
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <x-trade-type-component />
             </div>
-            <div class="col-lg-4 mb-3">
+            <div class="col-lg-3">
+                <div class="mb-3">
+                    <label>Trade Status</label>
+                    <select name="status" id="trade_status" class="form-control">
+                        <option value="">--select--status--</option>
+                        <option value="profit">Profit</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-3 mb-3">
                 <button class="btn btn-primary btn-lg" id="filter">Filter</button>
                 <button class="btn btn-light btn-lg lg-2" id="reset">Reset</button>
             </div>
@@ -38,8 +47,9 @@
             var username = $('#username').val();
             var exchange = $('#exchange').val();
             var trade_type = $('#trade_type').val();
+            var trade_status = $('#trade_status').val()
 
-            getData(page, username, exchange, trade_type)
+            getData(page, username, exchange, trade_type,trade_status)
 
         });
 
@@ -53,8 +63,9 @@
             var username = $('#username').val();
             var exchange = $('#exchange').val();
             var trade_type = $('#trade_type').val();
+            var trade_status = $('#trade_status').val()
 
-            getData(page, username, exchange, trade_type)
+            getData(page, username, exchange, trade_type, trade_status)
 
         })
 
@@ -64,7 +75,7 @@
             location.reload()
         })
 
-        function getData(page, username = null, exchange = null, trade_type = null) {
+        function getData(page, username = null, exchange = null, trade_type = null, trade_status = null) {
 
             tradeTable = $('#trade-table');
 
@@ -76,7 +87,8 @@
                     username: username,
                     exchange: exchange,
                     trade_type: trade_type,
-                    user: $('#userId').val()
+                    user: $('#userId').val(),
+                    trade_status: trade_status
                 },
                 beforeSend: function() {
                     tradeTable.html(
