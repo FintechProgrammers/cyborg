@@ -41,6 +41,7 @@ class UserManagementController extends Controller
         $data['showUser'] = true;
         $data['rewardToday'] = Reward::where('user_id', $user->id)->whereDate('created_at', Carbon::today())->sum('amount');
         $data['totalReward'] = Reward::where('user_id', $user->id)->latest()->sum('amount');
+        $data['totalAmount'] = Transaction::where('user_id', $user->id)->sum('amount');
 
         return view('admin.users.show', $data);
     }

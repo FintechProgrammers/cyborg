@@ -1,3 +1,20 @@
+@if (isset($totalAmount))
+    <div>
+        <div class="card card-h-100 bg-primary border-0">
+            <!-- card body -->
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-6">
+                        <span class="text-white mb-3 lh-1 d-block text-truncate">Total Amount</span>
+                        <h4 class="mb-3 text-white">
+                            <span class=" text-white">${{ number_format($totalAmount, 2) }}</span>
+                        </h4>
+                    </div>
+                </div>
+            </div><!-- end card body -->
+        </div><!-- end card -->
+    </div>
+@endif
 <div class="table-responsive mb-3">
     <table class="table table-bordered dt-responsive nowrap w-100 table-hover">
         <thead>
@@ -24,7 +41,7 @@
                     <td>{{ $sno++ }}</td>
                     <td>{{ $item->reference }}</td>
                     @unless ($showUser)
-                        <th class="text-capitalize">{{ $item->user->username }}</th>
+                        <th class="text-capitalize">{{ optional($item->user)->username }}</th>
                     @endunless
                     <td class="text-center">
                         {{ number_format($item->amount, 2) }}{{ $item->coin }}
@@ -63,6 +80,6 @@
         </tbody>
     </table>
 </div>
-<div>
+<div id="transaction-pag">
     {!! $transactions->links('pagination::bootstrap-5') !!}
 </div>

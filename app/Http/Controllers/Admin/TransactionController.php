@@ -94,6 +94,10 @@ class TransactionController extends Controller
 
         $data['transactions'] = $transactions;
 
+        if ($request->user) {
+            $data['totalAmount'] = $query->sum('amount');
+        }
+
         return view('admin.transactions._table', $data);
     }
 }

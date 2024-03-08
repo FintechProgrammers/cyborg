@@ -50,7 +50,7 @@
                 </div>
             </div>
             <div class="col-lg-4 pt-4">
-                <button class="btn btn-primary btn-lg" id="filter">Filter</button>
+                <button class="btn btn-primary btn-lg" id="filter-transaction">Filter</button>
                 <button class="btn btn-light btn-lg lg-2" id="reset">Reset</button>
             </div>
 
@@ -62,7 +62,7 @@
         @include('admin.transactions._table')
     </div>
 </div>
-<input type="hidden" name="hidden_page" id="hidden_page" value="1" />
+<input type="hidden" name="hidden_page" id="transactopm_hidden_page" value="1" />
 @include('admin.partials._transaction_modal')
 @push('scripts')
     <script>
@@ -162,10 +162,10 @@
         })
     </script>
     <script>
-        $('body').on('click', '.pagination a', function(event) {
+        $('body').on('click', '#transaction-pag .pagination a', function(event) {
             event.preventDefault();
             var page = $(this).attr('href').split('page=')[1];
-            $('#hidden_page').val(page);
+            $('#transactopm_hidden_page').val(page);
 
             var ref = $('#reference').val();
             var status = $('#transaction_status').val();
@@ -176,16 +176,16 @@
             let [startDate, endDate] = date.split(" - ");
 
 
-            getData(page, ref, status, type, action, startDate, endDate)
+            getTransactionData(page, ref, status, type, action, startDate, endDate)
 
         });
 
-        $('#filter').click(function(e) {
+        $('#filter-transaction').click(function(e) {
             e.preventDefault();
 
-            $('#hidden_page').val(1);
+            $('#transactopm_hidden_page').val(1);
 
-            var page = $('#hidden_page').val();
+            var page = $('#transactopm_hidden_page').val();
 
             var ref = $('#reference').val();
             var status = $('#transaction_status').val();
@@ -195,7 +195,7 @@
             var date = $("#search-date").val();
             let [startDate, endDate] = date.split(" - ");
 
-            getData(page, ref, status, type, action, startDate, endDate)
+            getTransactionData(page, ref, status, type, action, startDate, endDate)
 
         })
 
@@ -205,7 +205,7 @@
             location.reload()
         })
 
-        function getData(page, reference = null, status = null, type = null, action = null, startDate = null, endDate =
+        function getTransactionData(page, reference = null, status = null, type = null, action = null, startDate = null, endDate =
             null) {
 
             txBody = $('#transactions-body');
