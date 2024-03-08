@@ -101,7 +101,7 @@
             });
         })
 
-        $('body').on('click', '#approve', function(e) {
+        $('body').on('click', '.approve-decline-btn', function(e) {
             e.preventDefault();
 
             const button = $(this)
@@ -160,6 +160,7 @@
                 timeout: 8000,
             });
         })
+
     </script>
     <script>
         $('body').on('click', '#transaction-pag .pagination a', function(event) {

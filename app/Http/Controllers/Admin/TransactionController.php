@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
+use App\Models\Wallet;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,38 +39,54 @@ class TransactionController extends Controller
     function approveTranasction(Transaction $transaction)
     {
 
-        $payload = json_decode($transaction->request_payload, true);
+        if ($transaction->is_manual) {
+            $payload = json_decode($transaction->request_payload, true);
 
-        $coin = strtoupper('usdt.trc20');
+            $coin = strtoupper('usdt.trc20');
 
-        $coinpay = new \App\Services\Gateways\Coinpay();
+            $coinpay = new \App\Services\Gateways\Coinpay();
 
-        // check coinpayment balance
-        $balances = $coinpay->getBalance();
+            // check coinpayment balance
+            $balances = $coinpay->getBalance();
 
-        if ($balances['result'][$coin]['balancef'] <  $payload['amount']) {
-            sendToLog("Coinpayment insufficient balance");
-            return $this->sendError("Company account do not have the balance to complete the transaction request.", [], Response::HTTP_SERVICE_UNAVAILABLE);
+            if ($balances['result'][$coin]['balancef'] <  $payload['amount']) {
+                sendToLog("Coinpayment insufficient balance");
+                return $this->sendError("Company account do not have the balance to complete the transaction request.", [], Response::HTTP_SERVICE_UNAVAILABLE);
+            }
+
+            $response = $coinpay->withdrawal($payload);
+
+            if (empty($response)) {
+                sendToLog(["withdrawal response" => $response]);
+                return $this->sendError("Unable to complete your request at the moment.", [], Response::HTTP_SERVICE_UNAVAILABLE);
+            }
+
+            if ($response['error'] !== 'ok') {
+                sendToLog(["withdrawal response" => $response]);
+                return $this->sendError("Unable to complete your request at the moment.", [], Response::HTTP_SERVICE_UNAVAILABLE);
+            }
+        } else {
+            $transaction->update([
+                'status' => 'complete'
+            ]);
         }
-
-        $response = $coinpay->withdrawal($payload);
-
-        if (empty($response)) {
-            sendToLog(["withdrawal response" => $response]);
-            return $this->sendError("Unable to complete your request at the moment.", [], Response::HTTP_SERVICE_UNAVAILABLE);
-        }
-
-        if ($response['error'] !== 'ok') {
-            sendToLog(["withdrawal response" => $response]);
-            return $this->sendError("Unable to complete your request at the moment.", [], Response::HTTP_SERVICE_UNAVAILABLE);
-        }
-
-
-        // $transaction->update([
-        //     'status' => 'complete'
-        // ]);
 
         return $this->sendResponse([], "Transaction Approved successfully.");
+    }
+
+    function declineTranasction(Transaction $transaction)
+    {
+        $transaction->update([
+            'status' => 'failed'
+        ]);
+
+        $wallet = Wallet::where('user_id', $transaction->user_id)->first();
+
+        $wallet->update([
+            'balance' => $wallet->balance + $transaction->amount
+        ]);
+
+        return $this->sendResponse([], "Transaction Declined successfully.");
     }
 
     public function filterTransactions(Request $request)

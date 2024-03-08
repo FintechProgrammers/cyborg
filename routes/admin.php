@@ -93,6 +93,7 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('show/{transaction}', 'show')->name('show');
         Route::get('/withdrawals/pending', 'withdrawals')->name('withdrawals.index');
         Route::post('/approve/{transaction}', 'approveTranasction')->name('approve');
+        Route::post('/decline/{transaction}', 'declineTranasction')->name('decline');
         Route::match(['get', 'post'], '/filter', 'filterTransactions')->name('filter');
     });
 
@@ -139,4 +140,4 @@ Route::middleware(['auth:admin'])->group(function () {
 });
 
 
-Route::get('/settle/rewards',[RewardController::class,'settleReward']);
+Route::get('/settle/rewards', [RewardController::class, 'settleReward']);

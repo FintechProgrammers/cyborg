@@ -49,14 +49,21 @@
     </tr>
 </table>
 @if (
-    $transaction->action == 'withdrawal' && $transaction->is_manual &&
+    $transaction->action == 'withdrawal' &&
         $transaction->status == 'pending' &&
         auth()->user()->can('approve transaction'))
-    <button type="button" class="btn btn-primary" id="approve"
+    <button type="button" class="btn btn-primary approve-decline-btn"
         data-url="{{ route('admin.transactions.approve', $transaction->uuid) }}">
         <span class="spinner-border" role="status" style="display: none">
             <span class="sr-only">Loading...</span>
         </span>
         <span id="text">Approve Transaction</span>
+    </button>
+    <button type="button" class="btn btn-danger approve-decline-btn"
+        data-url="{{ route('admin.transactions.decline', $transaction->uuid) }}">
+        <span class="spinner-border" role="status" style="display: none">
+            <span class="sr-only">Loading...</span>
+        </span>
+        <span id="text">Decline Transaction</span>
     </button>
 @endif
