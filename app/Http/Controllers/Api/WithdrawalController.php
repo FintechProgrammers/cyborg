@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Validation\Rule;
@@ -32,7 +33,8 @@ class WithdrawalController extends Controller
 
         try {
 
-            // Continue with the rest of your logic if the validation passes
+            DB::beginTransaction();
+
             $user = $request->user;
 
             $coin = strtoupper('usdt.trc20');
@@ -57,22 +59,26 @@ class WithdrawalController extends Controller
                 return $this->sendError("Insufficient funds.", [], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
 
+            $finalAmount = $wallet->balance - $amount;
+
             $wallet->update([
-                'balance'  => $wallet->balance - $request->amount,
+                'balance'  => $finalAmount,
             ]);
 
-            $transaction = [
+            $transaction = Transaction::create([
                 'user_id'           => $wallet->user_id,
                 'coin'              => 'USDT',
                 'amount'            => $request->amount,
                 'fee'               => $fee,
+                'opening_balance'   => $wallet->balance,
+                'closing_balance'   => $finalAmount,
                 'type'              => 'debit',
                 'action'            => 'withdrawal',
                 'status'            => 'pending',
                 'address'           => $request->address,
                 'request_payload'   => json_encode($payload),
                 'narration'         => "Withdraw {$request->amount} USDT to {$request->address}"
-            ];
+            ]);
 
             if (strtolower(systemSettings()->automatic_withdrawal) == 'enable') {
                 $coinpay = new \App\Services\Gateways\Coinpay();
@@ -82,6 +88,13 @@ class WithdrawalController extends Controller
 
                 if ($balances['result'][$coin]['balancef'] < $request->amount) {
                     sendToLog("Coinpayment insufficient balance");
+
+                    $transaction->update(['status' => 'failed']);
+
+                    $this->refund($wallet,$amount);
+
+                    DB::commit();
+
                     return $this->sendError("Unable to complete your request at the moment.", [], Response::HTTP_SERVICE_UNAVAILABLE);
                 }
 
@@ -89,27 +102,52 @@ class WithdrawalController extends Controller
 
                 if (empty($response)) {
                     sendToLog(["withdrawal response" => $response]);
+
+                    $transaction->update(['status' => 'failed']);
+
+                    $this->refund($wallet,$amount);
+
+                    DB::commit();
+
                     return $this->sendError("Unable to complete your request at the moment.", [], Response::HTTP_SERVICE_UNAVAILABLE);
                 }
 
                 if ($response['error'] !== 'ok') {
                     sendToLog(["withdrawal response" => $response]);
+
+                    $transaction->update(['status' => 'failed']);
+
+                    $this->refund($wallet,$amount);
+
+                    DB::commit();
+
                     return $this->sendError("Unable to complete your request at the moment.", [], Response::HTTP_SERVICE_UNAVAILABLE);
                 }
 
-                $transaction['reference'] = $response['result']['id'];
+                $transaction->update(['reference' => $response['result']['id']]);
             } else {
-                $transaction['reference'] = generateReference();
-                $transaction['is_manual'] = true;
+                $transaction->update([
+                    'reference' => generateReference(),
+                    'is_manual' => true
+                ]);
             }
 
-            Transaction::create($transaction);
+            DB::commit();
 
             return $this->sendResponse([], "Withdrawal request place successfully.", Response::HTTP_CREATED);
         } catch (\Exception $e) {
             sendToLog(["withdrawal" => $e]);
 
+            DB::rollBack();
+
             return $this->sendError("Unable to complete your request at the moment.", [], Response::HTTP_SERVICE_UNAVAILABLE);
         }
+    }
+
+    function refund($wallet, $amount)
+    {
+        $wallet->update([
+            'balance' => $wallet->balance + $amount,
+        ]);
     }
 }
