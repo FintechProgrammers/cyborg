@@ -61,11 +61,8 @@ class WithdrawalController extends Controller
 
             $finalAmount = $wallet->balance - $amount;
 
-            $wallet->update([
-                'balance'  => $finalAmount,
-            ]);
-
-            $transaction = Transaction::create([
+            $transaction = [
+                'reference'         => generateReference(),
                 'user_id'           => $wallet->user_id,
                 'coin'              => 'USDT',
                 'amount'            => $request->amount,
@@ -78,6 +75,12 @@ class WithdrawalController extends Controller
                 'address'           => $request->address,
                 'request_payload'   => json_encode($payload),
                 'narration'         => "Withdraw {$request->amount} USDT to {$request->address}"
+            ];
+
+            $transaction = Transaction::create($transaction);
+
+            $wallet->update([
+                'balance'  => $finalAmount,
             ]);
 
             if (strtolower(systemSettings()->automatic_withdrawal) == 'enable') {
@@ -89,12 +92,6 @@ class WithdrawalController extends Controller
                 if ($balances['result'][$coin]['balancef'] < $request->amount) {
                     sendToLog("Coinpayment insufficient balance");
 
-                    $transaction->update(['status' => 'failed']);
-
-                    $this->refund($wallet,$amount);
-
-                    DB::commit();
-
                     return $this->sendError("Unable to complete your request at the moment.", [], Response::HTTP_SERVICE_UNAVAILABLE);
                 }
 
@@ -102,12 +99,6 @@ class WithdrawalController extends Controller
 
                 if (empty($response)) {
                     sendToLog(["withdrawal response" => $response]);
-
-                    $transaction->update(['status' => 'failed']);
-
-                    $this->refund($wallet,$amount);
-
-                    DB::commit();
 
                     return $this->sendError("Unable to complete your request at the moment.", [], Response::HTTP_SERVICE_UNAVAILABLE);
                 }
@@ -117,17 +108,12 @@ class WithdrawalController extends Controller
 
                     $transaction->update(['status' => 'failed']);
 
-                    $this->refund($wallet,$amount);
-
-                    DB::commit();
-
                     return $this->sendError("Unable to complete your request at the moment.", [], Response::HTTP_SERVICE_UNAVAILABLE);
                 }
 
                 $transaction->update(['reference' => $response['result']['id']]);
             } else {
                 $transaction->update([
-                    'reference' => generateReference(),
                     'is_manual' => true
                 ]);
             }
