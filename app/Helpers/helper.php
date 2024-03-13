@@ -293,3 +293,14 @@ if (!function_exists('tradeValues')) {
         ];
     }
 }
+
+if (!function_exists('plans')) {
+    function plans()
+    {
+        return [
+            "Cyborg monthly" => 2,
+            "Cyborg Annual" => 4,
+            "Pro Package" => 8
+        ];
+    }
+}

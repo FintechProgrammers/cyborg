@@ -26,6 +26,22 @@ class StrategyController extends Controller
         try {
             $user = $request->user;
 
+            $plans = settings()->plans;
+
+            $userPlan = $user->plan;
+
+            // get all users bot count
+            $userBotCount = Bot::where('user_id', $user->id)->count();
+
+            if (isset($plans[$userPlan])) {
+                $maxBotsAllowed = $plans[$userPlan];
+
+                // check if user has reached the maximum bot count according to the user package
+                if ($maxBotsAllowed <= $userBotCount) {
+                    return $this->sendError("You have reached the maximum bot count for your package.", [], 400);
+                }
+            }
+
             $strategy = Strategy::whereUuid($request->strategy)->first();
 
             $exchange = Exchange::where('uuid', $request->exchange)->first();
