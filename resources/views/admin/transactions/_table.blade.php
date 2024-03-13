@@ -1,4 +1,4 @@
-@if (isset($totalAmount))
+@if (isset($totalAmount) && auth()->user()->hasRole('super admin'))
     <div>
         <div class="card card-h-100 bg-primary border-0">
             <!-- card body -->
