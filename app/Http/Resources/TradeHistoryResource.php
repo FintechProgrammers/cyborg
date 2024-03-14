@@ -24,6 +24,7 @@ class TradeHistoryResource extends JsonResource
             'profit'        => $this->profit,
             'type'          => $this->type,
             'is_profit'     => (bool) $this->is_profit,
+            'is_stoploss'   => (bool) $this->is_stoploss,
             'created_at'    => $this->created_at,
         ];
     }
