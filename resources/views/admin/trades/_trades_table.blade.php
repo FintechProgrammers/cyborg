@@ -33,6 +33,12 @@
                                 <span class="badge-label">Profit</span>
                             </span>
                         @endif
+
+                        @if ($item->is_stoploss)
+                            <span class="badge bg-danger">
+                                <span class="badge-label">Stoploss</span>
+                            </span>
+                        @endif
                     </td>
                     <td>
                         {{ $item->market }}

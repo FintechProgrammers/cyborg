@@ -37,6 +37,8 @@ class TradeController extends Controller
             ->when(!empty($tradeStatus), function ($query) use ($tradeStatus) {
                 if ($tradeStatus == "profit") {
                     return $query->where('is_profit', true);
+                } else if ($tradeStatus == "stoploss") {
+                    return $query->where('is_stoploss', true);
                 }
             })
             ->latest();

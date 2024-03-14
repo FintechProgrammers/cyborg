@@ -23,6 +23,7 @@
                     <select name="status" id="trade_status" class="form-control">
                         <option value="">--select--status--</option>
                         <option value="profit">Profit</option>
+                        <option value="stoploss">Stoploss</option>
                     </select>
                 </div>
             </div>
