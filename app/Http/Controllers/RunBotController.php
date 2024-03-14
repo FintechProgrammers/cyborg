@@ -343,7 +343,7 @@ class RunBotController extends Controller
 
                         // if kucoin
                         if ($bot->exchange->slug == "kucoin") {
-                            $lot =(float) $exchange->fetchMarkets();
+                            $lot = (float) $exchange->fetchMarkets();
 
                             $quantity = $quantity / $lot;
                         }
@@ -635,7 +635,7 @@ class RunBotController extends Controller
                         $type = "sell";
                     }
 
-                    $this->recordTrade($bot, $trade_price, $quantity, $type, $profitDetails['profit'], false);
+                    $this->recordTrade($bot, $trade_price, $quantity, $type, $profitDetails['profit'], false, true);
 
                     return;
                 }
@@ -671,7 +671,7 @@ class RunBotController extends Controller
 
                     // if kucoin
                     if ($bot->exchange->slug == "kucoin") {
-                        $lot =(float) $exchange->fetchMarkets();
+                        $lot = (float) $exchange->fetchMarkets();
 
                         $qty = $tradec / $trade_price;
 
@@ -882,7 +882,7 @@ class RunBotController extends Controller
         }
     }
 
-    function recordTrade($bot, $trade_price, $quantity, $type, $profit = 0, $is_profit = false)
+    function recordTrade($bot, $trade_price, $quantity, $type, $profit = 0, $is_profit = false, $is_stoploss = false)
     {
         TradeHistory::create([
             'user_id'       => $bot->user_id,
@@ -892,6 +892,7 @@ class RunBotController extends Controller
             'profit'        => $profit,
             'quantity'      => $quantity,
             'is_profit'     => $is_profit,
+            'is_stoploss'   => $is_stoploss,
             'trade_type'    => $bot->trade_type,
             'type'          => $type,
         ]);
